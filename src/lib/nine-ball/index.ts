@@ -31,10 +31,10 @@ export class NineBallGame {
 		return additionalDeadBalls;
 	}
 
-  unEndRack(action: EndRack) {
-    this.racks.pop()
-    this.currentRack.unEndRack(action.deadBalls)
-  }
+	unEndRack(action: EndRack) {
+		this.racks.pop();
+		this.currentRack.unEndRack(action.deadBalls);
+	}
 
 	increment() {
 		this.currentPlayer.score++;
@@ -58,11 +58,11 @@ export class NineBallGame {
 			case 'SAFETY':
 				this.currentPlayer.safeties--;
 			case 'MISS':
-				this.currentRack.unEndTurn()
+				this.currentRack.unEndTurn();
 				break;
 			case 'END_RACK':
 				// save deadBalls for use in redo
-				this.unEndRack(action)
+				this.unEndRack(action);
 			default:
 				throw new AssertionError('unexpected action');
 		}
@@ -104,45 +104,45 @@ export class NineBallGame {
 }
 
 class NineBallRack {
-  static RACK_POINTS = 10;
+	static RACK_POINTS = 10;
 	innings = 0;
 	deadBalls = 0;
 	scores = [0, 0];
 	turn = 0;
-  
+
 	endTurn() {
-    this.changeTurn();
+		this.changeTurn();
 		if (this.turn === 0) {
-      this.innings++;
+			this.innings++;
 		}
 	}
-  
+
 	unEndTurn() {
-    this.changeTurn();
-    if (this.turn === 1) {
-      this.innings--
-    }
+		this.changeTurn();
+		if (this.turn === 1) {
+			this.innings--;
+		}
 	}
-  
+
 	private changeTurn() {
-    this.turn = (this.turn + 1) % 2;
+		this.turn = (this.turn + 1) % 2;
 	}
-  
+
 	// returns additional dead balls
 	endRack() {
-    const additional = NineBallRack.RACK_POINTS - this.deadBalls - this.total;
+		const additional = NineBallRack.RACK_POINTS - this.deadBalls - this.total;
 		this.deadBalls += additional;
 		return additional;
 	}
-  
-  unEndRack(deadBallsToRestore: number) {
-    this.deadBalls -= deadBallsToRestore
-  }
+
+	unEndRack(deadBallsToRestore: number) {
+		this.deadBalls -= deadBallsToRestore;
+	}
 
 	increment() {
-    this.scores[this.turn] += 1;
+		this.scores[this.turn] += 1;
 	}
-  
+
 	decrement() {
 		this.scores[this.turn] -= 1;
 	}
