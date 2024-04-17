@@ -8,12 +8,15 @@ class AssertionError extends Error {
 }
 
 export class NineBallGame {
-	players: [Player, Player] = [new Player(), new Player()];
-	innings: number = 0;
+	players: [Player, Player] = [new Player('player1'), new Player('player2')];
 	winner: Player | null = null;
 	racks = [new NineBallRack()];
 	actions: Action[] = [];
 	undoneActions: Action[] = [];
+
+	get totalInnings() {
+		return this.racks.reduce((n, { innings }) => n + innings, 0);
+	}
 
 	get currentRack() {
 		const rack = this.racks.at(-1);
@@ -25,13 +28,22 @@ export class NineBallGame {
 		return this.players[this.currentRack.turn];
 	}
 
+	get previousPlayer() {
+		const prevPlayer = this.currentRack.turn === 0 ? 1 : 0;
+		return this.players[prevPlayer];
+	}
+
 	endRack() {
+		this.increment();
+		this.increment();
 		const additionalDeadBalls = this.currentRack.endRack();
 		this.racks.push(new NineBallRack());
 		return additionalDeadBalls;
 	}
 
 	unEndRack(action: EndRack) {
+		this.decrement();
+		this.decrement();
 		this.racks.pop();
 		this.currentRack.unEndRack(action.deadBalls);
 	}
@@ -63,6 +75,7 @@ export class NineBallGame {
 			case 'END_RACK':
 				// save deadBalls for use in redo
 				this.unEndRack(action);
+				break;
 			default:
 				throw new AssertionError('unexpected action');
 		}
@@ -72,7 +85,7 @@ export class NineBallGame {
 	doAction(action: Action) {
 		switch (action.type) {
 			case 'UNDO':
-				const actionToUndo = this.undoneActions.pop();
+				const actionToUndo = this.actions.pop();
 				if (actionToUndo) this.undoAction(actionToUndo);
 				return;
 			case 'REDO':
@@ -88,12 +101,17 @@ export class NineBallGame {
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties++;
+				break;
 			case 'MISS':
 				this.currentRack.endTurn();
+				break;
+			case 'TIMEOUT':
+				this.currentRack.useTimeout();
 				break;
 			case 'END_RACK':
 				// save deadBalls for use in redo
 				action.deadBalls = this.endRack();
+				break;
 			default:
 				throw new AssertionError('unexpected action');
 		}
@@ -109,6 +127,7 @@ class NineBallRack {
 	deadBalls = 0;
 	scores = [0, 0];
 	turn = 0;
+	timeouts = [1, 1];
 
 	endTurn() {
 		this.changeTurn();
@@ -145,6 +164,12 @@ class NineBallRack {
 
 	decrement() {
 		this.scores[this.turn] -= 1;
+	}
+
+	useTimeout() {
+		if (this.timeouts[this.turn]) {
+			this.timeouts[this.turn]--;
+		}
 	}
 
 	get total() {
