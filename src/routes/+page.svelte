@@ -1,72 +1,123 @@
 <script lang="ts">
-	import { Meter, Player } from '$lib';
+	import { NineBallGame } from '$lib';
 	import { writable } from 'svelte/store';
+	import { Safety, Miss, Increment, EndRack, Timeout, Undo } from '$lib/nine-ball/actions.js';
+
 	export let data;
 
-	let playerOneScore = 0;
-	let playerTwoScore = 0;
-	let innings = 0;
+	const nineBallGame = writable(new NineBallGame());
 
-	const playerOne = writable(new Player());
-	const playerTwo = writable(new Player());
+	function handleClick() {
+		$nineBallGame.doAction(new Increment());
+		$nineBallGame = $nineBallGame;
+	}
 
-	let active = playerOne;
+	function handleNineBall() {
+		$nineBallGame.doAction(new EndRack());
+		$nineBallGame = $nineBallGame;
+	}
 
-	function handleClick(this: HTMLButtonElement) {
-		const value = parseInt(this.value);
-		$active.score += value;
+	function handleTurn() {
+		$nineBallGame.doAction(new Miss());
+		$nineBallGame = $nineBallGame;
+	}
+
+	function handleSaftey() {
+		$nineBallGame.doAction(new Safety());
+		$nineBallGame = $nineBallGame;
+	}
+
+	function handleTimeout() {
+		$nineBallGame.doAction(new Timeout());
+		$nineBallGame = $nineBallGame;
+	}
+
+	function handleUndo() {
+		$nineBallGame.doAction(new Undo());
+		$nineBallGame = $nineBallGame;
 	}
 </script>
 
 <div class="layout">
-  <Meter player={playerOne} placement="left"/>
-
 	<main>
+
 		<div aria-label="score">
 			<div class="player-score" aria-label="score-player-one">
-				{$playerOne.score}
+				{$nineBallGame.players[0].score}
+				<div>
+					Safeties: {$nineBallGame.players[0].safeties}
+				</div>
+				<div>
+					Timeouts: {$nineBallGame.currentRack.timeouts[0]}
+				</div>
 			</div>
 			<div class="player-score" aria-label="score-player-two">
-				{$playerTwo.score}
+				{$nineBallGame.players[1].score}
+				<div>
+					Safeties: {$nineBallGame.players[1].safeties}
+				</div>
+				<div>
+					Timeouts: {$nineBallGame.currentRack.timeouts[1]}
+				</div>
 			</div>
 		</div>
-		<h2>points</h2>
+		<h2>score</h2>
+		<div>Total Innings: {$nineBallGame.totalInnings}</div>
+		<div>Rack {$nineBallGame.racks.length} Inninges: {$nineBallGame.currentRack.innings}</div>
+
+		<div>
+			{$nineBallGame.currentPlayer.name}'s turn
+		</div>
+
 		<div aria-label="controls">
-			<button value="1" on:click={handleClick}> + </button>
-			<button value="-1" on:click={handleClick}> - </button>
+			<button on:click={handleClick}>{$nineBallGame.currentPlayer.name} made ball</button>
+			<button on:click={handleNineBall}
+				>{$nineBallGame.currentPlayer.name} made 9 ball and won</button
+			>
+			<button on:click={handleSaftey}>Defensive Shot</button>
+			<button on:click={handleTurn}>End Turn</button>
+			<button on:click={handleTimeout}>Time Out</button>
+
+			<button on:click={handleUndo}>Undo Action</button>
 		</div>
 	</main>
-	<Meter player={playerTwo} placement="right" />
 </div>
 
 <style>
 	button,
 	.player-score {
 		border: none;
-		aspect-ratio: 1;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		font-size: 2rem;
 	}
 
-	button[value='1'] {
-		background-color: greenyellow;
+	.player-score {
+		flex-direction: column;
 	}
-	button[value='-1'] {
-		background-color: orangered;
+
+	button {
+		background-color: blueviolet;
 	}
-	[aria-label='controls'],
+
 	[aria-label='score'] {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		column-gap: 0.5rem;
 	}
 
-	.layout {
-		display: grid;
-		grid-template-columns: 40px 1fr 40px;
-		height: 100vh;
+	[aria-label='controls'] {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+		margin: auto;
+		max-width: 300px;
 	}
 
+	.layout {
+		display: grid;
+		grid-template-columns: 1fr;
+		height: 100vh;
+	}
 </style>
