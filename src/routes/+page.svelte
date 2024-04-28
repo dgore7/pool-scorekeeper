@@ -5,8 +5,6 @@
 	import Scoreboard from '../lib/components/Scoreboard.svelte';
 	import PlayerStats from '$lib/components/PlayerStats.svelte';
 
-	export let data;
-
 	const nineBallGame = writable(new NineBallGame());
 
 	function handleClick() {
@@ -40,39 +38,24 @@
 	}
 </script>
 
+<main>
+	<Scoreboard game={$nineBallGame}>
+		{#each $nineBallGame.players as player, playerNumber}
+			<PlayerStats {player} game={$nineBallGame} {playerNumber} />
+		{/each}
+	</Scoreboard>
 
-	<main>
-		<Scoreboard
-			totalInnings={$nineBallGame.totalInnings}
-			rackInngings={$nineBallGame.currentRack.innings}
-			rackNumber={$nineBallGame.racks.length}
-			currentPlayer={$nineBallGame.currentPlayer}
+	<div aria-label="controls">
+		<button on:click={handleClick}>{$nineBallGame.currentPlayer.name} made ball</button>
+		<button on:click={handleNineBall}>{$nineBallGame.currentPlayer.name} made 9 ball and won</button
 		>
-			<PlayerStats
-				score={$nineBallGame.players[0].score}
-				safeties={$nineBallGame.players[0].safeties}
-				timeouts={$nineBallGame.currentRack.timeouts[0]}
-			/>
-			<PlayerStats
-				score={$nineBallGame.players[1].score}
-				safeties={$nineBallGame.players[1].safeties}
-				timeouts={$nineBallGame.currentRack.timeouts[1]}
-			/>
-		</Scoreboard>
+		<button on:click={handleSaftey}>Defensive Shot</button>
+		<button on:click={handleTurn}>End Turn</button>
+		<button on:click={handleTimeout}>Time Out</button>
 
-		<div aria-label="controls">
-			<button on:click={handleClick}>{$nineBallGame.currentPlayer.name} made ball</button>
-			<button on:click={handleNineBall}
-				>{$nineBallGame.currentPlayer.name} made 9 ball and won</button
-			>
-			<button on:click={handleSaftey}>Defensive Shot</button>
-			<button on:click={handleTurn}>End Turn</button>
-			<button on:click={handleTimeout}>Time Out</button>
-
-			<button on:click={handleUndo}>Undo Action</button>
-		</div>
-	</main>
-
+		<button on:click={handleUndo}>Undo Action</button>
+	</div>
+</main>
 
 <style>
 	button {
@@ -89,7 +72,6 @@
 
 	button:active {
 		background-color: red;
-
 	}
 
 	[aria-label='controls'] {
@@ -99,5 +81,4 @@
 		margin: auto;
 		max-width: 300px;
 	}
-
 </style>

@@ -1,19 +1,21 @@
 <script lang="ts">
-	export let score: number;
-	export let safeties: number;
-	export let timeouts: number;
+	import type {Player, NineBallGame} from "$lib"
+
+	export let player: Player
+	export let game: NineBallGame
+	export let playerNumber: number
 </script>
 
-<div class="player-score" aria-label="score-player-one">
+<div class="player-score">
 	<div class="score">
-		{score}
+		{player.score}
 	</div>
 	<div class="player-info">
 		<div>
-			S: {safeties}
+			S: {player.safeties}
 		</div>
 		<div>
-			T: {timeouts}
+			T: {game.currentRack.timeouts[playerNumber]}
 		</div>
 	</div>
 </div>

@@ -1,10 +1,7 @@
 <script lang="ts">
-	import type { Player } from '$lib';
+	import type { Player, NineBallGame } from '$lib';
 
-	export let totalInnings: number;
-	export let rackInngings: number;
-	export let rackNumber: number;
-	export let currentPlayer: Player;
+  export let game: NineBallGame
 </script>
 
 
@@ -14,14 +11,14 @@
   </div>
   <div class="additional-info">
     <div class="turn-container">
-      {currentPlayer.name}'s Turn
+      {game.currentPlayer.name}'s Turn
     </div>
     <div class="innings-container">
       <span>
-        Rack {rackNumber} Innings: {rackInngings}
+        Rack {game.racks.length} Innings: {game.currentRack.innings}
       </span>
       <span>
-        Match Inngings: {totalInnings}
+        Match Inngings: {game.totalInnings}
       </span>
     </div>
   </div>
