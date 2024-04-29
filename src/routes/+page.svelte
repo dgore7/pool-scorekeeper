@@ -1,12 +1,18 @@
 <script lang="ts">
-	import { NineBallGame } from '$lib';
+	import { NineBallGame, Player } from '$lib';
 	import { writable } from 'svelte/store';
 	import { Safety, Miss, Increment, EndRack, Timeout, Undo } from '$lib/nine-ball/actions.js';
 	import Scoreboard from '../lib/components/Scoreboard.svelte';
 	import PlayerStats from '$lib/components/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
 
-	const nineBallGame = writable(new NineBallGame());
+	export let data;
+	const nineBallGame = writable(
+		new NineBallGame(
+			new Player(data.playerOne.name, data.playerOne.handicap),
+			new Player(data.playerTwo.name, data.playerTwo.handicap)
+		)
+	);
 
 	function handleClick() {
 		$nineBallGame.doAction(new Increment());
@@ -37,6 +43,7 @@
 		$nineBallGame.doAction(new Undo());
 		$nineBallGame = $nineBallGame;
 	}
+
 </script>
 
 <main>

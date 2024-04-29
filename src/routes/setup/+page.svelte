@@ -13,6 +13,8 @@
 		playerTwoHandicap: 9
 	};
 
+	export let data
+
 	let step = 0;
 
 	let selectedGame: string;
@@ -38,7 +40,9 @@
 		gameInfo.playerTwo = playerTwoName;
 		gameInfo.playerOneHandicap = playerOneHandicap;
 		gameInfo.playerTwoHandicap = playerTwoHandicap;
-
+		
+		data.playerOne = { name: playerOneName, handicap: playerOneHandicap}
+		data.playerTwo = { name: playerTwoName, handicap: playerTwoHandicap}
 		goto('/');
 	}
 </script>

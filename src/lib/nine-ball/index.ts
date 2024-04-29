@@ -8,7 +8,15 @@ class AssertionError extends Error {
 }
 
 export class NineBallGame {
-	players: [Player, Player] = [new Player('player1'), new Player('player2')];
+	constructor(player1: Player, player2: Player) {
+		this.player1 = player1
+		this.player2 = player2
+		this.players = [this.player1, this.player2]
+	}
+
+	player1 = new Player("player1", 9)
+	player2 = new Player("player2", 9)
+	players: [Player, Player] = [this.player1, this.player2];
 	winner: Player | null = null;
 	racks = [new NineBallRack()];
 	actions: Action[] = [];
