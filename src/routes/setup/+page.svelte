@@ -4,16 +4,7 @@
 	import logo from '$lib/assets/brand.svg';
 	import { goto } from '$app/navigation';
 
-	let gameInfo = {
-		gameType: '',
-		ruleSet: '',
-		playerOne: '',
-		playerTwo: '',
-		playerOneHandicap: 9,
-		playerTwoHandicap: 9
-	};
-
-	export let data
+	export let data;
 
 	let step = 0;
 
@@ -34,15 +25,8 @@
 	}
 
 	function handleGameStart() {
-		gameInfo.gameType = selectedGame;
-		gameInfo.ruleSet = selectedRules;
-		gameInfo.playerOne = playerOneName;
-		gameInfo.playerTwo = playerTwoName;
-		gameInfo.playerOneHandicap = playerOneHandicap;
-		gameInfo.playerTwoHandicap = playerTwoHandicap;
-		
-		data.playerOne = { name: playerOneName, handicap: playerOneHandicap}
-		data.playerTwo = { name: playerTwoName, handicap: playerTwoHandicap}
+		data.playerOne = { name: playerOneName, handicap: playerOneHandicap };
+		data.playerTwo = { name: playerTwoName, handicap: playerTwoHandicap };
 		goto('/');
 	}
 </script>

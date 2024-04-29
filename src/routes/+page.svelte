@@ -43,7 +43,6 @@
 		$nineBallGame.doAction(new Undo());
 		$nineBallGame = $nineBallGame;
 	}
-
 </script>
 
 <main>
