@@ -4,6 +4,7 @@
 	import { Safety, Miss, Increment, EndRack, Timeout, Undo } from '$lib/nine-ball/actions.js';
 	import Scoreboard from '../lib/components/Scoreboard.svelte';
 	import PlayerStats from '$lib/components/PlayerStats.svelte';
+	import ProgressBar from '$lib/components/ProgressBar.svelte';
 
 	const nineBallGame = writable(new NineBallGame());
 
@@ -45,6 +46,9 @@
 		{/each}
 	</Scoreboard>
 
+	<ProgressBar player={$nineBallGame.players[0]} color={"red"}/>
+	<ProgressBar player={$nineBallGame.players[1]} color={"blue"}/>
+
 	<div aria-label="controls">
 		<button on:click={handleClick}>{$nineBallGame.currentPlayer.name} made ball</button>
 		<button on:click={handleNineBall}>{$nineBallGame.currentPlayer.name} made 9 ball and won</button
@@ -52,6 +56,11 @@
 		<button on:click={handleSaftey}>Defensive Shot</button>
 		<button on:click={handleTurn}>End Turn</button>
 		<button on:click={handleTimeout}>Time Out</button>
+
+
+		<h2>score</h2>
+		<div>Total Innings: {$nineBallGame.totalInnings}</div>
+		<div>Rack {$nineBallGame.racks.length} Inninges: {$nineBallGame.currentRack.innings}</div>
 
 		<button on:click={handleUndo}>Undo Action</button>
 	</div>
