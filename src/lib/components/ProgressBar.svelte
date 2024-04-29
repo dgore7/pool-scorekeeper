@@ -31,20 +31,20 @@
 	.progress-container {
 		display: flex;
 		align-items: center;
-		gap: 1em;
+		gap: 1rem;
 	}
 
-	.progress-bar-outer,
 	.progress-bar-inner {
-		justify-self: start;
-		display: flex;
-		height: 18px;
-		border-radius: 10px;
+		height: inherit;
+		border-radius: inherit;
 	}
 
 	.progress-bar-outer {
-		background-color: white;
+		border-radius: .5rem;
+		height: 1rem;
+		display: flex;
 		overflow: hidden;
-		width: 90%;
+		background-color: white;
+		width: 100%;
 	}
 </style>
