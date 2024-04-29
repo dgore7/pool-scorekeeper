@@ -16,7 +16,7 @@
 </script>
 
 <div class="progress-container">
-	<div class="player-name">
+	<div>
 		{player.name}
 	</div>
 	<div class="progress-bar-outer">
