@@ -5,14 +5,17 @@
 	export let playerName: string;
 	export let playerHandicap: number;
 
-	let handicaps = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	let handicaps = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 </script>
 
 <Well>
 	<fieldset class="flex flex-col gap-4" {name}>
-		<legend class="mb-1.5">{startcase(name)} {#if name=== 'player-one'}
-			(Won Lag)
-		{/if}</legend>
+		<legend class="mb-1.5">
+			{startcase(name)}
+			{#if name === 'player-one'}
+				(Won Lag)
+			{/if}
+		</legend>
 		<input
 			type="text"
 			name="name"

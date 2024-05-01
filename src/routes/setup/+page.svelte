@@ -2,9 +2,25 @@
 	import Rules from '$lib/components/Rules.svelte';
 	import Players from '$lib/components/Players.svelte';
 	import logo from '$lib/assets/brand.svg';
-	import { goto } from '$app/navigation';
+	import { goto, onNavigate } from '$app/navigation';
+	import { NineBallGame, Player } from '$lib';
+	import Toast from "$lib/components/Toast.svelte"
 
 	export let data;
+	let { game } = data
+
+	let isRedirect = false;
+	let redirectInt: NodeJS.Timeout
+	
+	onNavigate((nav) => {
+		if (nav.from?.route.id === nav.to?.route.id) {
+			isRedirect = true
+
+			redirectInt = setTimeout(() => {
+      isRedirect = false;
+    }, 5000);
+		}
+	})
 
 	let step = 0;
 
@@ -25,11 +41,26 @@
 	}
 
 	function handleGameStart() {
-		data.playerOne = { name: playerOneName, handicap: playerOneHandicap };
-		data.playerTwo = { name: playerTwoName, handicap: playerTwoHandicap };
+		$game = new NineBallGame(
+			new Player(playerOneName, playerOneHandicap),
+			new Player(playerTwoName, playerTwoHandicap)
+		);
+
 		goto('/');
 	}
+
+	function handleToastClose() {
+		isRedirect = false;
+		clearTimeout(redirectInt)
+	}
+
 </script>
+
+{#if isRedirect}
+	<div class="toast">
+		<Toast on:close={handleToastClose}/>
+	</div>
+{/if}
 
 <div class="flex flex-col gap-4 min-h-screen max-w-full">
 	<div class="mx-auto"><img src={logo} alt="rack em up" class="my-1" /></div>
@@ -61,4 +92,16 @@
 </div>
 
 <style>
+	 .toast {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    margin: 1rem auto;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+  }
 </style>

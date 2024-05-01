@@ -1,15 +1,11 @@
 // export const ssr = false
 // export const prerender = false
 
+import { writable } from "svelte/store";
+import { NineBallGame } from "$lib";
+
 export function load() {
-	return {
-		playerOne: {
-			name: '1',
-			handicap: 9
-		},
-		playerTwo: {
-			name: '2',
-			handicap: 9
-		}
-	};
+
+  const game = writable<NineBallGame | null>(null)
+	return { game }
 }

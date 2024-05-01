@@ -8,19 +8,23 @@ class AssertionError extends Error {
 }
 
 export class NineBallGame {
-	constructor(player1: Player, player2: Player) {
-		this.player1 = player1
-		this.player2 = player2
-		this.players = [this.player1, this.player2]
-	}
-
-	player1 = new Player("player1", 9)
-	player2 = new Player("player2", 9)
-	players: [Player, Player] = [this.player1, this.player2];
+	players: [Player, Player];
 	winner: Player | null = null;
 	racks = [new NineBallRack()];
 	actions: Action[] = [];
 	undoneActions: Action[] = [];
+
+	constructor(player1: Player, player2: Player) {
+		this.players = [player1, player2];
+	}
+
+	get player1() {
+		return this.players[0];
+	}
+
+	get player2() {
+		return this.players[1];
+	}
 
 	get totalInnings() {
 		return this.racks.reduce((n, { innings }) => n + innings, 0);
