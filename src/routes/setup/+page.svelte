@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Rules from '$lib/components/Rules.svelte';
-	import Players from '$lib/components/Players.svelte';
+	import Rules from '$lib/components/RuleForm.svelte';
+	import Players from '$lib/components/PlayerForm.svelte';
 	import logo from '$lib/assets/brand.svg';
 	import { goto, onNavigate } from '$app/navigation';
 	import { NineBallGame, Player } from '$lib';
