@@ -2,8 +2,8 @@
 	import Well from './Well.svelte';
 	import startcase from 'lodash.startcase';
 	export let name: 'player-one' | 'player-two';
-	export let playerName: string;
-	export let playerHandicap: number;
+	export let playerName: string | null;
+	export let playerHandicap: number | null;
 
 	let handicaps = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 </script>
