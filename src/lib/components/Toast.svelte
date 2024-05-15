@@ -1,16 +1,19 @@
 <script lang="ts">
+	import type { ComponentType } from 'svelte';
   import { fade } from 'svelte/transition';
 	import CloseToastIcon from './icons/CloseToastIcon.svelte';
-	import WarningIcon from './icons/WarningIcon.svelte';
   import { createEventDispatcher } from 'svelte';
+
+	export let message: string
+	export let icon: ComponentType
 
   const dispatch = createEventDispatcher();
 
 </script>
 
 <div class="toast-dialog" role="alert" transition:fade>
-	<WarningIcon />
-	<div class="text">Missing required player info.</div>
+	<svelte:component this={icon}/>
+	<div class="text">{message}</div>
 	<button class="close" on:click={() => dispatch("close")}>
 		<CloseToastIcon width="0.8em" />
 	</button>

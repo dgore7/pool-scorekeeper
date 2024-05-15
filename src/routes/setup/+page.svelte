@@ -5,6 +5,7 @@
 	import { goto, onNavigate } from '$app/navigation';
 	import { NineBallGame, Player } from '$lib';
 	import Toast from "$lib/components/Toast.svelte"
+	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
 
 	export let data;
 	let { game } = data
@@ -58,7 +59,7 @@
 
 {#if isRedirect}
 	<div class="toast">
-		<Toast on:close={handleToastClose}/>
+		<Toast on:close={handleToastClose} message={"Missing required player info."} icon={WarningIcon}/>
 	</div>
 {/if}
 
