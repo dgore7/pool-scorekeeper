@@ -1,17 +1,25 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition';
+	import type { ComponentType } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import CloseToastIcon from './icons/CloseToastIcon.svelte';
-	import WarningIcon from './icons/WarningIcon.svelte';
-  import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
-  const dispatch = createEventDispatcher();
+	export let message: string;
+	export let icon: ComponentType;
+	let className = '';
+	export { className as class };
 
+	const dispatch = createEventDispatcher();
 </script>
 
-<div class="toast-dialog" role="alert" transition:fade>
-	<WarningIcon />
-	<div class="text">Missing required player info.</div>
-	<button class="close" on:click={() => dispatch("close")}>
+<div
+	class="toast-dialog fixed left-5 right-5 top-10 max-w-xl rounded-lg {className}"
+	role="alert"
+	transition:fade
+>
+	<svelte:component this={icon} />
+	<div class="text">{@html message}</div>
+	<button class="close shrink" on:click={() => dispatch('close')}>
 		<CloseToastIcon width="0.8em" />
 	</button>
 </div>
@@ -20,16 +28,13 @@
 	.toast-dialog {
 		color: black;
 		padding: 0.75rem 1.5rem;
-		border-radius: 0.2rem;
 		display: flex;
 		align-items: center;
 		margin: 0 auto;
-    background-color: white;
 	}
 
 	.text {
-		max-width: 15rem;
-    margin: 1rem;
+		margin: 1rem;
 	}
 
 	button {

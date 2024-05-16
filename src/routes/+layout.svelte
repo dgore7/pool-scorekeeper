@@ -2,4 +2,6 @@
 	import '../app.pcss';
 </script>
 
-<slot />
+<div class="container m-auto max-w-xl">
+	<slot />
+</div>
