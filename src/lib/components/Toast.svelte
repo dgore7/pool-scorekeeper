@@ -13,13 +13,13 @@
 </script>
 
 <div
-	class="toast-dialog fixed left-5 right-5 top-10 max-w-xl {className}"
+	class="toast-dialog fixed left-5 right-5 top-10 max-w-xl rounded-lg {className}"
 	role="alert"
 	transition:fade
 >
 	<svelte:component this={icon} />
-	<div class="text">{message}</div>
-	<button class="close" on:click={() => dispatch('close')}>
+	<div class="text">{@html message}</div>
+	<button class="close shrink" on:click={() => dispatch('close')}>
 		<CloseToastIcon width="0.8em" />
 	</button>
 </div>
@@ -28,15 +28,12 @@
 	.toast-dialog {
 		color: black;
 		padding: 0.75rem 1.5rem;
-		border-radius: 0.2rem;
 		display: flex;
 		align-items: center;
 		margin: 0 auto;
-		background-color: white;
 	}
 
 	.text {
-		max-width: 15rem;
 		margin: 1rem;
 	}
 

@@ -1,38 +1,29 @@
 <script lang="ts">
-	import Rules from '$lib/components/RuleForm.svelte';
-	import Players from '$lib/components/PlayerForm.svelte';
+	import PlayerForm from '$lib/components/PlayerForm.svelte';
 	import logo from '$lib/assets/brand.svg';
-	import { goto, onNavigate } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { NineBallGame, Player } from '$lib';
-	import Toast from '$lib/components/Toast.svelte';
+	import { Toast, RuleForm, type PlayerFormData } from '$lib/components';
 	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
+	import { startCase } from 'lodash';
 
 	export let data;
-	let { game } = data;
+	let { game, toast } = data;
 
-	let isRedirect = false;
-	let redirectInt: NodeJS.Timeout;
+	let toastInt: NodeJS.Timeout;
 
-	onNavigate((nav) => {
-		if (nav.from?.route.id === nav.to?.route.id) {
-			isRedirect = true;
-
-			redirectInt = setTimeout(() => {
-				isRedirect = false;
-			}, 5000);
-		}
-	});
+	$: if ($toast) {
+		toastInt = setTimeout(() => {
+			$toast = null;
+		}, 5000);
+	}
 
 	let step = 0;
 
 	let selectedGame: string;
 	let selectedRules: string;
 
-	let playerOneName: string;
-	let playerTwoName: string;
-
-	let playerOneHandicap: number;
-	let playerTwoHandicap: number;
+	let playerFormData: PlayerFormData;
 
 	function handlePrev() {
 		step--;
@@ -41,26 +32,53 @@
 		step++;
 	}
 
+	function deriveMissingFields(formData: PlayerFormData) {
+		return Object.entries(formData)
+			.map(([name, value]) => (!value ? startCase(name) : ''))
+			.filter((name) => name.length);
+	}
+
+	function hasMissingData(formData: PlayerFormData) {
+		return Object.entries(formData).some(([_, value]) => !value);
+	}
+
+	function deriveErrorList(messages: string[]) {
+		return messages.map((message) => `<li class="ml-4">${message}</li>`).join(' ');
+	}
+
 	function handleGameStart() {
-		$game = new NineBallGame(
-			new Player(playerOneName, playerOneHandicap),
-			new Player(playerTwoName, playerTwoHandicap)
-		);
+		const isInvalid = hasMissingData(playerFormData);
+		const messages = deriveMissingFields(playerFormData);
+		const errorList = deriveErrorList(messages);
+
+		if (isInvalid) {
+			$toast = {
+				message: `Missing required player information: <ul class="list-disc">${errorList}</ul>`,
+				icon: WarningIcon,
+				class: 'bg-gray-200'
+			};
+		} else {
+			$game = new NineBallGame(
+				new Player(playerFormData.playerOneName, playerFormData.playerOneHandicap),
+				new Player(playerFormData.playerTwoName, playerFormData.playerTwoHandicap)
+			);
+		}
 
 		goto('/');
 	}
 
 	function handleToastClose() {
-		isRedirect = false;
-		clearTimeout(redirectInt);
+		$toast = null;
+		clearTimeout(toastInt);
 	}
 </script>
 
-{#if isRedirect}
+{#if $toast}
 	<Toast
 		on:close={handleToastClose}
-		message={'Missing required player info.'}
-		icon={WarningIcon}
+		message={$toast.message}
+		icon={$toast.icon}
+		class={$toast.class}
 	/>
 {/if}
 
@@ -68,9 +86,9 @@
 	<div class="mx-auto"><img src={logo} alt="rack em up" class="my-1" /></div>
 
 	{#if step === 0}
-		<Rules bind:selectedGame bind:selectedRules />
+		<RuleForm bind:selectedGame bind:selectedRules />
 	{:else}
-		<Players bind:playerOneName bind:playerOneHandicap bind:playerTwoName bind:playerTwoHandicap />
+		<PlayerForm bind:playerFormData />
 	{/if}
 
 	<div class="flex">

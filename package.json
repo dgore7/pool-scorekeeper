@@ -22,6 +22,7 @@
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.30.0",
+		"lodash": "^4.17.21",
 		"postcss": "^8.4.38",
 		"postcss-apply": "^0.12.0",
 		"postcss-class-apply": "^4.0.1",
