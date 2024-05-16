@@ -1,20 +1,25 @@
 <script lang="ts">
 	import type { ComponentType } from 'svelte';
-  import { fade } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import CloseToastIcon from './icons/CloseToastIcon.svelte';
-  import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
-	export let message: string
-	export let icon: ComponentType
+	export let message: string;
+	export let icon: ComponentType;
+	let className = '';
+	export { className as class };
 
-  const dispatch = createEventDispatcher();
-
+	const dispatch = createEventDispatcher();
 </script>
 
-<div class="toast-dialog" role="alert" transition:fade>
-	<svelte:component this={icon}/>
+<div
+	class="toast-dialog fixed left-5 right-5 top-10 max-w-xl {className}"
+	role="alert"
+	transition:fade
+>
+	<svelte:component this={icon} />
 	<div class="text">{message}</div>
-	<button class="close" on:click={() => dispatch("close")}>
+	<button class="close" on:click={() => dispatch('close')}>
 		<CloseToastIcon width="0.8em" />
 	</button>
 </div>
@@ -27,12 +32,12 @@
 		display: flex;
 		align-items: center;
 		margin: 0 auto;
-    background-color: white;
+		background-color: white;
 	}
 
 	.text {
 		max-width: 15rem;
-    margin: 1rem;
+		margin: 1rem;
 	}
 
 	button {
