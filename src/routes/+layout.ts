@@ -7,5 +7,6 @@ import { NineBallGame } from "$lib";
 export function load() {
 
   const game = writable<NineBallGame | null>(null)
-	return { game }
+  const toast = writable<boolean>(false)
+	return { game, toast }
 }

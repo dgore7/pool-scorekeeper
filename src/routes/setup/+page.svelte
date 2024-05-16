@@ -2,25 +2,21 @@
 	import Rules from '$lib/components/RuleForm.svelte';
 	import Players from '$lib/components/PlayerForm.svelte';
 	import logo from '$lib/assets/brand.svg';
-	import { goto, onNavigate } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { NineBallGame, Player } from '$lib';
-	import Toast from "$lib/components/Toast.svelte"
+	import Toast from '$lib/components/Toast.svelte';
 
 	export let data;
-	let { game } = data
+	let { game, toast } = data;
 
-	let isRedirect = false;
-	let redirectInt: NodeJS.Timeout
-	
-	onNavigate((nav) => {
-		if (nav.from?.route.id === nav.to?.route.id) {
-			isRedirect = true
+	let redirectInt: NodeJS.Timeout;
 
-			redirectInt = setTimeout(() => {
-      isRedirect = false;
-    }, 5000);
-		}
-	})
+	$: if ($toast) {
+
+		redirectInt = setTimeout(() => {
+			$toast = false
+		}, 5000);
+	}
 
 	let step = 0;
 
@@ -46,19 +42,22 @@
 			new Player(playerTwoName, playerTwoHandicap)
 		);
 
+		if (!playerOneName || !playerOneHandicap || !playerTwoName || !playerTwoHandicap) {
+			$toast = true;
+		}
+
 		goto('/');
 	}
 
 	function handleToastClose() {
-		isRedirect = false;
-		clearTimeout(redirectInt)
+		$toast = false
+		clearTimeout(redirectInt);
 	}
-
 </script>
 
-{#if isRedirect}
+{#if $toast}
 	<div class="toast">
-		<Toast on:close={handleToastClose}/>
+		<Toast on:close={handleToastClose} />
 	</div>
 {/if}
 
@@ -92,16 +91,16 @@
 </div>
 
 <style>
-	 .toast {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    display: flex;
-    margin: 1rem auto;
-    justify-content: center;
-    flex-direction: column;
-    z-index: 1000;
-  }
+	.toast {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
+		display: flex;
+		margin: 1rem auto;
+		justify-content: center;
+		flex-direction: column;
+		z-index: 1000;
+	}
 </style>
