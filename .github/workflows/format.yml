@@ -1,8 +1,7 @@
 on: push
 jobs:
   format-check:
-      runs-on: ubuntu-latest
-      steps:
-        - name: esLint
-          run: lint
-  
+    runs-on: ubuntu-latest
+    steps:
+      - name: esLint
+        run: lint

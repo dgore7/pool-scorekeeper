@@ -10,7 +10,7 @@
 	</div>
 	<div class="additional-info">
 		<div class="turn-container">
-			{game.currenname}'s Turn
+			{game.currentPlayer.name}'s Turn
 		</div>
 		<div class="innings-container">
 			<span>
