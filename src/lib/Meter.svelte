@@ -31,7 +31,6 @@
 		position: relative;
 	}
 
-
 	.tick {
 		display: flex;
 		align-items: center;
@@ -46,18 +45,18 @@
 		padding-inline-end: 4px;
 	}
 	.tick-mark {
-		height:  2px;
+		height: 2px;
 		width: 40%;
-    background-color: white;
-    position: relative;
+		background-color: white;
+		position: relative;
 	}
-  .tick-mark.complete::after {
-    content: "";
-    position: absolute;
-    transform: rotate(45deg);
-    height: 2px;
-    z-index: 1;
-    inset: 0;
-    background-color: white;
-  }
+	.tick-mark.complete::after {
+		content: '';
+		position: absolute;
+		transform: rotate(45deg);
+		height: 2px;
+		z-index: 1;
+		inset: 0;
+		background-color: white;
+	}
 </style>

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type {Player, NineBallGame} from "$lib"
+	import type { Player, NineBallGame } from '$lib';
 
-	export let player: Player
-	export let game: NineBallGame
-	export let playerNumber: number
+	export let player: Player;
+	export let game: NineBallGame;
+	export let playerNumber: number;
 </script>
 
 <div class="player-score">
@@ -33,8 +33,8 @@
 		font-size: 4rem;
 	}
 
-  .player-info {
-    display: flex;
-    gap: 1em;
-  }
+	.player-info {
+		display: flex;
+		gap: 1em;
+	}
 </style>

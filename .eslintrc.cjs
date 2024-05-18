@@ -16,8 +16,12 @@ module.exports = {
 	},
 	env: {
 		browser: true,
-		es2017: true,
-		node: true
+		node: true,
+		es2017: true
+	},
+	globals: {
+		angular: true,
+		NodeJS: true
 	},
 	overrides: [
 		{
@@ -25,6 +29,20 @@ module.exports = {
 			parser: 'svelte-eslint-parser',
 			parserOptions: {
 				parser: '@typescript-eslint/parser'
+			}
+		},
+		{
+			files: ['*.{ts,js,svelte}'],
+			rules: {
+				'@typescript-eslint/no-unused-vars': [
+					'error',
+					{
+						varsIgnorePattern: '^_',
+						argsIgnorePattern: '^_'
+					}
+				],
+				'svelte/no-at-html-tags': 'off',
+				'no-case-declarations': 'off'
 			}
 		}
 	]

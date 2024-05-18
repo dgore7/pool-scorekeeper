@@ -10,8 +10,8 @@
 	];
 	const rules = ['APA', 'BCA', 'Pro'];
 
-	export let selectedGame: String;
-	export let selectedRules: String;
+	export let selectedGame: string;
+	export let selectedRules: string;
 </script>
 
 <h2 class="mx-auto">What Type Of Pool Ya Wanna Shoot?</h2>

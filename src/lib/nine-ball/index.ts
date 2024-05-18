@@ -1,5 +1,5 @@
 import type { Action, EndRack } from './actions';
-import { Player } from './player';
+import type { Player } from './player';
 
 class AssertionError extends Error {
 	constructor(cause: string) {
@@ -81,6 +81,7 @@ export class NineBallGame {
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties--;
+				break;
 			case 'MISS':
 				this.currentRack.unEndTurn();
 				break;
@@ -104,7 +105,6 @@ export class NineBallGame {
 				const actionToRedo = this.undoneActions.pop();
 				if (actionToRedo) this.doAction(actionToRedo);
 				return;
-
 			case 'DECREMENT':
 				this.decrement();
 				break;

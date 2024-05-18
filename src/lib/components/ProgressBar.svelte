@@ -40,7 +40,7 @@
 	}
 
 	.progress-bar-outer {
-		border-radius: .5rem;
+		border-radius: 0.5rem;
 		height: 1rem;
 		display: flex;
 		overflow: hidden;

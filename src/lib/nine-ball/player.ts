@@ -12,11 +12,11 @@ const APA_SCORE_REQUIRED = new Map([
 
 export class Player {
 	constructor(name: string, handicap: number) {
-		this.name = name
-		this.handicap = handicap
+		this.name = name;
+		this.handicap = handicap;
 	}
 
-	name = ""
+	name = '';
 	score = 0;
 	safeties = 0;
 	handicap = 9;

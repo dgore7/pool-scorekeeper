@@ -29,7 +29,7 @@ interface IRedo {
 }
 
 interface ITimeOut {
-	type: 'TIMEOUT'
+	type: 'TIMEOUT';
 }
 
 export class Increment implements IIncrement {
@@ -63,7 +63,7 @@ export class Redo implements IRedo {
 }
 
 export class Timeout implements ITimeOut {
-	readonly type = 'TIMEOUT'
+	readonly type = 'TIMEOUT';
 }
 
 export type Action = Increment | Decrement | Safety | Miss | EndRack | Undo | Redo | Timeout;

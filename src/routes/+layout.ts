@@ -2,7 +2,7 @@
 // export const prerender = false
 
 import { writable } from 'svelte/store';
-import { NineBallGame } from '$lib';
+import type { NineBallGame } from '$lib';
 import type { ToastProps } from '$lib/components';
 
 export function load() {
