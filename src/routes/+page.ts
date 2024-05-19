@@ -6,6 +6,6 @@ export async function load({ parent }) {
 	const $game = get(game);
 
 	if (!$game) {
-		throw redirect(303, '/setup');
+		redirect(303, '/setup');
 	}
 }
