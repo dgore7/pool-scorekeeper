@@ -1,12 +1,14 @@
 // export const ssr = false
 // export const prerender = false
-
-import { writable } from 'svelte/store';
 import type { NineBallGame } from '$lib';
 import type { ToastProps } from '$lib/components';
+import { persisted } from 'svelte-persisted-store';
 
 export function load() {
-	const game = writable<NineBallGame | null>(null);
-	const toast = writable<ToastProps | null>(null);
+	const game = persisted<NineBallGame | null>('game', null, { storage: 'session' });
+	const toast = persisted<ToastProps | null>('toast', null, { storage: 'session' });
 	return { game, toast };
 }
+
+export const ssr = false;
+export const prerender = false;
