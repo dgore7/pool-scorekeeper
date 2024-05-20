@@ -9,6 +9,6 @@
 	{@html webManifestLink}
 </svelte:head>
 
-<div class="container m-auto max-w-xl">
+<div class="container m-auto max-w-xl h-full my-4">
 	<slot />
 </div>

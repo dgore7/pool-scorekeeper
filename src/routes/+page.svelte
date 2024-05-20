@@ -5,10 +5,15 @@
 	import Scoreboard from '../lib/components/Scoreboard.svelte';
 	import PlayerStats from '$lib/components/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
+	import BallButtons from '$lib/components/BallButtons.svelte';
+	import BallReturn from '$lib/components/BallReturn.svelte';
+	import type { BallModel } from '$lib/components/Ball.svelte';
 
 	export let data;
 
 	const { game } = data as Required<{ game: Writable<NineBallGame> }>;
+
+	let madeBalls: BallModel[] = [];
 
 	function handleClick() {
 		$game.doAction(new Increment());
@@ -39,9 +44,14 @@
 		$game.doAction(new Undo());
 		$game = $game;
 	}
+
+	function handleBallPocket(event: CustomEvent<BallModel>) {
+		madeBalls.push(event.detail);
+		madeBalls = madeBalls;
+	}
 </script>
 
-<main>
+<main class="container m-auto max-w-96">
 	<Scoreboard game={$game}>
 		{#each $game.players as player, playerNumber}
 			<PlayerStats {player} game={$game} {playerNumber} />
@@ -51,19 +61,8 @@
 	<ProgressBar player={$game.players[0]} color={'red'} />
 	<ProgressBar player={$game.players[1]} color={'blue'} />
 
-	<div aria-label="controls">
-		<button on:click={handleClick}>{$game.currentPlayer.name} made ball</button>
-		<button on:click={handleNineBall}>{$game.currentPlayer.name} made 9 ball and won</button>
-		<button on:click={handleSaftey}>Defensive Shot</button>
-		<button on:click={handleTurn}>End Turn</button>
-		<button on:click={handleTimeout}>Time Out</button>
-
-		<h2>score</h2>
-		<div>Total Innings: {$game.totalInnings}</div>
-		<div>Rack {$game.racks.length} Inninges: {$game.currentRack.innings}</div>
-
-		<button on:click={handleUndo}>Undo Action</button>
-	</div>
+	<BallButtons on:ballPocket={handleBallPocket} />
+	<BallReturn {madeBalls} />
 </main>
 
 <style>
@@ -83,11 +82,7 @@
 		background-color: red;
 	}
 
-	[aria-label='controls'] {
-		display: flex;
-		flex-direction: column;
-		gap: 1em;
+	/* [aria-label='controls'] {
 		margin: auto;
-		max-width: 300px;
-	}
+	} */
 </style>
