@@ -65,9 +65,9 @@
 	export type BallModel = {
 		number: number;
 		color: string;
-		value: number;
 		isStripe: boolean;
 		isDead: boolean;
+		isPocketed: boolean;
 	};
 </script>
 
@@ -77,12 +77,23 @@
 </script>
 
 {#if ball.number < 10}
-	<div
-		class={ballContainer({ size, striped: ball.isStripe })}
-		style="background-color: {ball.isDead && size === 'large' ? 'rgb(75, 85, 105)' : ball.color}"
-	>
-		<div aria-label="ball number" class={numberContainer({ size, class: 'font-noto' })}>
+	{#if ball.isDead && size === 'large'}
+		<div
+			aria-label="ball number"
+			class={numberContainer({ size, class: ['font-noto', 'absolute', 'left-7', 'top-6'] })}
+		>
 			{ball.number}
 		</div>
-	</div>
+	{:else}
+		<div
+			class={ballContainer({ size, striped: ball.isStripe })}
+			style="background-color: {ball.isPocketed && size === 'large'
+				? 'rgb(75, 85, 105)'
+				: ball.color}"
+		>
+			<div aria-label="ball number" class={numberContainer({ size, class: 'font-noto' })}>
+				{ball.number}
+			</div>
+		</div>
+	{/if}
 {/if}

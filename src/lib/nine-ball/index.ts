@@ -1,5 +1,6 @@
 import type { Action, EndRack } from './actions';
 import type { Player } from './player';
+import type { BallModel } from '$lib/components/Ball.svelte';
 
 class AssertionError extends Error {
 	constructor(cause: string) {
@@ -10,7 +11,7 @@ class AssertionError extends Error {
 export class NineBallGame {
 	players: [Player, Player];
 	winner: Player | null = null;
-	racks = [new NineBallRack()];
+	racks = [new NineBallRack(0)];
 	actions: Action[] = [];
 	undoneActions: Action[] = [];
 
@@ -45,19 +46,15 @@ export class NineBallGame {
 		return this.players[prevPlayer];
 	}
 
-	endRack() {
-		this.increment();
-		this.increment();
+	endRack(turn: number) {
 		const additionalDeadBalls = this.currentRack.endRack();
-		this.racks.push(new NineBallRack());
+		this.racks.push(new NineBallRack(turn));
 		return additionalDeadBalls;
 	}
 
 	unEndRack(action: EndRack) {
-		this.decrement();
-		this.decrement();
 		this.racks.pop();
-		this.currentRack.unEndRack(action.deadBalls);
+		this.currentRack.unEndRack(action.deadBallCount);
 	}
 
 	increment() {
@@ -78,6 +75,16 @@ export class NineBallGame {
 				break;
 			case 'INCREMENT':
 				this.decrement();
+				this.currentRack.unpocketBall();
+				break;
+			case 'DOUBLE_INCREMENT':
+				this.decrement();
+				this.decrement();
+				this.currentRack.unpocketBall();
+				break;
+			case 'DOUBLE_DECREMENT':
+				this.increment();
+				this.increment();
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties--;
@@ -95,7 +102,7 @@ export class NineBallGame {
 		this.undoneActions.push(action);
 	}
 
-	doAction(action: Action) {
+	doAction(action: Action, turn?: number) {
 		switch (action.type) {
 			case 'UNDO':
 				const actionToUndo = this.actions.pop();
@@ -111,6 +118,14 @@ export class NineBallGame {
 			case 'INCREMENT':
 				this.increment();
 				break;
+			case 'DOUBLE_INCREMENT':
+				this.increment();
+				this.increment();
+				break;
+			case 'DOUBLE_DECREMENT':
+				this.decrement();
+				this.decrement();
+				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties++;
 				break;
@@ -122,7 +137,7 @@ export class NineBallGame {
 				break;
 			case 'END_RACK':
 				// save deadBalls for use in redo
-				action.deadBalls = this.endRack();
+				action.deadBallCount = this.endRack(turn!);
 				break;
 			default:
 				throw new AssertionError('unexpected action');
@@ -136,10 +151,17 @@ export class NineBallGame {
 class NineBallRack {
 	static RACK_POINTS = 10;
 	innings = 0;
-	deadBalls = 0;
+	deadBallCount = 0;
 	scores = [0, 0];
 	turn = 0;
 	timeouts = [1, 1];
+	liveBalls = this.createBalls();
+	pocketedBalls: BallModel[] = [];
+	deadBalls: BallModel[] = [];
+
+	constructor(turn: number) {
+		this.turn = turn;
+	}
 
 	endTurn() {
 		this.changeTurn();
@@ -161,13 +183,13 @@ class NineBallRack {
 
 	// returns additional dead balls
 	endRack() {
-		const additional = NineBallRack.RACK_POINTS - this.deadBalls - this.total;
-		this.deadBalls += additional;
+		const additional = NineBallRack.RACK_POINTS - this.deadBallCount - this.total;
+		this.deadBallCount += additional;
 		return additional;
 	}
 
 	unEndRack(deadBallsToRestore: number) {
-		this.deadBalls -= deadBallsToRestore;
+		this.deadBallCount -= deadBallsToRestore;
 	}
 
 	increment() {
@@ -182,6 +204,38 @@ class NineBallRack {
 		if (this.timeouts[this.turn]) {
 			this.timeouts[this.turn]--;
 		}
+	}
+
+	unpocketBall() {
+		if (this.pocketedBalls.length) {
+			const zombieBall = this.pocketedBalls.pop();
+			zombieBall!.isPocketed = false;
+		}
+	}
+
+	private createBalls() {
+		const balls = [];
+		const colors: string[] = [
+			'yellow',
+			'blue',
+			'red',
+			'purple',
+			'orange',
+			'green',
+			'brown',
+			'black'
+		];
+		for (let i = 0; i < 15; i++) {
+			const ball: BallModel = {
+				number: i + 1,
+				color: colors[i % colors.length],
+				isStripe: i >= 8,
+				isDead: false,
+				isPocketed: false
+			};
+			balls.push(ball);
+		}
+		return balls;
 	}
 
 	get total() {

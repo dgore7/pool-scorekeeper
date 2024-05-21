@@ -3,20 +3,12 @@
 	import logo from '$lib/assets/brand.svg';
 	import { goto } from '$app/navigation';
 	import { NineBallGame, Player } from '$lib';
-	import { Toast, RuleForm, type PlayerFormData } from '$lib/components';
+	import { RuleForm, type PlayerFormData } from '$lib/components';
 	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
 	import { startCase } from 'lodash';
 
 	export let data;
-	let { game, toast } = data;
-
-	let toastInt: NodeJS.Timeout;
-
-	$: if ($toast) {
-		toastInt = setTimeout(() => {
-			$toast = null;
-		}, 5000);
-	}
+	let { game, toast, toastTime } = data;
 
 	let step = 0;
 
@@ -52,6 +44,7 @@
 		const errorList = deriveErrorList(messages);
 
 		if (isInvalid) {
+			$toastTime = 5000;
 			$toast = {
 				message: `Missing required player information: <ul class="list-disc">${errorList}</ul>`,
 				icon: WarningIcon,
@@ -66,21 +59,7 @@
 
 		goto('/');
 	}
-
-	function handleToastClose() {
-		$toast = null;
-		clearTimeout(toastInt);
-	}
 </script>
-
-{#if $toast}
-	<Toast
-		on:close={handleToastClose}
-		message={$toast.message}
-		icon={$toast.icon}
-		class={$toast.class}
-	/>
-{/if}
 
 <div class="flex flex-col gap-4 min-h-screen max-w-full">
 	<div class="mx-auto"><img src={logo} alt="rack em up" class="my-1" /></div>
@@ -110,6 +89,3 @@
 		{/if}
 	</div>
 </div>
-
-<style>
-</style>

@@ -3,8 +3,10 @@
 import { NineBallGame } from '$lib';
 import type { ToastProps } from '$lib/components';
 import { persisted } from 'svelte-persisted-store';
+import { writable } from 'svelte/store';
 
 export function load() {
+	const toastTime = writable<number>(0);
 	const game = persisted<NineBallGame | null>('game', null, {
 		storage: 'session',
 		serializer: {
@@ -13,7 +15,7 @@ export function load() {
 		}
 	});
 	const toast = persisted<ToastProps | null>('toast', null, { storage: 'session' });
-	return { game, toast };
+	return { game, toast, toastTime };
 }
 
 export const ssr = false;
