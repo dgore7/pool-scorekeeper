@@ -8,7 +8,8 @@
 		EndRack,
 		Timeout,
 		Undo,
-		DoubleIncrement
+		DeadBall,
+		PostKill
 	} from '$lib/nine-ball/actions.js';
 	import GraveIcon from '$lib/components/icons/GraveIcon.svelte';
 	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
@@ -17,6 +18,8 @@
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
 	import ControlPad from '$lib/components/ControlPad.svelte';
 	import BallReturn from '$lib/components/BallReturn.svelte';
+	import DeadBallTitle from '$lib/components/DeadBallTitle.svelte';
+	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
 
 	import type { BallModel } from '$lib/components/Ball.svelte';
 
@@ -26,15 +29,15 @@
 	const { toast, toastTime } = data;
 
 	let isDeadBallMode = false;
+	let isGameOver = false;
 
-	function handleIncrement() {
-		$game.doAction(new Increment());
+	function handlePocket(ball: BallModel) {
+		$game.doAction(new Increment(), null, ball);
 		$game = $game;
-	}
 
-	function handleDoubleIncrement() {
-		$game.doAction(new DoubleIncrement());
-		$game = $game;
+		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
+			handleWinner();
+		}
 	}
 
 	function handleTurn() {
@@ -55,6 +58,10 @@
 	function handleUndo() {
 		$game.doAction(new Undo());
 		$game = $game;
+
+		if (isGameOver) {
+			isGameOver = false;
+		}
 	}
 
 	function handleNewRack() {
@@ -81,23 +88,32 @@
 		}
 	}
 
+	function handleWinner() {
+		isGameOver = true;
+		$toastTime = 5000;
+		$toast = {
+			message: `Player ${$game.currentPlayer.name} wins!`,
+			icon: TrophyIcon,
+			class: 'bg-gray-200'
+		};
+	}
+
 	function handleBallPocket(event: CustomEvent<BallModel>) {
-		event.detail.isPocketed = true;
-		$game.currentRack.pocketedBalls.push(event.detail);
-		if (event.detail.number === 9) {
-			handleDoubleIncrement();
-		} else {
-			handleIncrement();
-		}
+		const pocketedBall = event.detail;
+		handlePocket(pocketedBall);
 		$game = $game;
 	}
 
-	function handleDeadBall(event: CustomEvent<BallModel>) {
-		let deadBall = event.detail;
-		deadBall.isDead = true;
-		deadBall.isPocketed = true;
-		$game.currentRack.pocketedBalls.push(deadBall);
-		$game.currentRack.deadBalls.push(deadBall);
+	function handleDeadBalls(event: CustomEvent<BallModel[]>) {
+		handleDeadBallMode();
+		const deadBalls = event.detail;
+		deadBalls.forEach((ball) => {
+			if (ball.isPocketed) {
+				$game.doAction(new PostKill(), null, ball);
+			} else if ((isGameOver && ball.number === 9) || ball.number < 9) {
+				$game.doAction(new DeadBall(), null, ball);
+			}
+		});
 		$game = $game;
 	}
 </script>
@@ -106,16 +122,22 @@
 	class="container m-auto max-w-96"
 	style="background-color:{isDeadBallMode ? 'darkkhaki' : '#131318'}"
 >
-	<Scoreboard game={$game}>
-		{#each $game.players as player, playerNumber}
-			<PlayerStats {player} game={$game} {playerNumber} />
-		{/each}
-	</Scoreboard>
-	<ProgressBar player={$game.players[0]} color={'red'} />
-	<ProgressBar player={$game.players[1]} color={'blue'} />
+	{#if isDeadBallMode}
+		<DeadBallTitle />
+	{:else}
+		<Scoreboard game={$game}>
+			{#each $game.players as player, playerNumber}
+				<PlayerStats {player} game={$game} {playerNumber} />
+			{/each}
+		</Scoreboard>
+		<ProgressBar player={$game.players[0]} />
+		<ProgressBar player={$game.players[1]} />
+	{/if}
+
 	<ControlPad
 		game={$game}
 		{isDeadBallMode}
+		{isGameOver}
 		on:ballPocket={handleBallPocket}
 		on:miss={handleTurn}
 		on:undo={handleUndo}
@@ -123,7 +145,7 @@
 		on:timeout={handleTimeout}
 		on:newRack={handleNewRack}
 		on:deadBallMode={handleDeadBallMode}
-		on:deadBall={handleDeadBall}
+		on:saveDeadBalls={handleDeadBalls}
 	/>
 	<BallReturn game={$game} />
 </main>

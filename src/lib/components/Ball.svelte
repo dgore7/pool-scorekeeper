@@ -68,6 +68,7 @@
 		isStripe: boolean;
 		isDead: boolean;
 		isPocketed: boolean;
+		isPostKill: boolean;
 	};
 </script>
 
@@ -80,7 +81,7 @@
 	{#if ball.isDead && size === 'large'}
 		<div
 			aria-label="ball number"
-			class={numberContainer({ size, class: ['font-noto', 'absolute', 'left-7', 'top-6'] })}
+			class={numberContainer({ size, class: ['font-noto', 'absolute', 'left-7', 'top-1'] })}
 		>
 			{ball.number}
 		</div>

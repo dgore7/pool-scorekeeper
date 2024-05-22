@@ -4,15 +4,13 @@
 	import { cubicOut } from 'svelte/easing';
 
 	export let player: Player;
-	export let color: string;
 
 	const progress = tweened(0, {
 		duration: 500,
 		easing: cubicOut
 	});
 
-	$: progressPercent = player.score / player.scoreRequired;
-	$: progress.set(progressPercent);
+	$: progress.set(player.progressPercent);
 </script>
 
 <div class="progress-container">
@@ -22,7 +20,7 @@
 	<div class="progress-bar-outer">
 		<div
 			class="progress-bar-inner"
-			style="width: {$progress * 100}%; background-color: {color}"
+			style="width: {$progress * 100}%; background-color: {player.color}"
 		></div>
 	</div>
 </div>

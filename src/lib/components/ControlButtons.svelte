@@ -6,6 +6,9 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { ComponentType } from 'svelte';
 
+	export let isDeadBallMode: boolean;
+	export let isGameOver: boolean;
+
 	let dispatch = createEventDispatcher();
 
 	type ComponentEvent = {
@@ -26,7 +29,11 @@
 </script>
 
 {#each components as component}
-	<button class="py-4" on:click={() => handleClick(component.event)}
+	<button
+		class="py-4"
+		on:click={() => handleClick(component.event)}
+		disabled={(component.event !== 'deadBallMode' && isDeadBallMode) ||
+			((component.event === 'safety' || component.event === 'timeout') && isGameOver)}
 		><svelte:component this={component.icon} /></button
 	>
 {/each}

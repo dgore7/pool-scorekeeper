@@ -63,8 +63,63 @@ export class NineBallGame {
 	}
 
 	decrement() {
-		this.currentPlayer.score--;
-		this.currentRack.decrement();
+		if (this.currentPlayer.score) {
+			this.currentPlayer.score--;
+			this.currentRack.decrement();
+		}
+	}
+
+	pocketBall(ball: BallModel) {
+		ball.isPocketed = true;
+		if (!ball.isDead) {
+			if (ball.number === 9) {
+				this.increment();
+				this.currentRack.leftOverBalls.forEach((ball) => (ball.isDead = true));
+			}
+			this.increment();
+		}
+
+		this.currentRack.pocketedBalls.push(ball);
+	}
+
+	unpocketBall() {
+		if (this.currentRack.pocketedBalls.length) {
+			const zombieBall = this.currentRack.pocketedBalls.pop();
+			zombieBall!.isPocketed = false;
+
+			if (!zombieBall!.isDead) {
+				if (zombieBall!.number === 9) {
+					this.decrement();
+					this.currentRack.leftOverBalls.forEach((ball) => (ball.isDead = false));
+				}
+				this.decrement();
+			}
+		}
+	}
+
+	killBall(ball: BallModel) {
+		ball.isDead = true;
+		this.currentRack.deadBalls.push(ball);
+
+		if (!ball.isPocketed) {
+			this.pocketBall(ball);
+		}
+	}
+
+	unKillBall() {
+		if (this.currentRack.deadBalls.length) {
+			const zombieBall = this.currentRack.deadBalls.pop();
+			// THIS IS NOT TRUE! -> zombieBall and unpocketBall should always be the same ball since actions are undone in order
+
+			if (!zombieBall!.isPostKill) {
+				this.unpocketBall();
+			} else {
+				this.increment();
+			}
+
+			// needs to happen AFTER unpocketBall()
+			zombieBall!.isDead = false;
+		}
 	}
 
 	undoAction(action: Action) {
@@ -74,17 +129,7 @@ export class NineBallGame {
 				this.increment();
 				break;
 			case 'INCREMENT':
-				this.decrement();
-				this.currentRack.unpocketBall();
-				break;
-			case 'DOUBLE_INCREMENT':
-				this.decrement();
-				this.decrement();
-				this.currentRack.unpocketBall();
-				break;
-			case 'DOUBLE_DECREMENT':
-				this.increment();
-				this.increment();
+				this.unpocketBall();
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties--;
@@ -96,13 +141,22 @@ export class NineBallGame {
 				// save deadBalls for use in redo
 				this.unEndRack(action);
 				break;
+			case 'TIMEOUT':
+				this.currentRack.unUseTimeout();
+				break;
+			case 'DEAD_BALL':
+				this.unKillBall();
+				break;
+			case 'POST_KILL':
+				this.unKillBall();
+				break;
 			default:
 				throw new AssertionError('unexpected action');
 		}
 		this.undoneActions.push(action);
 	}
 
-	doAction(action: Action, turn?: number) {
+	doAction(action: Action, turn?: number | null, ball?: BallModel) {
 		switch (action.type) {
 			case 'UNDO':
 				const actionToUndo = this.actions.pop();
@@ -113,18 +167,10 @@ export class NineBallGame {
 				if (actionToRedo) this.doAction(actionToRedo);
 				return;
 			case 'DECREMENT':
-				this.decrement();
+				this.unpocketBall();
 				break;
 			case 'INCREMENT':
-				this.increment();
-				break;
-			case 'DOUBLE_INCREMENT':
-				this.increment();
-				this.increment();
-				break;
-			case 'DOUBLE_DECREMENT':
-				this.decrement();
-				this.decrement();
+				this.pocketBall(ball!);
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties++;
@@ -138,6 +184,14 @@ export class NineBallGame {
 			case 'END_RACK':
 				// save deadBalls for use in redo
 				action.deadBallCount = this.endRack(turn!);
+				break;
+			case 'DEAD_BALL':
+				this.killBall(ball!);
+				break;
+			case 'POST_KILL':
+				this.decrement();
+				ball!.isPostKill = true;
+				this.killBall(ball!);
 				break;
 			default:
 				throw new AssertionError('unexpected action');
@@ -155,7 +209,7 @@ class NineBallRack {
 	scores = [0, 0];
 	turn = 0;
 	timeouts = [1, 1];
-	liveBalls = this.createBalls();
+	gameBalls = this.createBalls();
 	pocketedBalls: BallModel[] = [];
 	deadBalls: BallModel[] = [];
 
@@ -206,11 +260,9 @@ class NineBallRack {
 		}
 	}
 
-	unpocketBall() {
-		if (this.pocketedBalls.length) {
-			const zombieBall = this.pocketedBalls.pop();
-			zombieBall!.isPocketed = false;
-		}
+	unUseTimeout() {
+		//since you use a timeout while its a players turn, undoing actions should always lead to it being this.turn
+		this.timeouts[this.turn]++;
 	}
 
 	private createBalls() {
@@ -231,7 +283,8 @@ class NineBallRack {
 				color: colors[i % colors.length],
 				isStripe: i >= 8,
 				isDead: false,
-				isPocketed: false
+				isPocketed: false,
+				isPostKill: false
 			};
 			balls.push(ball);
 		}
@@ -240,6 +293,14 @@ class NineBallRack {
 
 	get total() {
 		return this.scores.reduce((a, b) => a + b);
+	}
+
+	get leftOverBalls() {
+		return this.gameBalls.filter((ball) => {
+			if (!ball.isPocketed && ball.number < 10) {
+				return ball;
+			}
+		});
 	}
 }
 

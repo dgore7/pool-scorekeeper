@@ -6,14 +6,6 @@ interface IDecrement {
 	type: 'DECREMENT';
 }
 
-interface IDoubleIncrement {
-	type: 'DOUBLE_INCREMENT';
-}
-
-interface IDoubleDecrement {
-	type: 'DOUBLE_DECREMENT';
-}
-
 interface ISafety {
 	type: 'SAFETY';
 }
@@ -40,20 +32,20 @@ interface ITimeOut {
 	type: 'TIMEOUT';
 }
 
+interface IDeadBall {
+	type: 'DEAD_BALL';
+}
+
+interface IPostKill {
+	type: 'POST_KILL';
+}
+
 export class Increment implements IIncrement {
 	readonly type = 'INCREMENT';
 }
 
 export class Decrement implements IDecrement {
 	readonly type = 'DECREMENT';
-}
-
-export class DoubleIncrement implements IDoubleIncrement {
-	readonly type = 'DOUBLE_INCREMENT';
-}
-
-export class DoubleDecrement implements IDoubleDecrement {
-	readonly type = 'DOUBLE_DECREMENT';
 }
 
 export class Safety implements ISafety {
@@ -82,14 +74,22 @@ export class Timeout implements ITimeOut {
 	readonly type = 'TIMEOUT';
 }
 
+export class DeadBall implements IDeadBall {
+	readonly type = 'DEAD_BALL';
+}
+
+export class PostKill implements IPostKill {
+	readonly type = 'POST_KILL';
+}
+
 export type Action =
 	| Increment
 	| Decrement
-	| DoubleIncrement
-	| DoubleDecrement
 	| Safety
 	| Miss
 	| EndRack
 	| Undo
 	| Redo
-	| Timeout;
+	| Timeout
+	| DeadBall
+	| PostKill;
