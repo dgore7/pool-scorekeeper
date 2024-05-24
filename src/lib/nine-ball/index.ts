@@ -9,14 +9,14 @@ class AssertionError extends Error {
 }
 
 const BALL_COLORS: string[] = [
-	'yellow',
-	'blue',
-	'red',
-	'purple',
-	'orange',
-	'green',
-	'brown',
-	'black'
+	'bg-[yellow]',
+	'bg-[blue]',
+	'bg-[red]',
+	'bg-[purple]',
+	'bg-[orange]',
+	'bg-[green]',
+	'bg-[brown]',
+	'bg-[black]'
 ];
 
 export class NineBallGame {
