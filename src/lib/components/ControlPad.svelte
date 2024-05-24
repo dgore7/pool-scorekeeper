@@ -89,7 +89,7 @@
 		<div class="relative">
 			{#if ball.isDead}
 				<button
-					class="relative "
+					class="relative"
 					class:hidden={!ball.isDead}
 					on:click={() => removeDeadBall(ball)}
 					disabled={!isDeadBallMode}
@@ -137,17 +137,20 @@
 				End {game.currentPlayer.name}'s Turn
 			{/if}
 		</button>
-
 	{/if}
-  <div aria-label="control button container" class:invisible={isDeadBallMode} class="rounded-xl bg-slate-600 justify-evenly">
-    <ControlButtons
-      {isGameOver}
-      on:undo={handleUndo}
-      on:safety={handleSaftey}
-      on:timeout={handleTimeout}
-      on:deadBallMode={handleDeadBallMode}
-    />
-  </div>
+	<div
+		aria-label="control button container"
+		class:invisible={isDeadBallMode}
+		class="rounded-xl bg-slate-600 justify-evenly"
+	>
+		<ControlButtons
+			{isGameOver}
+			on:undo={handleUndo}
+			on:safety={handleSaftey}
+			on:timeout={handleTimeout}
+			on:deadBallMode={handleDeadBallMode}
+		/>
+	</div>
 </div>
 
 <style>

@@ -2,7 +2,16 @@
 	import type { NineBallGame } from '$lib';
 	import { fly, type TransitionConfig } from 'svelte/transition';
 	import Ball, { type BallModel } from './Ball.svelte';
-	import { bounceIn, bounceInOut, bounceOut, cubicIn, cubicOut, elasticOut, linear, quintIn } from 'svelte/easing';
+	import {
+		bounceIn,
+		bounceInOut,
+		bounceOut,
+		cubicIn,
+		cubicOut,
+		elasticOut,
+		linear,
+		quintIn
+	} from 'svelte/easing';
 
 	export let game: NineBallGame;
 
