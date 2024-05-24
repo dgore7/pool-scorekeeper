@@ -32,8 +32,7 @@
 	<button
 		class="py-4"
 		on:click={() => handleClick(component.event)}
-		disabled={(component.event !== 'deadBallMode' && isDeadBallMode) ||
-			((component.event === 'safety' || component.event === 'timeout') && isGameOver)}
+		disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
 		><svelte:component this={component.icon} /></button
 	>
 {/each}

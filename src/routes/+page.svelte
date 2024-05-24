@@ -32,7 +32,7 @@
 	let isGameOver = false;
 
 	function handlePocket(ball: BallModel) {
-		$game.doAction(new Increment(), null, ball);
+		$game.doAction(new Increment(), ball);
 		$game = $game;
 
 		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
@@ -41,11 +41,11 @@
 	}
 
 	function handleTurn() {
-		$game!.doAction(new Miss());
+		$game.doAction(new Miss());
 		$game = $game;
 	}
 
-	function handleSaftey() {
+	function handleSafety() {
 		$game.doAction(new Safety());
 		$game = $game;
 	}
@@ -65,7 +65,7 @@
 	}
 
 	function handleNewRack() {
-		$game.doAction(new EndRack(), $game.currentRack.turn);
+		$game.doAction(new EndRack());
 		$game = $game;
 	}
 
@@ -75,7 +75,7 @@
 		if (isDeadBallMode) {
 			$toast = {
 				message:
-					'You Have Entered Deal Ball Mode. Select All Dead Balls Then Click Dead Ball Button Again to Save and Exist Dead Ball Mode.',
+					'You Have Entered Dead Ball Mode. Select All Dead Balls Then Click Dead Ball Button Again to Save and Exist Dead Ball Mode.',
 				icon: GraveIcon,
 				class: 'bg-gray-200'
 			};
@@ -109,9 +109,9 @@
 		const deadBalls = event.detail;
 		deadBalls.forEach((ball) => {
 			if (ball.isPocketed) {
-				$game.doAction(new PostKill(), null, ball);
+				$game.doAction(new PostKill(), ball);
 			} else if ((isGameOver && ball.number === 9) || ball.number < 9) {
-				$game.doAction(new DeadBall(), null, ball);
+				$game.doAction(new DeadBall(), ball);
 			}
 		});
 		$game = $game;
@@ -141,7 +141,7 @@
 		on:ballPocket={handleBallPocket}
 		on:miss={handleTurn}
 		on:undo={handleUndo}
-		on:safety={handleSaftey}
+		on:safety={handleSafety}
 		on:timeout={handleTimeout}
 		on:newRack={handleNewRack}
 		on:deadBallMode={handleDeadBallMode}

@@ -10,12 +10,7 @@
 		easing: cubicOut
 	});
 
-	function adHoc(me: number) {
-		debugger;
-		progress.set(me);
-	}
-
-	$: adHoc(player.progressPercent);
+	$: $progress = player.progressPercent;
 </script>
 
 <div class="progress-container">

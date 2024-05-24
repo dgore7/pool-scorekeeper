@@ -1,10 +1,9 @@
 <script lang="ts">
 	let className = '';
-	export let viewBox = '0 0 60 60';
 	export { className as class };
 </script>
 
-<svg {viewBox} class={className} xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 60 60" class={className} xmlns="http://www.w3.org/2000/svg">
 	<defs />
 	<path
 		fill="#4b5569"

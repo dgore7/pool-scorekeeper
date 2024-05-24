@@ -8,6 +8,17 @@ class AssertionError extends Error {
 	}
 }
 
+const BALL_COLORS: string[] = [
+	'yellow',
+	'blue',
+	'red',
+	'purple',
+	'orange',
+	'green',
+	'brown',
+	'black'
+];
+
 export class NineBallGame {
 	players: [Player, Player];
 	winner: Player | null = null;
@@ -46,9 +57,9 @@ export class NineBallGame {
 		return this.players[prevPlayer];
 	}
 
-	endRack(turn: number) {
+	endRack() {
 		const additionalDeadBalls = this.currentRack.endRack();
-		this.racks.push(new NineBallRack(turn));
+		this.racks.push(new NineBallRack(this.currentRack.turn));
 		return additionalDeadBalls;
 	}
 
@@ -82,13 +93,13 @@ export class NineBallGame {
 		this.currentRack.pocketedBalls.push(ball);
 	}
 
-	unpocketBall() {
+	unPocketBall() {
 		if (this.currentRack.pocketedBalls.length) {
-			const zombieBall = this.currentRack.pocketedBalls.pop();
-			zombieBall!.isPocketed = false;
+			const zombieBall = this.currentRack.pocketedBalls.pop()!;
+			zombieBall.isPocketed = false;
 
-			if (!zombieBall!.isDead) {
-				if (zombieBall!.number === 9) {
+			if (!zombieBall.isDead) {
+				if (zombieBall.number === 9) {
 					this.decrement();
 					this.currentRack.leftOverBalls.forEach((ball) => (ball.isDead = false));
 				}
@@ -108,17 +119,16 @@ export class NineBallGame {
 
 	unKillBall() {
 		if (this.currentRack.deadBalls.length) {
-			const zombieBall = this.currentRack.deadBalls.pop();
-			// THIS IS NOT TRUE! -> zombieBall and unpocketBall should always be the same ball since actions are undone in order
+			const zombieBall = this.currentRack.deadBalls.pop()!;
 
-			if (!zombieBall!.isPostKill) {
-				this.unpocketBall();
+			if (!zombieBall.isPostKill) {
+				this.unPocketBall();
 			} else {
 				this.increment();
 			}
 
-			// needs to happen AFTER unpocketBall()
-			zombieBall!.isDead = false;
+			// needs to happen AFTER unpPocketBall()
+			zombieBall.isDead = false;
 		}
 	}
 
@@ -129,7 +139,7 @@ export class NineBallGame {
 				this.increment();
 				break;
 			case 'INCREMENT':
-				this.unpocketBall();
+				this.unPocketBall();
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties--;
@@ -145,8 +155,6 @@ export class NineBallGame {
 				this.currentRack.unUseTimeout();
 				break;
 			case 'DEAD_BALL':
-				this.unKillBall();
-				break;
 			case 'POST_KILL':
 				this.unKillBall();
 				break;
@@ -156,7 +164,7 @@ export class NineBallGame {
 		this.undoneActions.push(action);
 	}
 
-	doAction(action: Action, turn?: number | null, ball?: BallModel) {
+	doAction(action: Action, ball?: BallModel) {
 		switch (action.type) {
 			case 'UNDO':
 				const actionToUndo = this.actions.pop();
@@ -167,7 +175,7 @@ export class NineBallGame {
 				if (actionToRedo) this.doAction(actionToRedo);
 				return;
 			case 'DECREMENT':
-				this.unpocketBall();
+				this.unPocketBall();
 				break;
 			case 'INCREMENT':
 				this.pocketBall(ball!);
@@ -183,7 +191,7 @@ export class NineBallGame {
 				break;
 			case 'END_RACK':
 				// save deadBalls for use in redo
-				action.deadBallCount = this.endRack(turn!);
+				action.deadBallCount = this.endRack();
 				break;
 			case 'DEAD_BALL':
 				this.killBall(ball!);
@@ -267,20 +275,11 @@ export class NineBallRack {
 
 	private createBalls() {
 		const balls = [];
-		const colors: string[] = [
-			'yellow',
-			'blue',
-			'red',
-			'purple',
-			'orange',
-			'green',
-			'brown',
-			'black'
-		];
-		for (let i = 0; i < 15; i++) {
+
+		for (let i = 0; i < 9; i++) {
 			const ball: BallModel = {
 				number: i + 1,
-				color: colors[i % colors.length],
+				color: BALL_COLORS[i % BALL_COLORS.length],
 				isStripe: i >= 8,
 				isDead: false,
 				isPocketed: false,
@@ -296,11 +295,7 @@ export class NineBallRack {
 	}
 
 	get leftOverBalls() {
-		return this.gameBalls.filter((ball) => {
-			if (!ball.isPocketed && ball.number < 10) {
-				return ball;
-			}
-		});
+		return this.gameBalls.filter((ball) => !ball.isPocketed);
 	}
 }
 

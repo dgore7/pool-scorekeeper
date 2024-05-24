@@ -22,9 +22,7 @@
 		}
 	}
 
-	function pocketBall(ball: BallModel) {
-		const pocketedBall = getCurrentBall(ball);
-
+	function pocketBall(pocketedBall: BallModel) {
 		if (pocketedBall.isPocketed) {
 			return;
 		}
@@ -52,10 +50,6 @@
 		deadBallsToAdd.splice(zomebieBallIndex, 1);
 		deadBallsToAdd = deadBallsToAdd;
 		game = game;
-	}
-
-	function getCurrentBall(ball: BallModel) {
-		return game.currentRack.gameBalls[ball.number - 1];
 	}
 
 	function handleMiss() {
@@ -89,64 +83,60 @@
 	}
 </script>
 
-{#if game.currentRack.gameBalls.length}
-	<div aria-label="button container" class="container mx-auto py-5">
-		{#each game.currentRack.gameBalls as ball}
-			{#if ball.number < 10}
-				{#if ball.isDead}
-					<button
-						class="relative flex items-center justify-center"
-						on:click={() => removeDeadBall(ball)}
-						disabled={!isDeadBallMode}
-					>
-						<Ball {ball} size="large" />
-						<SkullyIcon class={'w-[9rem] -m-6'} />
-					</button>
-				{:else}
-					<button
-						on:click={() => handleBallClick(ball)}
-						disabled={ball.isDead || (isGameOver && !isDeadBallMode)}
-					>
-						<Ball {ball} size={'large'} />
-					</button>
-				{/if}
-			{/if}
-		{/each}
-		{#if isDeadBallMode}
+<div aria-label="button container" class="container mx-auto py-5">
+	{#each game.currentRack.gameBalls as ball}
+		{#if ball.isDead}
 			<button
-				aria-label="dead mode exit button"
-				class="rounded-xl bg-slate-600 py-4 w-full"
-				on:click={handleDeadBallSave}>Exit Deadball Mode</button
+				class="relative flex items-center justify-center"
+				on:click={() => removeDeadBall(ball)}
+				disabled={!isDeadBallMode}
 			>
+				<Ball {ball} size="large" />
+				<SkullyIcon class={'w-[9rem] -m-6'} />
+			</button>
 		{:else}
 			<button
-				aria-label="switch innings button"
-				class="rounded-xl bg-slate-600 py-4 w-full"
-				style="background-color:{game.currentPlayer.color}"
-				on:click={isRackOver ? handleNewRack : handleMiss}
-				disabled={isDeadBallMode || isGameOver}
+				on:click={() => handleBallClick(ball)}
+				disabled={ball.isDead || (isGameOver && !isDeadBallMode)}
 			>
-				{#if isRackOver}
-					New Rack
-				{:else if isGameOver}
-					{game.currentPlayer.name} Wins!
-				{:else}
-					End {game.currentPlayer.name}'s Turn
-				{/if}
+				<Ball {ball} size={'large'} />
 			</button>
-			<div aria-label="control button container" class="rounded-xl bg-slate-600 justify-evenly">
-				<ControlButtons
-					{isDeadBallMode}
-					{isGameOver}
-					on:undo={handleUndo}
-					on:safety={handleSaftey}
-					on:timeout={handleTimeout}
-					on:deadBallMode={handleDeadBallMode}
-				/>
-			</div>
 		{/if}
-	</div>
-{/if}
+	{/each}
+	{#if isDeadBallMode}
+		<button
+			aria-label="dead mode exit button"
+			class="rounded-xl bg-slate-600 py-4 w-full"
+			on:click={handleDeadBallSave}>Exit Deadball Mode</button
+		>
+	{:else}
+		<button
+			aria-label="switch innings button"
+			class="rounded-xl bg-slate-600 py-4 w-full"
+			style="background-color:{game.currentPlayer.color}"
+			on:click={isRackOver ? handleNewRack : handleMiss}
+			disabled={isDeadBallMode || isGameOver}
+		>
+			{#if isRackOver}
+				New Rack
+			{:else if isGameOver}
+				{game.currentPlayer.name} Wins!
+			{:else}
+				End {game.currentPlayer.name}'s Turn
+			{/if}
+		</button>
+		<div aria-label="control button container" class="rounded-xl bg-slate-600 justify-evenly">
+			<ControlButtons
+				{isDeadBallMode}
+				{isGameOver}
+				on:undo={handleUndo}
+				on:safety={handleSaftey}
+				on:timeout={handleTimeout}
+				on:deadBallMode={handleDeadBallMode}
+			/>
+		</div>
+	{/if}
+</div>
 
 <style>
 	[aria-label='button container'] {
