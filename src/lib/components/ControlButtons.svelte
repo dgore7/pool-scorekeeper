@@ -6,7 +6,6 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { ComponentType } from 'svelte';
 
-	export let isDeadBallMode: boolean;
 	export let isGameOver: boolean;
 
 	let dispatch = createEventDispatcher();
