@@ -119,7 +119,7 @@
 </script>
 
 <main
-	class="container m-auto max-w-96 transition-colors h-screen"
+	class="container m-auto max-w-96"
 	style="background-color:{isDeadBallMode ? 'darkkhaki' : '#131318'}"
 >
 	{#if isDeadBallMode}
@@ -130,11 +130,9 @@
 				<PlayerStats {player} game={$game} {playerNumber} />
 			{/each}
 		</Scoreboard>
-	{/if}
-	<div class:invisible={isDeadBallMode}>
 		<ProgressBar player={$game.players[0]} />
 		<ProgressBar player={$game.players[1]} />
-	</div>
+	{/if}
 
 	<ControlPad
 		game={$game}

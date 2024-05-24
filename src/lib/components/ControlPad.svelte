@@ -4,7 +4,6 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { NineBallGame } from '$lib';
 	import SkullyIcon from './icons/SkullyIcon.svelte';
-	import { receive, send } from '$lib/cross-fade';
 
 	export let game: NineBallGame;
 	export let isDeadBallMode: boolean;
@@ -85,36 +84,24 @@
 </script>
 
 <div aria-label="button container" class="container mx-auto py-5">
-	{#each game.currentRack.gameBalls as ball (ball.number)}
-		<div class="relative">
-			{#if ball.isDead}
-				<button
-					class="relative"
-					class:hidden={!ball.isDead}
-					on:click={() => removeDeadBall(ball)}
-					disabled={!isDeadBallMode}
-					in:send|global={{ key: ball.number }}
-					out:receive|global={{ key: ball.number }}
-					on:transitionstart={console.log}
-					on:transitionend={(e) => e.currentTarget.classList.remove('absolute')}
-				>
-					<Ball {ball} size="large" />
-					<SkullyIcon class={'w-[9rem] -m-6'} />
-				</button>
-			{:else}
-				<button
-					class="active:scale-90 transition-transform aria-pressed:pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-					aria-pressed={(ball.isPocketed || ball.isDead) && !isDeadBallMode}
-					class:hidden={ball.isDead}
-					on:click={() => handleBallClick(ball)}
-					disabled={ball.isDead || (isGameOver && !isDeadBallMode)}
-					in:send|global={{ key: ball.number }}
-					out:receive|global={{ key: ball.number }}
-				>
-					<Ball {ball} size={'large'} />
-				</button>
-			{/if}
-		</div>
+	{#each game.currentRack.gameBalls as ball}
+		{#if ball.isDead}
+			<button
+				class="relative flex items-center justify-center"
+				on:click={() => removeDeadBall(ball)}
+				disabled={!isDeadBallMode}
+			>
+				<Ball {ball} size="large" />
+				<SkullyIcon class={'w-[9rem] -m-6'} />
+			</button>
+		{:else}
+			<button
+				on:click={() => handleBallClick(ball)}
+				disabled={ball.isDead || (isGameOver && !isDeadBallMode)}
+			>
+				<Ball {ball} size={'large'} />
+			</button>
+		{/if}
 	{/each}
 	{#if isDeadBallMode}
 		<button
@@ -125,7 +112,8 @@
 	{:else}
 		<button
 			aria-label="switch innings button"
-			class="rounded-xl py-4 w-full transition-colors {game.currentPlayer.color}"
+			class="rounded-xl bg-slate-600 py-4 w-full"
+			style="background-color:{game.currentPlayer.color}"
 			on:click={isRackOver ? handleNewRack : handleMiss}
 			disabled={isDeadBallMode || isGameOver}
 		>
@@ -137,27 +125,24 @@
 				End {game.currentPlayer.name}'s Turn
 			{/if}
 		</button>
+		<div aria-label="control button container" class="rounded-xl bg-slate-600 justify-evenly">
+			<ControlButtons
+				{isDeadBallMode}
+				{isGameOver}
+				on:undo={handleUndo}
+				on:safety={handleSaftey}
+				on:timeout={handleTimeout}
+				on:deadBallMode={handleDeadBallMode}
+			/>
+		</div>
 	{/if}
-	<div
-		aria-label="control button container"
-		class:invisible={isDeadBallMode}
-		class="rounded-xl bg-slate-600 justify-evenly"
-	>
-		<ControlButtons
-			{isGameOver}
-			on:undo={handleUndo}
-			on:safety={handleSaftey}
-			on:timeout={handleTimeout}
-			on:deadBallMode={handleDeadBallMode}
-		/>
-	</div>
 </div>
 
 <style>
 	[aria-label='button container'] {
 		display: grid;
-		grid-template-columns: repeat(3, 6rem);
-		grid-template-rows: repeat(3, 6rem) repeat(2, 0.5fr);
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(3, 1fr) repeat(2, 0.5fr);
 		gap: 1em;
 		margin: auto;
 		max-width: 20rem;

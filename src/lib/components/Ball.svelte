@@ -2,16 +2,7 @@
 	import { cva } from 'class-variance-authority';
 
 	const ballContainer = cva(
-		[
-			'aspect-square',
-			'rounded-full',
-			'flex',
-			'flex-none',
-			'overflow-hidden',
-			'relative',
-			'transition-colors',
-			'duration-200'
-		],
+		['aspect-square', 'rounded-full', 'flex', 'flex-none', 'overflow-hidden', 'relative'],
 		{
 			variants: {
 				size: {
@@ -86,23 +77,24 @@
 	export let ball: BallModel;
 </script>
 
-{#if ball.isDead && size === 'large'}
-	<div
-		aria-label="ball number"
-		class={numberContainer({ size, class: ['font-noto', 'absolute', 'left-7', 'top-1'] })}
-	>
-		{ball.number}
-	</div>
-{:else}
-	<div
-		class={ballContainer({
-			size,
-			striped: ball.isStripe,
-			class: ball.isPocketed && size === 'large' ? 'bg-dead-ball' : ball.color
-		})}
-	>
-		<div aria-label="ball number" class={numberContainer({ size, class: 'font-noto' })}>
+{#if ball.number < 10}
+	{#if ball.isDead && size === 'large'}
+		<div
+			aria-label="ball number"
+			class={numberContainer({ size, class: ['font-noto', 'absolute', 'left-7', 'top-1'] })}
+		>
 			{ball.number}
 		</div>
-	</div>
+	{:else}
+		<div
+			class={ballContainer({ size, striped: ball.isStripe })}
+			style="background-color: {ball.isPocketed && size === 'large'
+				? 'rgb(75, 85, 105)'
+				: ball.color}"
+		>
+			<div aria-label="ball number" class={numberContainer({ size, class: 'font-noto' })}>
+				{ball.number}
+			</div>
+		</div>
+	{/if}
 {/if}

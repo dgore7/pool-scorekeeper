@@ -2,18 +2,18 @@ import { quintOut } from 'svelte/easing';
 import { crossfade } from 'svelte/transition';
 
 export const [send, receive] = crossfade({
-	duration: 400,
+	duration: (d) => Math.sqrt(d * 200),
 
 	fallback(node) {
 		const style = getComputedStyle(node);
 		const transform = style.transform === 'none' ? '' : style.transform;
 
 		return {
-			duration: 400,
+			duration: 600,
 			easing: quintOut,
 			css: (t) => `
 				transform: ${transform};
-				opacity: ${t};
+				opacity: ${t}
 			`
 		};
 	}

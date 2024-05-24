@@ -29,7 +29,7 @@
 
 {#each components as component}
 	<button
-		class="w-12 my-1 active:bg-slate-700 aspect-square rounded flex justify-center items-center transition-colors"
+		class="py-4"
 		on:click={() => handleClick(component.event)}
 		disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
 		><svelte:component this={component.icon} /></button
