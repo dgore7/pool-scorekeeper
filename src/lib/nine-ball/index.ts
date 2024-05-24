@@ -202,7 +202,7 @@ export class NineBallGame {
 	}
 }
 
-class NineBallRack {
+export class NineBallRack {
 	static RACK_POINTS = 10;
 	innings = 0;
 	deadBallCount = 0;

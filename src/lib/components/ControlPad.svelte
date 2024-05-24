@@ -97,6 +97,7 @@
 					<button
 						class="relative flex items-center justify-center"
 						on:click={() => removeDeadBall(ball)}
+						disabled={!isDeadBallMode}
 					>
 						<Ball {ball} size="large" />
 						<SkullyIcon class={'w-[9rem] -m-6'} />

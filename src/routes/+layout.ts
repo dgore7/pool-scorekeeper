@@ -1,6 +1,6 @@
 // export const ssr = false
 // export const prerender = false
-import { NineBallGame } from '$lib';
+import { NineBallGame, Player, NineBallRack } from '$lib';
 import type { ToastProps } from '$lib/components';
 import { persisted } from 'svelte-persisted-store';
 import { writable } from 'svelte/store';
@@ -10,7 +10,12 @@ export function load() {
 	const game = persisted<NineBallGame | null>('game', null, {
 		storage: 'session',
 		serializer: {
-			parse: (str) => Object.setPrototypeOf(JSON.parse(str), NineBallGame.prototype),
+			parse: (str) => {
+				const game: NineBallGame = Object.setPrototypeOf(JSON.parse(str), NineBallGame.prototype);
+				game.players.forEach((player: Player) => Object.setPrototypeOf(player, Player.prototype));
+				game.racks.forEach((rack) => Object.setPrototypeOf(rack, NineBallRack.prototype));
+				return game;
+			},
 			stringify: JSON.stringify
 		}
 	});
