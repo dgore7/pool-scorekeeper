@@ -1,31 +1,51 @@
 <script lang="ts">
 	import type { NineBallGame } from '$lib';
 	import type { Writable } from 'svelte/store';
-	import { Safety, Miss, Increment, EndRack, Timeout, Undo } from '$lib/nine-ball/actions.js';
-	import Scoreboard from '../lib/components/Scoreboard.svelte';
+	import {
+		Safety,
+		Miss,
+		Increment,
+		EndRack,
+		Timeout,
+		Undo,
+		DeadBall,
+		PostKill
+	} from '$lib/nine-ball/actions.js';
+	import GraveIcon from '$lib/components/icons/GraveIcon.svelte';
+	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
+	import Scoreboard from '$lib/components/Scoreboard.svelte';
 	import PlayerStats from '$lib/components/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
+	import ControlPad from '$lib/components/ControlPad.svelte';
+	import BallReturn from '$lib/components/BallReturn.svelte';
+	import DeadBallTitle from '$lib/components/DeadBallTitle.svelte';
+	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
+
+	import type { BallModel } from '$lib/components/Ball.svelte';
 
 	export let data;
 
 	const { game } = data as Required<{ game: Writable<NineBallGame> }>;
+	const { toast, toastTime } = data;
 
-	function handleClick() {
-		$game.doAction(new Increment());
-		$game = $game;
-	}
+	let isDeadBallMode = false;
+	let isGameOver = false;
 
-	function handleNineBall() {
-		$game.doAction(new EndRack());
+	function handlePocket(ball: BallModel) {
+		$game.doAction(new Increment(), ball);
 		$game = $game;
+
+		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
+			handleWinner();
+		}
 	}
 
 	function handleTurn() {
-		$game!.doAction(new Miss());
+		$game.doAction(new Miss());
 		$game = $game;
 	}
 
-	function handleSaftey() {
+	function handleSafety() {
 		$game.doAction(new Safety());
 		$game = $game;
 	}
@@ -38,56 +58,94 @@
 	function handleUndo() {
 		$game.doAction(new Undo());
 		$game = $game;
+
+		if (isGameOver) {
+			isGameOver = false;
+		}
+	}
+
+	function handleNewRack() {
+		$game.doAction(new EndRack());
+		$game = $game;
+	}
+
+	function handleDeadBallMode() {
+		isDeadBallMode = !isDeadBallMode;
+		$toastTime = 10000;
+		if (isDeadBallMode) {
+			$toast = {
+				message:
+					'You Have Entered Dead Ball Mode. Select All Dead Balls Then Click Dead Ball Button Again to Save and Exist Dead Ball Mode.',
+				icon: GraveIcon,
+				class: 'bg-gray-200'
+			};
+		} else {
+			$toast = {
+				message: 'You Have Re-Entered the World of the Living.',
+				icon: WarningIcon,
+				class: 'bg-gray-200'
+			};
+		}
+	}
+
+	function handleWinner() {
+		isGameOver = true;
+		$toastTime = 5000;
+		$toast = {
+			message: `Player ${$game.currentPlayer.name} wins!`,
+			icon: TrophyIcon,
+			class: 'bg-gray-200'
+		};
+	}
+
+	function handleBallPocket(event: CustomEvent<BallModel>) {
+		const pocketedBall = event.detail;
+		handlePocket(pocketedBall);
+		$game = $game;
+	}
+
+	function handleDeadBalls(event: CustomEvent<BallModel[]>) {
+		handleDeadBallMode();
+		const deadBalls = event.detail;
+		deadBalls.forEach((ball) => {
+			if (ball.isPocketed) {
+				$game.doAction(new PostKill(), ball);
+			} else if ((isGameOver && ball.number === 9) || ball.number < 9) {
+				$game.doAction(new DeadBall(), ball);
+			}
+		});
+		$game = $game;
 	}
 </script>
 
-<main>
-	<Scoreboard game={$game}>
-		{#each $game.players as player, playerNumber}
-			<PlayerStats {player} game={$game} {playerNumber} />
-		{/each}
-	</Scoreboard>
+<main
+	class="container m-auto max-w-96"
+	style="background-color:{isDeadBallMode ? 'darkkhaki' : '#131318'}"
+>
+	{#if isDeadBallMode}
+		<DeadBallTitle />
+	{:else}
+		<Scoreboard game={$game}>
+			{#each $game.players as player, playerNumber}
+				<PlayerStats {player} game={$game} {playerNumber} />
+			{/each}
+		</Scoreboard>
+		<ProgressBar player={$game.players[0]} />
+		<ProgressBar player={$game.players[1]} />
+	{/if}
 
-	<ProgressBar player={$game.players[0]} color={'red'} />
-	<ProgressBar player={$game.players[1]} color={'blue'} />
-
-	<div aria-label="controls">
-		<button on:click={handleClick}>{$game.currentPlayer.name} made ball</button>
-		<button on:click={handleNineBall}>{$game.currentPlayer.name} made 9 ball and won</button>
-		<button on:click={handleSaftey}>Defensive Shot</button>
-		<button on:click={handleTurn}>End Turn</button>
-		<button on:click={handleTimeout}>Time Out</button>
-
-		<h2>score</h2>
-		<div>Total Innings: {$game.totalInnings}</div>
-		<div>Rack {$game.racks.length} Inninges: {$game.currentRack.innings}</div>
-
-		<button on:click={handleUndo}>Undo Action</button>
-	</div>
+	<ControlPad
+		game={$game}
+		{isDeadBallMode}
+		{isGameOver}
+		on:ballPocket={handleBallPocket}
+		on:miss={handleTurn}
+		on:undo={handleUndo}
+		on:safety={handleSafety}
+		on:timeout={handleTimeout}
+		on:newRack={handleNewRack}
+		on:deadBallMode={handleDeadBallMode}
+		on:saveDeadBalls={handleDeadBalls}
+	/>
+	<BallReturn game={$game} />
 </main>
-
-<style>
-	button {
-		border: 5px solid white;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 2rem;
-	}
-
-	button:hover {
-		background-color: orange;
-	}
-
-	button:active {
-		background-color: red;
-	}
-
-	[aria-label='controls'] {
-		display: flex;
-		flex-direction: column;
-		gap: 1em;
-		margin: auto;
-		max-width: 300px;
-	}
-</style>

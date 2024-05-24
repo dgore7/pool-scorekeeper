@@ -11,16 +11,23 @@ const APA_SCORE_REQUIRED = new Map([
 ]);
 
 export class Player {
-	constructor(name: string, handicap: number) {
+	constructor(name: string, handicap: number, color: string) {
 		this.name = name;
 		this.handicap = handicap;
+		this.color = color;
 	}
 
 	name = '';
+	color = '';
 	score = 0;
 	safeties = 0;
 	handicap = 9;
+
 	get scoreRequired() {
 		return APA_SCORE_REQUIRED.get(this.handicap)!;
+	}
+
+	get progressPercent() {
+		return this.score / this.scoreRequired;
 	}
 }

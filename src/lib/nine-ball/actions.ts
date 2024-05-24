@@ -12,12 +12,12 @@ interface ISafety {
 
 interface IMiss {
 	readonly type: 'MISS';
-	readonly deadBalls: number;
+	readonly deadBallCount: number;
 }
 
 interface IEndRack {
 	type: 'END_RACK';
-	deadBalls: number;
+	deadBallCount: number;
 }
 
 interface IUndo {
@@ -30,6 +30,14 @@ interface IRedo {
 
 interface ITimeOut {
 	type: 'TIMEOUT';
+}
+
+interface IDeadBall {
+	type: 'DEAD_BALL';
+}
+
+interface IPostKill {
+	type: 'POST_KILL';
 }
 
 export class Increment implements IIncrement {
@@ -46,12 +54,12 @@ export class Safety implements ISafety {
 
 export class Miss implements IMiss {
 	readonly type = 'MISS';
-	constructor(readonly deadBalls: number = 0) {}
+	constructor(readonly deadBallCount: number = 0) {}
 }
 
 export class EndRack implements IEndRack {
 	readonly type = 'END_RACK';
-	deadBalls = 0;
+	deadBallCount = 0;
 }
 
 export class Undo implements IUndo {
@@ -66,4 +74,22 @@ export class Timeout implements ITimeOut {
 	readonly type = 'TIMEOUT';
 }
 
-export type Action = Increment | Decrement | Safety | Miss | EndRack | Undo | Redo | Timeout;
+export class DeadBall implements IDeadBall {
+	readonly type = 'DEAD_BALL';
+}
+
+export class PostKill implements IPostKill {
+	readonly type = 'POST_KILL';
+}
+
+export type Action =
+	| Increment
+	| Decrement
+	| Safety
+	| Miss
+	| EndRack
+	| Undo
+	| Redo
+	| Timeout
+	| DeadBall
+	| PostKill;

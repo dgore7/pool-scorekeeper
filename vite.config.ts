@@ -9,5 +9,8 @@ export default defineConfig({
 	},
 	optimizeDeps: {
 		include: ['postcss', 'autoprefixer', 'postcss-jit-props', 'open-props']
+	},
+	server: {
+		host: true
 	}
 });
