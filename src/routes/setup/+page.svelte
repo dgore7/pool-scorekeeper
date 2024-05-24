@@ -52,8 +52,8 @@
 			};
 		} else {
 			$game = new NineBallGame(
-				new Player(playerFormData.playerOneName, playerFormData.playerOneHandicap, 'red'),
-				new Player(playerFormData.playerTwoName, playerFormData.playerTwoHandicap, 'blue')
+				new Player(playerFormData.playerOneName, playerFormData.playerOneHandicap, 'bg-[red]'),
+				new Player(playerFormData.playerTwoName, playerFormData.playerTwoHandicap, 'bg-[blue]')
 			);
 		}
 
