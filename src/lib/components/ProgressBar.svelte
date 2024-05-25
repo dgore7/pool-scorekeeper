@@ -18,10 +18,7 @@
 		{player.name}
 	</div>
 	<div class="progress-bar-outer">
-		<div
-			class="progress-bar-inner"
-			style="width: {$progress * 100}%; background-color: {player.color}"
-		></div>
+		<div class="progress-bar-inner {player.color}" style:width="{$progress * 100}%"></div>
 	</div>
 </div>
 
