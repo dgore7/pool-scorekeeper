@@ -95,7 +95,6 @@
 					disabled={!isDeadBallMode}
 					in:send|global={{ key: ball.number }}
 					out:receive|global={{ key: ball.number }}
-					on:transitionstart={console.log}
 					on:transitionend={(e) => e.currentTarget.classList.remove('absolute')}
 				>
 					<Ball {ball} size="large" />
