@@ -13,13 +13,14 @@
 	type ComponentEvent = {
 		icon: ComponentType;
 		event: string;
+		label: string;
 	};
 
 	let components: ComponentEvent[] = [
-		{ icon: UndoIcon, event: 'undo' },
-		{ icon: ShieldIcon, event: 'safety' },
-		{ icon: PauseIcon, event: 'timeout' },
-		{ icon: GraveIcon, event: 'deadBallMode' }
+		{ icon: UndoIcon, event: 'undo', label: 'undo' },
+		{ icon: ShieldIcon, event: 'safety', label: 'safety' },
+		{ icon: PauseIcon, event: 'timeout', label: 'timeout' },
+		{ icon: GraveIcon, event: 'deadBallMode', label: 'dead ball mode' }
 	];
 
 	function handleClick(eventType: string) {
@@ -27,11 +28,13 @@
 	}
 </script>
 
-{#each components as component}
+{#each components as { icon, event, label }}
 	<button
-		class="w-12 my-1 active:bg-slate-700 aspect-square rounded flex justify-center items-center transition-colors"
-		on:click={() => handleClick(component.event)}
-		disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
-		><svelte:component this={component.icon} /></button
+		class="w-8 my-1 active:bg-slate-700 aspect-square rounded flex justify-center items-center transition-colors"
+		on:click={() => handleClick(event)}
+		disabled={(event === 'safety' || event === 'timeout') && isGameOver}
 	>
+		<span class="sr-only">{label}</span>
+		<svelte:component this={icon} />
+	</button>
 {/each}

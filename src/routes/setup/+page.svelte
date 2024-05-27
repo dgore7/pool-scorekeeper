@@ -1,11 +1,11 @@
 <script lang="ts">
 	import PlayerForm from '$lib/components/PlayerForm.svelte';
-	import logo from '$lib/assets/brand.svg';
 	import { goto } from '$app/navigation';
 	import { NineBallGame, Player } from '$lib';
 	import { RuleForm, type PlayerFormData } from '$lib/components';
-	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
+	import WarningIcon from '$lib/components/WarningIcon.svelte';
 	import { startCase } from 'lodash';
+	import Header from '$lib/components/Header.svelte';
 
 	export let data;
 	let { game, toast, toastTime } = data;
@@ -61,8 +61,8 @@
 	}
 </script>
 
-<div class="flex flex-col gap-4 min-h-screen max-w-full">
-	<div class="mx-auto"><img src={logo} alt="rack em up" class="my-1" /></div>
+<div class="flex flex-col gap-4 max-w-full">
+	<Header></Header>
 
 	{#if step === 0}
 		<RuleForm bind:selectedGame bind:selectedRules />

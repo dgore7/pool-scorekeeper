@@ -1,75 +1,7 @@
 <script context="module" lang="ts">
 	import { cva } from 'class-variance-authority';
 
-	const ballContainer = cva(
-		[
-			'aspect-square',
-			'rounded-full',
-			'flex',
-			'flex-none',
-			'overflow-hidden',
-			'relative',
-			'transition-colors',
-			'duration-200'
-		],
-		{
-			variants: {
-				size: {
-					small: ['text-m', 'w-10'],
-					large: ['text-3xl', 'w-24']
-				},
-				striped: {
-					true: [
-						'before:absolute',
-						'before:bg-amber-50',
-						'before:top-0',
-						'before:h-4',
-						'before:w-full',
-						'after:absolute',
-						'after:bg-amber-50',
-						'after:bottom-0',
-						'after:h-4',
-						'after:w-full'
-					],
-					false: ''
-				}
-			},
-			defaultVariants: {
-				size: 'large'
-			},
-			compoundVariants: [
-				{
-					striped: true,
-					size: 'small',
-					class: ['before:h-[.5rem]', 'after:h-[.5rem]']
-				}
-			]
-		}
-	);
-
-	const numberContainer = cva(
-		[
-			'aspect-square',
-			'rounded-full',
-			'm-auto',
-			'text-black',
-			'bg-amber-50',
-			'flex',
-			'justify-center',
-			'items-center'
-		],
-		{
-			variants: {
-				size: {
-					small: ['text-xs', 'w-4'],
-					large: ['text-3xl', 'w-10']
-				}
-			},
-			defaultVariants: {
-				size: 'large'
-			}
-		}
-	);
+	const ballClasses = cva(['transition-colors', 'duration-200', 'h-full']);
 
 	export type BallModel = {
 		number: number;
@@ -82,27 +14,51 @@
 </script>
 
 <script lang="ts">
+	import BallText from './BallText.svelte';
+
 	export let size: 'large' | 'small';
 	export let ball: BallModel;
+	export let pocketed = false;
+	let className = '';
+	export { className as class };
+
+	$: ballColor = pocketed ? 'fill-dead-ball' : `fill-${ball.color}-ball`;
 </script>
 
-{#if ball.isDead && size === 'large'}
-	<div
-		aria-label="ball number"
-		class={numberContainer({ size, class: ['font-noto', 'absolute', 'left-7', 'top-1'] })}
-	>
-		{ball.number}
-	</div>
-{:else}
-	<div
-		class={ballContainer({
-			size,
-			striped: ball.isStripe,
-			class: ball.isPocketed && size === 'large' ? 'bg-dead-ball' : ball.color
-		})}
-	>
-		<div aria-label="ball number" class={numberContainer({ size, class: 'font-noto' })}>
+<svg
+	viewBox="0 0 48 48"
+	class={ballClasses({
+		class: [ball.isStripe ? 'fill-white' : ballColor, className]
+	})}
+	clip-rule="even-odd"
+>
+	<circle cx="50%" cy="50%" r="22" id="pool-ball" />
+	{#key ball.isPocketed}
+		<clipPath id="stripe">
+			<!--
+        Everything outside the circle will be
+        clipped and therefore invisible.
+      -->
+			<rect y="20%" height="60%" width="100%" />
+		</clipPath>
+		<use
+			clip-path="url(#stripe)"
+			href="#pool-ball"
+			class:hidden={!ball.isStripe}
+			class={ball.isPocketed && size === 'large' ? 'fill-dead-ball' : `fill-${ball.color}-ball`}
+		/>
+		<BallText alignment="center">
 			{ball.number}
-		</div>
-	</div>
-{/if}
+		</BallText>
+	{/key}
+</svg>
+
+<style>
+	circle {
+		stroke: #646464;
+		stroke-width: 1px;
+		stroke-opacity: 0.6;
+		stroke-linejoin: round;
+		filter: url(#drop-shadow);
+	}
+</style>

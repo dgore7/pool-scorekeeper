@@ -4,6 +4,9 @@
 	import { cubicOut } from 'svelte/easing';
 
 	export let player: Player;
+	let className = '';
+	export { className as class };
+	export let reverse = false;
 
 	const progress = tweened(0, {
 		duration: 500,
@@ -13,33 +16,44 @@
 	$: $progress = player.progressPercent;
 </script>
 
-<div class="progress-container">
-	<div>
-		{player.name}
-	</div>
-	<div class="progress-bar-outer">
-		<div class="progress-bar-inner {player.color}" style:width="{$progress * 100}%"></div>
+<div
+	class="progress-container {className}"
+	role="progressbar"
+	aria-label="{player.name}'s progress bar"
+	aria-valuenow={player.score}
+	aria-valuemax={player.scoreRequired}
+>
+	<div
+		class="progress-bar-outer rounded-t-lg"
+		class:rounded-t-lg={!reverse}
+		class:rounded-b-lg={reverse}
+	>
+		<div class="progress-bar-inner {player.color}" style:width="{$progress * 100}%" />
 	</div>
 </div>
 
 <style>
 	.progress-container {
+		grid-column: span 2;
 		display: flex;
 		align-items: center;
 		gap: 1rem;
 	}
 
 	.progress-bar-inner {
-		height: inherit;
-		border-radius: inherit;
+		height: 100%;
 	}
 
 	.progress-bar-outer {
-		border-radius: 0.5rem;
 		height: 1rem;
 		display: flex;
 		overflow: hidden;
 		background-color: white;
 		width: 100%;
+		border: 2px solid grey;
+
+		&.reverse {
+			border-radius: 0 0 8px 8px;
+		}
 	}
 </style>
