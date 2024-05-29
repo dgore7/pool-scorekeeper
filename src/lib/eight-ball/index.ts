@@ -15,7 +15,7 @@ export class EightBallGame {
 	players: [Player, Player];
 	winner: Player | null = null;
 	actions: Action[] = [];
-	racks: any[] = [];
+	racks: EightBallRack[] = [];
 	undoneActions: Action[] = [];
 
 	constructor(player1: Player, player2: Player) {
@@ -114,16 +114,16 @@ export class EightBallGame {
 			this.currentRack.playerBalls = ['solid', 'stripe'];
 		} else {
 			this.currentRack.playerBalls = ['stripe', 'solid'];
-			let ballToMove = this.currentRack.assignmentBalls.pop();
-			this.currentRack.assignmentBalls.unshift(ballToMove);
+			const ballToMove = this.currentRack.assignmentBalls.pop();
+			this.currentRack.assignmentBalls.unshift(ballToMove!);
 		}
 	}
 
 	assignSolid() {
 		if (this.currentRack.turn) {
 			this.currentRack.playerBalls = ['stripe', 'solid'];
-			let ballToMove = this.currentRack.assignmentBalls.pop();
-			this.currentRack.assignmentBalls.unshift(ballToMove);
+			const ballToMove = this.currentRack.assignmentBalls.pop();
+			this.currentRack.assignmentBalls.unshift(ballToMove!);
 		} else {
 			this.currentRack.playerBalls = ['solid', 'stripe'];
 		}
@@ -219,8 +219,8 @@ export class EightBallRack {
 	scores = [0, 0];
 	turn = 0;
 	timeouts = [1, 1];
-	gameEndCase: endGameCase | null = null;
-	playerBalls: ballType | null[] = [null, null];
+	endGameCase: endGameCase | null = null;
+	playerBalls: ballType[] | null[] = [null, null];
 	assignmentBalls: BallModel[] = this.createBalls();
 	winner: Player | null = null;
 	playerToBreak: Player | null = null;
@@ -267,9 +267,9 @@ export class EightBallRack {
 	}
 
 	private createBalls() {
-		let ballHolder: BallModel[] = [];
+		const ballHolder: BallModel[] = [];
 		for (let i = 0; i < 2; i++) {
-			let ball = {
+			const ball = {
 				number: i === 0 ? 1 : 9,
 				color: '#FFB51E',
 				isStripe: i !== 0,

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import ControlButtons from './ControlButtons.svelte';
-	import type { ballType } from '$lib/eight-ball/types';
 
 	export let isGameOver;
 	export let game;
