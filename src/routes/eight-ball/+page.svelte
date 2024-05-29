@@ -152,5 +152,3 @@
 		on:safety={handleSafety}
 	/>
 </div>
-
-

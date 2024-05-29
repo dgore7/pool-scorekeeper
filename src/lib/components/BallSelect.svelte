@@ -3,12 +3,12 @@
 	import { createEventDispatcher } from 'svelte';
 	import Ball from './Ball.svelte';
 
-  export let game;
+	export let game;
 
 	let dispatch = createEventDispatcher();
 
 	function handleBallAssignment(ball: BallModel) {
-    dispatch("ballSelect", ball)
+		dispatch('ballSelect', ball);
 	}
 </script>
 

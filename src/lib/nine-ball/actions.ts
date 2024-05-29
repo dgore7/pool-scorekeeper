@@ -92,5 +92,4 @@ export type Action =
 	| Redo
 	| Timeout
 	| DeadBall
-	| PostKill
-
+	| PostKill;

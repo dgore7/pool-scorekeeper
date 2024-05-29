@@ -6,7 +6,7 @@ import { persisted } from 'svelte-persisted-store';
 import { writable } from 'svelte/store';
 
 export function load() {
-	const dialog = persisted<DialogProps | null>('dialog', null, { storage: 'session'})
+	const dialog = persisted<DialogProps | null>('dialog', null, { storage: 'session' });
 	const toastTime = writable<number>(0);
 	const game = persisted<NineBallGame | null>('game', null, {
 		storage: 'session',

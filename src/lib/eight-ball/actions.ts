@@ -30,7 +30,6 @@ interface ITimeOut {
 	type: 'TIMEOUT';
 }
 
-
 interface IStripe {
 	type: 'STRIPE';
 }
@@ -79,14 +78,4 @@ export class Solid implements ISolid {
 	readonly type = 'SOLID';
 }
 
-export type Action =
-	| Win
-	| Lose
-	| Safety
-	| Miss
-	| EndRack
-	| Undo
-	| Redo
-	| Timeout
-	| Stripe
-	| Solid;
+export type Action = Win | Lose | Safety | Miss | EndRack | Undo | Redo | Timeout | Stripe | Solid;

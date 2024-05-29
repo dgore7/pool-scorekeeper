@@ -11,4 +11,3 @@ export class Player {
 	safeties = 0;
 	handicap = 9;
 }
-

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Player, NineBallGame, EightBallGame } from '$lib';
-	import type { Player as EightBallPlayer } from "$lib/index/player"
+	import type { Player as EightBallPlayer } from '$lib/index/player';
 
 	export let player: Player | EightBallPlayer;
 	export let game: NineBallGame | EightBallGame;
