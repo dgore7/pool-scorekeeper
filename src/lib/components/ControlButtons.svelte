@@ -7,6 +7,7 @@
 	import type { ComponentType } from 'svelte';
 
 	export let isGameOver: boolean;
+	export let isNineBall: boolean = true;
 
 	let dispatch = createEventDispatcher();
 
@@ -28,13 +29,22 @@
 	}
 </script>
 
-{#each components as { icon, event, label }}
-	<button
-		class="w-8 my-1 active:bg-slate-700 aspect-square rounded flex justify-center items-center transition-colors"
-		on:click={() => handleClick(event)}
-		disabled={(event === 'safety' || event === 'timeout') && isGameOver}
-	>
-		<span class="sr-only">{label}</span>
-		<svelte:component this={icon} />
-	</button>
+{#each components as component}
+	{#if !isNineBall}
+		{#if component.event !== 'deadBallMode'}
+			<button
+				class="py-4"
+				on:click={() => handleClick(component.event)}
+				disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
+				><svelte:component this={component.icon} /></button
+			>
+		{/if}
+	{:else}
+		<button
+			class="py-4"
+			on:click={() => handleClick(component.event)}
+			disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
+			><svelte:component this={component.icon} /></button
+		>
+	{/if}
 {/each}

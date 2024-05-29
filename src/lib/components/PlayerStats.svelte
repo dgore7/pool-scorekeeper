@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type { Player, NineBallGame } from '$lib';
+	import type { Player, NineBallGame, EightBallGame } from '$lib';
+	import type { Player as EightBallPlayer } from "$lib/index/player"
 
-	export let player: Player;
-	export let game: NineBallGame;
+	export let player: Player | EightBallPlayer;
+	export let game: NineBallGame | EightBallGame;
 	export let playerNumber: number;
 </script>
 

@@ -1,9 +1,9 @@
-interface IIncrement {
-	type: 'INCREMENT';
+interface IWin {
+	type: 'WIN';
 }
 
-interface IDecrement {
-	type: 'DECREMENT';
+interface ILose {
+	type: 'LOSE';
 }
 
 interface ISafety {
@@ -12,12 +12,10 @@ interface ISafety {
 
 interface IMiss {
 	readonly type: 'MISS';
-	readonly deadBallCount: number;
 }
 
 interface IEndRack {
 	type: 'END_RACK';
-	deadBallCount: number;
 }
 
 interface IUndo {
@@ -32,20 +30,21 @@ interface ITimeOut {
 	type: 'TIMEOUT';
 }
 
-interface IDeadBall {
-	type: 'DEAD_BALL';
+
+interface IStripe {
+	type: 'STRIPE';
 }
 
-interface IPostKill {
-	type: 'POST_KILL';
+interface ISolid {
+	type: 'SOLID';
 }
 
-export class Increment implements IIncrement {
-	readonly type = 'INCREMENT';
+export class Win implements IWin {
+	readonly type = 'WIN';
 }
 
-export class Decrement implements IDecrement {
-	readonly type = 'DECREMENT';
+export class Lose implements ILose {
+	readonly type = 'LOSE';
 }
 
 export class Safety implements ISafety {
@@ -54,12 +53,10 @@ export class Safety implements ISafety {
 
 export class Miss implements IMiss {
 	readonly type = 'MISS';
-	constructor(readonly deadBallCount: number = 0) {}
 }
 
 export class EndRack implements IEndRack {
 	readonly type = 'END_RACK';
-	deadBallCount = 0;
 }
 
 export class Undo implements IUndo {
@@ -74,23 +71,22 @@ export class Timeout implements ITimeOut {
 	readonly type = 'TIMEOUT';
 }
 
-export class DeadBall implements IDeadBall {
-	readonly type = 'DEAD_BALL';
+export class Stripe implements IStripe {
+	readonly type = 'STRIPE';
 }
 
-export class PostKill implements IPostKill {
-	readonly type = 'POST_KILL';
+export class Solid implements ISolid {
+	readonly type = 'SOLID';
 }
 
 export type Action =
-	| Increment
-	| Decrement
+	| Win
+	| Lose
 	| Safety
 	| Miss
 	| EndRack
 	| Undo
 	| Redo
 	| Timeout
-	| DeadBall
-	| PostKill
-
+	| Stripe
+	| Solid;
