@@ -84,12 +84,12 @@
 	}
 </script>
 
-<div aria-label="button container" class="container mx-auto py-5">
+<div aria-label="button container" class="container mx-auto py-5 w-full">
 	{#each game.currentRack.gameBalls as ball (ball.number)}
-		<div class="relative">
+		<div class="relative h-full w-full mb-4">
 			{#if ball.isDead}
 				<button
-					class="relative"
+					class="relative h-full w-full"
 					class:hidden={!ball.isDead}
 					on:click={() => removeDeadBall(ball)}
 					disabled={!isDeadBallMode}
@@ -97,12 +97,11 @@
 					out:receive|global={{ key: ball.number }}
 					on:transitionend={(e) => e.currentTarget.classList.remove('absolute')}
 				>
-					<Ball {ball} size="large" />
-					<SkullyIcon class={'w-[9rem] -m-6'} />
+					<SkullyIcon {ball} class="h-full mx-auto -my-6" />
 				</button>
 			{:else}
 				<button
-					class="active:scale-90 transition-transform aria-pressed:pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+					class="active:scale-90 transition-transform aria-pressed:pointer-events-none h-full w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
 					aria-pressed={(ball.isPocketed || ball.isDead) && !isDeadBallMode}
 					class:hidden={ball.isDead}
 					on:click={() => handleBallClick(ball)}
@@ -110,7 +109,7 @@
 					in:send|global={{ key: ball.number }}
 					out:receive|global={{ key: ball.number }}
 				>
-					<Ball {ball} size={'large'} />
+					<Ball {ball} size={'large'} class="mx-auto" />
 				</button>
 			{/if}
 		</div>
@@ -118,13 +117,13 @@
 	{#if isDeadBallMode}
 		<button
 			aria-label="dead mode exit button"
-			class="rounded-xl bg-slate-600 py-4 w-full"
+			class="rounded-xl bg-slate-600 py-2 w-full"
 			on:click={handleDeadBallSave}>Exit Deadball Mode</button
 		>
 	{:else}
 		<button
 			aria-label="switch innings button"
-			class="rounded-xl py-4 w-full transition-colors {game.currentPlayer.color}"
+			class="rounded-xl py-2 w-full transition-colors {game.currentPlayer.color}"
 			on:click={isRackOver ? handleNewRack : handleMiss}
 			disabled={isDeadBallMode || isGameOver}
 		>
@@ -155,9 +154,9 @@
 <style>
 	[aria-label='button container'] {
 		display: grid;
-		grid-template-columns: repeat(3, 6rem);
-		grid-template-rows: repeat(3, 6rem) repeat(2, 0.5fr);
-		gap: 1em;
+		grid-template-columns: repeat(3, 33%);
+		grid-template-rows: repeat(3, 4rem) repeat(2, 0.5fr);
+		gap: 0.5rem;
 		margin: auto;
 		max-width: 20rem;
 		place-items: center;

@@ -12,7 +12,7 @@
 		PostKill
 	} from '$lib/nine-ball/actions.js';
 	import GraveIcon from '$lib/components/icons/GraveIcon.svelte';
-	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
+	import WarningIcon from '$lib/components/WarningIcon.svelte';
 	import Scoreboard from '$lib/components/Scoreboard.svelte';
 	import PlayerStats from '$lib/components/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
@@ -20,6 +20,7 @@
 	import BallReturn from '$lib/components/BallReturn.svelte';
 	import DeadBallTitle from '$lib/components/DeadBallTitle.svelte';
 	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
+	import Header from '$lib/components/Header.svelte';
 
 	import type { BallModel } from '$lib/components/Ball.svelte';
 
@@ -118,8 +119,9 @@
 	}
 </script>
 
+<Header />
 <main
-	class="container m-auto max-w-96 transition-colors h-screen"
+	class="container px-4 mt-4 mb-auto max-w-96 transition-colors"
 	style="background-color:{isDeadBallMode ? 'darkkhaki' : '#131318'}"
 >
 	{#if isDeadBallMode}
@@ -129,12 +131,11 @@
 			{#each $game.players as player, playerNumber}
 				<PlayerStats {player} game={$game} {playerNumber} />
 			{/each}
+			{#each $game.players as player, playerNumber}
+				<ProgressBar {player} reverse={!!playerNumber} />
+			{/each}
 		</Scoreboard>
 	{/if}
-	<div class:invisible={isDeadBallMode}>
-		<ProgressBar player={$game.players[0]} />
-		<ProgressBar player={$game.players[1]} />
-	</div>
 
 	<ControlPad
 		game={$game}

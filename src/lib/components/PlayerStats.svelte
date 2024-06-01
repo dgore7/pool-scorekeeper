@@ -30,7 +30,7 @@
 	}
 
 	.score {
-		font-size: 4rem;
+		font-size: 2rem;
 	}
 
 	.player-info {

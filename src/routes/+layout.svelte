@@ -26,7 +26,7 @@
 	{@html webManifestLink}
 </svelte:head>
 
-<div class="container m-auto max-w-xl h-full my-4">
+<div class="container w-full h-full py-4 flex flex-col">
 	{#if $toast}
 		<Toast
 			on:close={handleToastClose}
