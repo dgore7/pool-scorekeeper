@@ -1,4 +1,4 @@
-import type { Action, EndRack } from './actions';
+import { type Action, type EndRack, Undo } from './actions';
 import type { Player } from './player';
 import type { BallModel } from '$lib/components/Ball.svelte';
 
@@ -80,20 +80,51 @@ export class NineBallGame {
 		}
 	}
 
+	isPlayerWon() {
+		return this.currentPlayer.score === this.currentPlayer.scoreRequired;
+	}
+
+	killLeftOverBalls() {
+		this.currentRack.leftOverBalls.forEach((ball) => {
+			ball.isDead = true;
+			this.currentRack.deadBalls.push(ball);
+		});
+	}
+
+	reviveLeftOverBalls() {
+		this.currentRack.leftOverBalls.forEach((ball) => {
+			ball.isDead = false;
+			this.currentRack.deadBalls.pop();
+		});
+	}
+
 	pocketBall(ball: BallModel) {
+		if (this.isPlayerWon()) {
+			return;
+		}
+
 		ball.isPocketed = true;
 		if (!ball.isDead) {
 			if (ball.number === 9) {
 				this.increment();
-				this.currentRack.leftOverBalls.forEach((ball) => (ball.isDead = true));
+				this.killLeftOverBalls();
 			}
 			this.increment();
 		}
 
 		this.currentRack.pocketedBalls.push(ball);
+		if (this.isPlayerWon()) {
+			console.log('winning click');
+			console.log(this.currentRack);
+			this.killLeftOverBalls();
+		}
 	}
 
 	unPocketBall() {
+		if (this.isPlayerWon()) {
+			this.reviveLeftOverBalls();
+		}
+
 		if (this.currentRack.pocketedBalls.length) {
 			const zombieBall = this.currentRack.pocketedBalls.pop()!;
 			zombieBall.isPocketed = false;
@@ -101,7 +132,7 @@ export class NineBallGame {
 			if (!zombieBall.isDead) {
 				if (zombieBall.number === 9) {
 					this.decrement();
-					this.currentRack.leftOverBalls.forEach((ball) => (ball.isDead = false));
+					this.reviveLeftOverBalls();
 				}
 				this.decrement();
 			}
@@ -204,9 +235,12 @@ export class NineBallGame {
 			default:
 				throw new AssertionError('unexpected action');
 		}
-		this.actions.push(action);
-		// clear undone actions because history has been overridden
-		this.undoneActions.length = 0;
+
+		if (!this.isPlayerWon()) {
+			this.actions.push(action);
+			// clear undone actions because history has been overridden
+			this.undoneActions.length = 0;
+		}
 	}
 }
 

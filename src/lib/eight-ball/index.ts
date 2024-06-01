@@ -74,13 +74,19 @@ export class EightBallGame {
 		return this.currentPlayer.score > 0;
 	}
 
+	private get areTeamsAssigned() {
+		return this.currentRack.playerBalls.some((val) => val !== null);
+	}
+
 	private get requiredScores() {
 		// prettier-ignore
 		return APA_SCORE_REQUIRED[this.player1.handicap - MIN_HANDICAP][this.player2.handicap - MIN_HANDICAP];
 	}
 
 	endRack() {
-		this.racks.push(new EightBallRack(this.currentRack.turn, this.currentPlayer));
+		if (this.isScoreValidToIncrease) {
+			this.racks.push(new EightBallRack(this.currentRack.turn, this.currentPlayer));
+		}
 	}
 
 	unEndRack() {
