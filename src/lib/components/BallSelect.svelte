@@ -6,10 +6,10 @@
 
 	export let game;
 
-	let dispatch = createEventDispatcher<{ballSelect: BallType}>();
+	let dispatch = createEventDispatcher<{ ballSelect: BallType }>();
 
 	function handleBallAssignment(ball: BallModel) {
-		dispatch('ballSelect', ball.isStripe ? "stripe" : "solid");
+		dispatch('ballSelect', ball.isStripe ? 'stripe' : 'solid');
 	}
 </script>
 
@@ -20,4 +20,3 @@
 		</button>
 	{/each}
 </div>
-

@@ -74,7 +74,7 @@ export class Timeout implements ITimeOut {
 
 export class AssignSide implements IAssignSide {
 	readonly type = 'ASSIGN_SIDE';
-  constructor(readonly side: BallType) {}
+	constructor(readonly side: BallType) {}
 }
 
 export type Action = Win | Lose | Safety | Miss | EndRack | Undo | Redo | Timeout | AssignSide;

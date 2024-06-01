@@ -24,9 +24,7 @@
 		Safety,
 		type BallType,
 		type EndGameCase,
-
 		AssignSide
-
 	} from '$lib/eight-ball';
 
 	export let data;
