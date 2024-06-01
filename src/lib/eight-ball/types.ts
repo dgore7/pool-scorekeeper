@@ -1,8 +1,8 @@
-export type endGameCase = 'M8' | 'BNR' | '8OB' | '8WP' | 'E8' | 'S8';
+export type EndGameCase = 'M8' | 'BNR' | '8OB' | '8WP' | 'E8' | 'S8';
 
-export type ballType = 'stripe' | 'solid';
+export type BallType = 'stripe' | 'solid';
 
-export type condition = {
-	id: endGameCase;
+export type Condition = {
+	id: EndGameCase;
 	message: string;
 };

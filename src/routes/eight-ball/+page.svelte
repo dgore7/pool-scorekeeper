@@ -1,16 +1,33 @@
 <script lang="ts">
-	import { EightBallGame } from '$lib/eight-ball/index';
-	import { Player } from '$lib/eight-ball/player';
-	import Scoreboard from '$lib/components/Scoreboard.svelte';
-	import PlayerStats from '$lib/components/PlayerStats.svelte';
 	import BallSelect from '$lib/components/BallSelect.svelte';
-	import TeamDisplay from '$lib/components/TeamDisplay.svelte';
-	import type { ballType } from '$lib/eight-ball/types';
-	import { Stripe, Solid, Safety, Miss, Undo, Timeout, Win, Lose } from '$lib/eight-ball/actions';
-	import EightBallControlPad from '$lib/components/EightBallControlPad.svelte';
-	import ProgressBar from '$lib/components/ProgressBar.svelte';
+
 	import Dialog from '$lib/components/Dialog.svelte';
-	import type { endGameCase } from '$lib/eight-ball/types.ts';
+
+	import EightBallControlPad from '$lib/components/EightBallControlPad.svelte';
+
+	import PlayerStats from '$lib/components/PlayerStats.svelte';
+
+	import ProgressBar from '$lib/components/ProgressBar.svelte';
+
+	import Scoreboard from '$lib/components/Scoreboard.svelte';
+
+	import TeamDisplay from '$lib/components/TeamDisplay.svelte';
+
+	import {
+		EightBallGame,
+		Miss,
+		Win,
+		Lose,
+		Undo,
+		Player,
+		Timeout,
+		Safety,
+		type BallType,
+		type EndGameCase,
+
+		AssignSide
+
+	} from '$lib/eight-ball';
 
 	export let data;
 	const { dialog } = data;
@@ -18,50 +35,36 @@
 	let game = new EightBallGame(new Player('John', 5, 'red'), new Player('George', 5, 'blue'));
 	let isGameOver = false;
 
-	let miss = new Miss();
-	let win = new Win();
-	let lose = new Lose();
-	let undo = new Undo();
-	let timeout = new Timeout();
-	let safety = new Safety();
-	let stripe = new Stripe();
-	let solid = new Solid();
-
 	$: areTeamsAssigned = game.currentRack.playerBalls.some(
-		(value: ballType | null) => value !== null
+		(value: BallType | null) => value !== null
 	);
 
-	function handleBallSelect(e: CustomEvent) {
-		if (e.detail.isStripe) {
-			game.doAction(stripe);
-		} else {
-			game.doAction(solid);
-		}
+	function handleBallSelect(e: CustomEvent<BallType>) {
+		game.doAction(new AssignSide(e.detail));
 		game = game;
 	}
 
 	function handleMiss() {
-		game.doAction(miss);
+		game.doAction(new Miss());
 		game = game;
 	}
 
 	function handleWinDialog() {
 		let message = `How did ${game.currentPlayer.name} win?`;
 		let conditions = getWinConditions();
-		$dialog = { message, conditions, selectedCondition: null };
+		$dialog = { message, conditions };
 	}
 
-	function handleWin(id: endGameCase | CustomEvent<endGameCase>) {
-		let winId = typeof id === 'string' ? id : id.detail;
-		game.doAction(win, winId);
+	function handleWin(e: CustomEvent<EndGameCase>) {
+		game.doAction(new Win(e.detail));
 		game = game;
 	}
 
-	function handleSubmitDialog(e: CustomEvent<endGameCase>) {
+	function handleSubmitDialog(e: CustomEvent<EndGameCase>) {
 		if (e.detail === '8OB' || e.detail === 'BNR') {
-			handleWin(e.detail);
+			handleWin(e);
 		} else {
-			handleLose(e.detail);
+			handleLose(e);
 		}
 		$dialog = null;
 	}
@@ -84,30 +87,30 @@
 			{ id: 'W8', message: '8 In Wrong Pocket.' },
 			{ id: 'S8', message: 'Scratched On 8.' }
 		];
-		$dialog = { message, conditions, selectedCondition: null };
+		$dialog = { message, conditions };
 	}
 
 	function handleCancelDialog() {
 		$dialog = null;
 	}
 
-	function handleLose(id: endGameCase) {
-		game.doAction(lose, id);
+	function handleLose(e: CustomEvent<EndGameCase>) {
+		game.doAction(new Lose(e.detail));
 		game = game;
 	}
 
 	function handleUndo() {
-		game.doAction(undo);
+		game.doAction(new Undo());
 		game = game;
 	}
 
 	function handleTimeout() {
-		game.doAction(timeout);
+		game.doAction(new Timeout());
 		game = game;
 	}
 
 	function handleSafety() {
-		game.doAction(safety);
+		game.doAction(new Safety());
 		game = game;
 	}
 </script>

@@ -1,9 +1,23 @@
 import type { Player } from '$lib/eight-ball/player';
 import type { Action } from '$lib/eight-ball/actions';
-import type { endGameCase, ballType } from './types';
+import type { EndGameCase, BallType } from './types';
 import type { BallModel } from '$lib/components/Ball.svelte';
+export * from './actions';
+export * from './player';
+export * from './types';
 
-const APA_SCORE_REQUIRED: number[][][] = [];
+type ScoreRequiredMatrix = number[][][];
+const MIN_HANDICAP = 2;
+
+// prettier-ignore
+const APA_SCORE_REQUIRED: ScoreRequiredMatrix =[
+ [[2,2],[2,3],[2,4],[2,5],[2,6],[2,7]],
+ [[3,2],[2,2],[2,3],[2,4],[2,5],[2,6]],
+ [[4,2],[3,2],[3,3],[3,4],[3,5],[2,5]],
+ [[5,2],[4,2],[4,3],[4,4],[4,5],[3,5]],
+ [[6,2],[5,2],[5,3],[5,4],[5,5],[4,5]],
+ [[7,2],[6,2],[5,2],[5,3],[5,4],[5,5]],
+]
 
 class AssertionError extends Error {
 	constructor(cause: string) {
@@ -20,7 +34,6 @@ export class EightBallGame {
 
 	constructor(player1: Player, player2: Player) {
 		this.players = [player1, player2];
-		this.createScoreMatrix();
 		this.player1.scoreRequired = this.requiredScores[0];
 		this.player2.scoreRequired = this.requiredScores[1];
 		this.racks = [new EightBallRack(0, player1)];
@@ -62,7 +75,8 @@ export class EightBallGame {
 	}
 
 	private get requiredScores() {
-		return APA_SCORE_REQUIRED[this.player1.handicap - 2][this.player2.handicap - 2];
+		// prettier-ignore
+		return APA_SCORE_REQUIRED[this.player1.handicap - MIN_HANDICAP][this.player2.handicap - MIN_HANDICAP];
 	}
 
 	endRack() {
@@ -78,7 +92,7 @@ export class EightBallGame {
 		this.currentRack.increment();
 	}
 
-	win(id: endGameCase) {
+	win(id: EndGameCase) {
 		if (this.isScoreValidToIncrease) {
 			this.increment();
 			this.currentRack.endGameCase = id;
@@ -94,7 +108,7 @@ export class EightBallGame {
 		}
 	}
 
-	lose(id: endGameCase) {
+	lose(id: EndGameCase) {
 		this.currentRack.endTurn();
 		this.win(id);
 	}
@@ -109,21 +123,27 @@ export class EightBallGame {
 		this.currentRack.decrement();
 	}
 
+	assignSide(side: BallType) {
+		if (side === 'solid') {
+			this.assignSolid();
+		} else {
+			this.assignStripe();
+		}
+	}
+
 	assignStripe() {
 		if (this.currentRack.turn) {
 			this.currentRack.playerBalls = ['solid', 'stripe'];
 		} else {
 			this.currentRack.playerBalls = ['stripe', 'solid'];
-			const ballToMove = this.currentRack.assignmentBalls.pop();
-			this.currentRack.assignmentBalls.unshift(ballToMove!);
+			this.currentRack.assignmentBalls.reverse();
 		}
 	}
 
 	assignSolid() {
 		if (this.currentRack.turn) {
 			this.currentRack.playerBalls = ['stripe', 'solid'];
-			const ballToMove = this.currentRack.assignmentBalls.pop();
-			this.currentRack.assignmentBalls.unshift(ballToMove!);
+			this.currentRack.assignmentBalls.reverse();
 		} else {
 			this.currentRack.playerBalls = ['solid', 'stripe'];
 		}
@@ -156,7 +176,7 @@ export class EightBallGame {
 		this.undoneActions.push(action);
 	}
 
-	doAction(action: Action, id?: endGameCase) {
+	doAction(action: Action) {
 		switch (action.type) {
 			case 'UNDO':
 				const actionToUndo = this.actions.pop();
@@ -167,10 +187,10 @@ export class EightBallGame {
 				if (actionToRedo) this.doAction(actionToRedo);
 				return;
 			case 'LOSE':
-				this.lose(id!);
+				this.lose(action.id);
 				break;
 			case 'WIN':
-				this.win(id!);
+				this.win(action.id);
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties++;
@@ -184,11 +204,8 @@ export class EightBallGame {
 			case 'END_RACK':
 				this.endRack();
 				break;
-			case 'STRIPE':
-				this.assignStripe();
-				break;
-			case 'SOLID':
-				this.assignSolid();
+			case 'ASSIGN_SIDE':
+				this.assignSide(action.side);
 				break;
 			default:
 				throw new AssertionError('unexpected action');
@@ -197,38 +214,21 @@ export class EightBallGame {
 		// clear undone actions because history has been overridden
 		this.undoneActions.length = 0;
 	}
-
-	private createScoreMatrix() {
-		for (let i = 0; i < 6; i++) {
-			APA_SCORE_REQUIRED[i] = [];
-			for (let j = 0; j < 6; j++) {
-				if (!i || !j) {
-					APA_SCORE_REQUIRED[i][j] = [i + 2, j + 2];
-				} else if ((i < 5 && j < 5) || i + j === 6) {
-					APA_SCORE_REQUIRED[i][j] = [i + 1, j + 1];
-				} else {
-					APA_SCORE_REQUIRED[i][j] = [i, j];
-				}
-			}
-		}
-	}
 }
 
 export class EightBallRack {
 	innings = 0;
 	scores = [0, 0];
-	turn = 0;
 	timeouts = [1, 1];
-	endGameCase: endGameCase | null = null;
-	playerBalls: ballType[] | null[] = [null, null];
+	endGameCase: EndGameCase | null = null;
+	playerBalls: BallType[] | null[] = [null, null];
 	assignmentBalls: BallModel[] = this.createBalls();
 	winner: Player | null = null;
-	playerToBreak: Player | null = null;
 
-	constructor(turn: number, player: Player) {
-		this.turn = turn;
-		this.playerToBreak = player;
-	}
+	constructor(
+		public turn: number,
+		readonly playerToBreak: Player
+	) {}
 
 	endTurn() {
 		this.changeTurn();

@@ -1,13 +1,17 @@
+import type { BallType, EndGameCase } from './types';
+
 interface IWin {
-	type: 'WIN';
+	readonly type: 'WIN';
+	id: EndGameCase;
 }
 
 interface ILose {
-	type: 'LOSE';
+	readonly type: 'LOSE';
+	id: EndGameCase;
 }
 
 interface ISafety {
-	type: 'SAFETY';
+	readonly type: 'SAFETY';
 }
 
 interface IMiss {
@@ -15,35 +19,33 @@ interface IMiss {
 }
 
 interface IEndRack {
-	type: 'END_RACK';
+	readonly type: 'END_RACK';
 }
 
 interface IUndo {
-	type: 'UNDO';
+	readonly type: 'UNDO';
 }
 
 interface IRedo {
-	type: 'REDO';
+	readonly type: 'REDO';
 }
 
 interface ITimeOut {
-	type: 'TIMEOUT';
+	readonly type: 'TIMEOUT';
 }
 
-interface IStripe {
-	type: 'STRIPE';
-}
-
-interface ISolid {
-	type: 'SOLID';
+interface IAssignSide {
+	readonly type: 'ASSIGN_SIDE';
 }
 
 export class Win implements IWin {
 	readonly type = 'WIN';
+	constructor(readonly id: EndGameCase) {}
 }
 
 export class Lose implements ILose {
 	readonly type = 'LOSE';
+	constructor(readonly id: EndGameCase) {}
 }
 
 export class Safety implements ISafety {
@@ -70,12 +72,9 @@ export class Timeout implements ITimeOut {
 	readonly type = 'TIMEOUT';
 }
 
-export class Stripe implements IStripe {
-	readonly type = 'STRIPE';
+export class AssignSide implements IAssignSide {
+	readonly type = 'ASSIGN_SIDE';
+  constructor(readonly side: BallType) {}
 }
 
-export class Solid implements ISolid {
-	readonly type = 'SOLID';
-}
-
-export type Action = Win | Lose | Safety | Miss | EndRack | Undo | Redo | Timeout | Stripe | Solid;
+export type Action = Win | Lose | Safety | Miss | EndRack | Undo | Redo | Timeout | AssignSide;

@@ -22,7 +22,7 @@
 		{ icon: ShieldIcon, event: 'safety', label: 'safety' },
 		{ icon: PauseIcon, event: 'timeout', label: 'timeout' },
 		{ icon: GraveIcon, event: 'deadBallMode', label: 'dead ball mode' }
-	];
+	].filter((component) => isNineBall || component.event !== 'deadBallMode');
 
 	function handleClick(eventType: string) {
 		dispatch(eventType);
@@ -30,21 +30,12 @@
 </script>
 
 {#each components as component}
-	{#if !isNineBall}
-		{#if component.event !== 'deadBallMode'}
-			<button
-				class="py-4"
-				on:click={() => handleClick(component.event)}
-				disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
-				><svelte:component this={component.icon} /></button
-			>
-		{/if}
-	{:else}
-		<button
-			class="py-4"
-			on:click={() => handleClick(component.event)}
-			disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
-			><svelte:component this={component.icon} /></button
-		>
-	{/if}
+	<button
+		class="py-4"
+		on:click={() => handleClick(component.event)}
+		disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
+		aria-label={component.label}
+	>
+		<svelte:component this={component.icon} />
+	</button>
 {/each}

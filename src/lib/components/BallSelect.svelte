@@ -2,13 +2,14 @@
 	import type { BallModel } from './Ball.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Ball from './Ball.svelte';
+	import type { BallType } from '$lib/eight-ball';
 
 	export let game;
 
-	let dispatch = createEventDispatcher();
+	let dispatch = createEventDispatcher<{ballSelect: BallType}>();
 
 	function handleBallAssignment(ball: BallModel) {
-		dispatch('ballSelect', ball);
+		dispatch('ballSelect', ball.isStripe ? "stripe" : "solid");
 	}
 </script>
 
@@ -20,4 +21,3 @@
 	{/each}
 </div>
 
-<style></style>

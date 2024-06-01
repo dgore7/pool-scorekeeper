@@ -1,26 +1,23 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import type { Condition } from '$lib';
+
+	const dispatch = createEventDispatcher<{
+		submitDialog: Condition;
+		cancelDialog: undefined;
+	}>();
 
 	export let message: string;
-	export let conditions: condition[];
+	export let conditions: Condition[];
 
-	export let selectedCondition: condition | null = null;
-
-	let dispatch = createEventDispatcher();
-
-	type condition = {
-		id: string;
-		message: string;
-	};
+	let selectedCondition: Condition | null = null;
 
 	function handleSubmit() {
-		dispatch('submitDialog', selectedCondition);
-		selectedCondition = null;
+		dispatch('submitDialog', selectedCondition!);
 	}
 
 	function handleCancel() {
 		dispatch('cancelDialog');
-		selectedCondition = null;
 	}
 </script>
 
@@ -35,7 +32,11 @@
 		</div>
 	{/each}
 	<div>
-		<button on:click={handleSubmit} class="rounded-xl bg-emerald-400 p-4">Submit</button>
+		<button
+			on:click={handleSubmit}
+			class="rounded-xl bg-emerald-400 p-4"
+			disabled={selectedCondition === null}>Submit</button
+		>
 		<button on:click={handleCancel} class="rounded-xl p-4 bg-red-400">Cancel</button>
 	</div>
 </div>

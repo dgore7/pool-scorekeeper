@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import ControlButtons from './ControlButtons.svelte';
+	import type { EightBallGame } from '$lib/eight-ball';
 
 	export let isGameOver;
-	export let game;
+	export let game: EightBallGame;
 
 	let dispatch = createEventDispatcher();
 
@@ -12,11 +13,11 @@
 	}
 
 	function handleWin() {
-		dispatch('win', 'M8');
-	}
-
-	function handleWinDialog() {
-		dispatch('winDialog');
+		if (!game.currentRack.innings && game.currentRack.playerToBreak === game.currentPlayer) {
+			dispatch('winDialog');
+		} else {
+			dispatch('win', 'M8');
+		}
 	}
 
 	function handleLose() {
@@ -27,7 +28,7 @@
 		dispatch('undo');
 	}
 
-	function handleSaftey() {
+	function handleSafety() {
 		dispatch('safety');
 	}
 
@@ -43,20 +44,12 @@
 >
 
 <div class="flex justify-center gap-6">
-	{#if !game.currentRack.innings && game.currentRack.playerToBreak === game.currentPlayer}
-		<button class="rounded-xl text-2xl text-black bg-green-400 w-full" on:click={handleWinDialog}
-			>{game.currentPlayer.name} Won!</button
-		>
-	{:else}
-		<button
-			class="rounded-xl text-2xl text-black bg-green-400 w-full"
-			on:click={handleWin}
-			disabled={!game.currentRack.playerBalls[0]}>{game.currentPlayer.name} Won!</button
-		>
-	{/if}
-	<button class="rounded-xl py-4 text-2xl bg-rose-600 w-full" on:click={handleLose}
-		>{game.currentPlayer.name} Lost...</button
-	>
+	<button class="rounded-xl text-2xl text-black bg-green-400 w-full" on:click={handleWin}>
+		{game.currentPlayer.name} Won!
+	</button>
+	<button class="rounded-xl py-4 text-2xl bg-rose-600 w-full" on:click={handleLose}>
+		{game.currentPlayer.name} Lost...
+	</button>
 </div>
 
 <div
@@ -67,9 +60,7 @@
 		{isGameOver}
 		isNineBall={false}
 		on:undo={handleUndo}
-		on:safety={handleSaftey}
+		on:safety={handleSafety}
 		on:timeout={handleTimeout}
 	/>
 </div>
-
-<style></style>
