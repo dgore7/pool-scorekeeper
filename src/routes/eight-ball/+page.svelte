@@ -30,7 +30,7 @@
 	export let data;
 	const { dialog } = data;
 
-	let game = new EightBallGame(new Player('John', 5, 'red'), new Player('George', 5, 'blue'));
+	let game = new EightBallGame(new Player('John', 5, 'bg-[red]'), new Player('George', 5, 'bg-[blue]'));
 	let isGameOver = false;
 
 	$: areTeamsAssigned = game.currentRack.playerBalls.some(

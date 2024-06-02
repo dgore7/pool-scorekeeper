@@ -38,8 +38,7 @@
 </script>
 
 <button
-	class="flex justify-center rounded-xl py-4 text-2xl"
-	style="background-color:{game.currentPlayer.color}"
+	class="flex justify-center rounded-xl py-4 text-2xl {game.currentPlayer.color}"
 	on:click={handleMiss}>End {game.currentPlayer.name}'s Turn</button
 >
 
