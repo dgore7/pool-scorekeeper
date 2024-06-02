@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { NineBallGame } from '$lib';
+	import type { NineBallGame, EightBallGame } from '$lib';
 
-	export let game: NineBallGame;
+	export let game: NineBallGame | EightBallGame;
 </script>
 
 <div aria-live="polite" class="rounded-lg overflow-hidden">

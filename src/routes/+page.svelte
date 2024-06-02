@@ -20,7 +20,6 @@
 	import BallReturn from '$lib/components/BallReturn.svelte';
 	import DeadBallTitle from '$lib/components/DeadBallTitle.svelte';
 	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
-	import Header from '$lib/components/Header.svelte';
 
 	import type { BallModel } from '$lib/components/Ball.svelte';
 
@@ -117,38 +116,33 @@
 		});
 		$game = $game;
 	}
+	$: document.body.style.backgroundColor = isDeadBallMode ? 'darkkhaki' : '#131318';
 </script>
 
-<Header />
-<main
-	class="container px-4 mt-4 mb-auto max-w-96 transition-colors"
-	style="background-color:{isDeadBallMode ? 'darkkhaki' : '#131318'}"
->
-	{#if isDeadBallMode}
-		<DeadBallTitle />
-	{:else}
-		<Scoreboard game={$game}>
-			{#each $game.players as player, playerNumber}
-				<PlayerStats {player} game={$game} {playerNumber} />
-			{/each}
-			{#each $game.players as player, playerNumber}
-				<ProgressBar {player} reverse={!!playerNumber} />
-			{/each}
-		</Scoreboard>
-	{/if}
-
-	<ControlPad
-		game={$game}
-		{isDeadBallMode}
-		{isGameOver}
-		on:ballPocket={handleBallPocket}
-		on:miss={handleTurn}
-		on:undo={handleUndo}
-		on:safety={handleSafety}
-		on:timeout={handleTimeout}
-		on:newRack={handleNewRack}
-		on:deadBallMode={handleDeadBallMode}
-		on:saveDeadBalls={handleDeadBalls}
-	/>
-	<BallReturn game={$game} />
-</main>
+{#if isDeadBallMode}
+	<DeadBallTitle />
+{:else}
+	<Scoreboard game={$game}>
+		{#each $game.players as player, playerNumber}
+			<PlayerStats {player} game={$game} {playerNumber} />
+		{/each}
+		{#each $game.players as player, playerNumber}
+			<ProgressBar {player} reverse={!!playerNumber} />
+		{/each}
+	</Scoreboard>
+{/if}
+<div class="flex-1"></div>
+<ControlPad
+	game={$game}
+	{isDeadBallMode}
+	{isGameOver}
+	on:ballPocket={handleBallPocket}
+	on:miss={handleTurn}
+	on:undo={handleUndo}
+	on:safety={handleSafety}
+	on:timeout={handleTimeout}
+	on:newRack={handleNewRack}
+	on:deadBallMode={handleDeadBallMode}
+	on:saveDeadBalls={handleDeadBalls}
+/>
+<BallReturn game={$game} />

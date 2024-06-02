@@ -2,6 +2,7 @@
 	import '../app.pcss';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import Toast from '$lib/components/Toast.svelte';
+	import Header from '$lib/components/Header.svelte';
 
 	$: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 
@@ -26,14 +27,17 @@
 	{@html webManifestLink}
 </svelte:head>
 
-<div class="container w-full h-full py-4 flex flex-col">
-	{#if $toast}
-		<Toast
-			on:close={handleToastClose}
-			message={$toast.message}
-			icon={$toast.icon}
-			class={$toast.class}
-		/>
-	{/if}
-	<slot />
+<div class="flex flex-col h-full">
+	<Header />
+	<main class="container w-full py-4 px-4 mt-4 mb-auto mx-auto max-w-96 flex flex-col flex-1">
+		{#if $toast}
+			<Toast
+				on:close={handleToastClose}
+				message={$toast.message}
+				icon={$toast.icon}
+				class={$toast.class}
+			/>
+		{/if}
+		<slot />
+	</main>
 </div>

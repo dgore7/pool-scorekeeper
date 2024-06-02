@@ -61,7 +61,7 @@
 		dispatch('undo');
 	}
 
-	function handleSaftey() {
+	function handleSafety() {
 		dispatch('safety');
 	}
 
@@ -144,7 +144,7 @@
 		<ControlButtons
 			{isGameOver}
 			on:undo={handleUndo}
-			on:safety={handleSaftey}
+			on:safety={handleSafety}
 			on:timeout={handleTimeout}
 			on:deadBallMode={handleDeadBallMode}
 		/>

@@ -7,6 +7,7 @@
 	import type { ComponentType } from 'svelte';
 
 	export let isGameOver: boolean;
+	export let isNineBall: boolean = true;
 
 	let dispatch = createEventDispatcher();
 
@@ -21,7 +22,7 @@
 		{ icon: ShieldIcon, event: 'safety', label: 'safety' },
 		{ icon: PauseIcon, event: 'timeout', label: 'timeout' },
 		{ icon: GraveIcon, event: 'deadBallMode', label: 'dead ball mode' }
-	];
+	].filter((component) => isNineBall || component.event !== 'deadBallMode');
 
 	function handleClick(eventType: string) {
 		dispatch(eventType);
