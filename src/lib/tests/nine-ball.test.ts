@@ -12,22 +12,13 @@ import {
 	PostKill
 } from '$lib/nine-ball/actions';
 
-const increment = new Increment();
-const endRack = new EndRack();
-const miss = new Miss();
-const undo = new Undo();
-const deadBall = new DeadBall();
-const postKill = new PostKill();
-const safety = new Safety();
-const timeout = new Timeout();
-
-describe('#pocketBall', () => {
+describe('pocketBall', () => {
 	it('pocket one ball', () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(increment, testGame.currentRack.gameBalls[0]);
+		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[0]);
 		expect(testGame.player1.score).toBe(1);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
 		expect(testGame.currentRack.deadBalls.length).toBe(0);
@@ -39,7 +30,7 @@ describe('#pocketBall', () => {
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(increment, testGame.currentRack.gameBalls[8]);
+		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[8]);
 		expect(testGame.player1.score).toBe(2);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
 		expect(testGame.currentRack.deadBalls.length).toBe(8);
@@ -52,7 +43,7 @@ describe('#pocketBall', () => {
 			new Player('Player2', 6, 'blue')
 		);
 		for (let i = 0; i < 9; i++) {
-			testGame.doAction(increment, testGame.currentRack.gameBalls[i]);
+			testGame.doAction(new Increment(), testGame.currentRack.gameBalls[i]);
 		}
 
 		expect(testGame.player1.score).toBe(10);
@@ -60,10 +51,10 @@ describe('#pocketBall', () => {
 		expect(testGame.currentRack.deadBalls.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(10);
 
-		testGame.doAction(endRack);
+		testGame.doAction(new EndRack());
 
 		for (let j = 0; j < 9; j++) {
-			testGame.doAction(increment, testGame.currentRack.gameBalls[j]);
+			testGame.doAction(new Increment(), testGame.currentRack.gameBalls[j]);
 		}
 		expect(testGame.player1.score).toBe(14);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(4);
@@ -78,7 +69,7 @@ describe('#pocketBall', () => {
 		);
 
 		for (let i = 0; i < 3; i++) {
-			testGame.doAction(increment, testGame.currentRack.gameBalls[i]);
+			testGame.doAction(new Increment(), testGame.currentRack.gameBalls[i]);
 		}
 		expect(testGame.player1.score).toBe(3);
 		expect(testGame.player2.score).toBe(0);
@@ -87,10 +78,10 @@ describe('#pocketBall', () => {
 		expect(testGame.currentRack.scores[0]).toBe(3);
 		expect(testGame.currentRack.scores[1]).toBe(0);
 
-		testGame.doAction(miss);
+		testGame.doAction(new Miss());
 
 		for (let j = 0; j < 3; j++) {
-			testGame.doAction(increment, testGame.currentRack.gameBalls[j]);
+			testGame.doAction(new Increment(), testGame.currentRack.gameBalls[j]);
 		}
 
 		expect(testGame.player1.score).toBe(3);
@@ -102,19 +93,19 @@ describe('#pocketBall', () => {
 	});
 });
 
-describe('#unPocketBalls', () => {
-	it('player unpockets pocketed ball', () => {
+describe('unPocketBalls', () => {
+	it('player unPockets pocketed ball', () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(increment, testGame.currentRack.gameBalls[0]);
+		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[0]);
 		expect(testGame.player1.score).toBe(1);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
 		expect(testGame.currentRack.deadBalls.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(1);
 
-		testGame.doAction(undo);
+		testGame.doAction(new Undo());
 
 		expect(testGame.player1.score).toBe(0);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(0);
@@ -127,13 +118,13 @@ describe('#unPocketBalls', () => {
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(increment, testGame.currentRack.gameBalls[8]);
+		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[8]);
 		expect(testGame.player1.score).toBe(2);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
 		expect(testGame.currentRack.deadBalls.length).toBe(8);
 		expect(testGame.currentRack.scores[0]).toBe(2);
 
-		testGame.doAction(undo);
+		testGame.doAction(new Undo());
 
 		expect(testGame.player1.score).toBe(0);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(0);
@@ -147,16 +138,16 @@ describe('#unPocketBalls', () => {
 			new Player('Player2', 6, 'blue')
 		);
 		for (let i = 0; i < 9; i++) {
-			testGame.doAction(increment, testGame.currentRack.gameBalls[i]);
+			testGame.doAction(new Increment(), testGame.currentRack.gameBalls[i]);
 		}
 
-		testGame.doAction(endRack);
+		testGame.doAction(new EndRack());
 
 		for (let j = 0; j < 9; j++) {
-			testGame.doAction(increment, testGame.currentRack.gameBalls[j]);
+			testGame.doAction(new Increment(), testGame.currentRack.gameBalls[j]);
 		}
 
-		testGame.doAction(undo);
+		testGame.doAction(new Undo());
 
 		expect(testGame.player1.score).toBe(13);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(3);
@@ -165,13 +156,13 @@ describe('#unPocketBalls', () => {
 	});
 });
 
-describe('#switchTurn', () => {
+describe('switchTurn', () => {
 	it('player one misses first turn', () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(miss);
+		testGame.doAction(new Miss());
 		expect(testGame.currentRack.turn).toBe(1);
 		expect(testGame.currentRack.innings).toBe(0);
 	});
@@ -181,57 +172,57 @@ describe('#switchTurn', () => {
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(miss);
-		testGame.doAction(miss);
+		testGame.doAction(new Miss());
+		testGame.doAction(new Miss());
 		expect(testGame.currentRack.turn).toBe(0);
 		expect(testGame.currentRack.innings).toBe(1);
 	});
 
-	it("undo Playe2's endTurn", () => {
+	it("undo Player2's endTurn", () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(miss);
-		testGame.doAction(miss);
-		testGame.doAction(undo);
+		testGame.doAction(new Miss());
+		testGame.doAction(new Miss());
+		testGame.doAction(new Undo());
 		expect(testGame.currentRack.turn).toBe(1);
 		expect(testGame.currentRack.innings).toBe(0);
 	});
 });
 
-describe('#killBall', () => {
+describe('killBall', () => {
 	it('player makes one ball and kills one ball', () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(increment, testGame.currentRack.gameBalls[0]);
-		testGame.doAction(deadBall, testGame.currentRack.gameBalls[1]);
+		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[0]);
+		testGame.doAction(new DeadBall(), testGame.currentRack.gameBalls[1]);
 		expect(testGame.player1.score).toBe(1);
 		expect(testGame.currentRack.deadBalls.length).toBe(1);
 	});
 
-	it('player makes one ball then kills it post mortum', () => {
+	it('player makes one ball then kills it postmortem', () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(increment, testGame.currentRack.gameBalls[0]);
-		testGame.doAction(postKill, testGame.currentRack.gameBalls[0]);
+		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[0]);
+		testGame.doAction(new PostKill(), testGame.currentRack.gameBalls[0]);
 		expect(testGame.player1.score).toBe(0);
 		expect(testGame.currentRack.deadBalls.length).toBe(1);
 	});
 });
 
-describe('#reviveBall', () => {
+describe('reviveBall', () => {
 	it('player kills one ball by accident and brings it back', () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(deadBall, testGame.currentRack.gameBalls[1]);
-		testGame.doAction(undo);
+		testGame.doAction(new DeadBall(), testGame.currentRack.gameBalls[1]);
+		testGame.doAction(new Undo());
 		expect(testGame.currentRack.deadBalls.length).toBe(0);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(0);
 	});
@@ -241,22 +232,22 @@ describe('#reviveBall', () => {
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(increment, testGame.currentRack.gameBalls[1]);
-		testGame.doAction(postKill, testGame.currentRack.gameBalls[1]);
-		testGame.doAction(undo);
+		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[1]);
+		testGame.doAction(new PostKill(), testGame.currentRack.gameBalls[1]);
+		testGame.doAction(new Undo());
 		expect(testGame.player1.score).toBe(1);
 		expect(testGame.currentRack.deadBalls.length).toBe(0);
 		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
 	});
 });
 
-describe('#safety', () => {
+describe('safety', () => {
 	it('player does a safety', () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(safety);
+		testGame.doAction(new Safety());
 		expect(testGame.currentPlayer.safeties).toBe(1);
 	});
 
@@ -265,19 +256,19 @@ describe('#safety', () => {
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(safety);
-		testGame.doAction(undo);
+		testGame.doAction(new Safety());
+		testGame.doAction(new Undo());
 		expect(testGame.currentPlayer.safeties).toBe(0);
 	});
 });
 
-describe('#timeout', () => {
+describe('timeout', () => {
 	it('player uses timeout', () => {
 		const testGame = new NineBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(timeout);
+		testGame.doAction(new Timeout());
 		expect(testGame.currentRack.timeouts[0]).toBe(0);
 	});
 	it('player uses timeout, then starts a new rack', () => {
@@ -285,8 +276,8 @@ describe('#timeout', () => {
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 6, 'blue')
 		);
-		testGame.doAction(timeout);
-		testGame.doAction(endRack);
+		testGame.doAction(new Timeout());
+		testGame.doAction(new EndRack());
 		expect(testGame.currentRack.timeouts[0]).toBe(1);
 	});
 });
