@@ -5,7 +5,6 @@
 	import { RuleForm, type PlayerFormData } from '$lib/components';
 	import WarningIcon from '$lib/components/WarningIcon.svelte';
 	import { startCase } from 'lodash';
-	import Header from '$lib/components/Header.svelte';
 
 	export let data;
 	let { game, toast, toastTime } = data;
@@ -62,8 +61,6 @@
 </script>
 
 <div class="flex flex-col gap-4 max-w-full">
-	<Header></Header>
-
 	{#if step === 0}
 		<RuleForm bind:selectedGame bind:selectedRules />
 	{:else}
