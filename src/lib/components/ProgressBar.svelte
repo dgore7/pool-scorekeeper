@@ -14,6 +14,7 @@
 	});
 
 	$: $progress = player.progressPercent;
+  $: console.log(player.progressPercent, player.score, player.scoreRequired)
 </script>
 
 <div
