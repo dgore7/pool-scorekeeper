@@ -3,7 +3,6 @@ import { NineBallGame } from '$lib/nine-ball';
 import type { Player } from '$lib/index/player';
 import type { Action } from '$lib/nine-ball/actions';
 
-
 class AssertionError extends Error {
 	constructor(cause: string) {
 		super('Assertion Error: ' + cause);
@@ -14,7 +13,7 @@ export class Game {
 	players: [Player, Player];
 	winner: Player | null = null;
 	actions: Action[] = [];
-  racks: any[] = []
+	racks: any[] = [];
 	undoneActions: Action[] = [];
 
 	constructor(player1: Player, player2: Player) {
@@ -87,5 +86,4 @@ export class Game {
 		}
 		this.undoneActions.push(action);
 	}
-
 }

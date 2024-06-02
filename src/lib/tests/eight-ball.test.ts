@@ -1,19 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { EightBallGame } from '$lib/eight-ball';
-import { Win, Lose, Miss, Safety, Timeout, Undo, Stripe, Solid } from '$lib/eight-ball/actions';
+import { Win, Lose, Miss, Safety, Timeout, Undo, AssignSide } from '$lib/eight-ball/actions';
 import { Player } from '$lib/eight-ball/player';
 
-const win = new Win();
-const lose = new Lose();
-const miss = new Miss();
-const safety = new Safety();
-const timeout = new Timeout();
-const undo = new Undo();
-const stripe = new Stripe();
-const solid = new Solid();
-
-describe('#initialization', () => {
-	it('a 6 vs 3 has a 6/2 race', () => {
+describe('initialization', () => {
+	it('a 6 vs 3 has a 5/2 race', () => {
 		const testGame = new EightBallGame(
 			new Player('Player1', 6, 'red'),
 			new Player('Player2', 3, 'blue')
@@ -23,15 +14,15 @@ describe('#initialization', () => {
 	});
 });
 
-describe('#teamBallSelect', () => {
+describe('teamBallSelect', () => {
 	it('Player1 claims stripes', () => {
 		const testGame = new EightBallGame(
 			new Player('Player1', 6, 'red'),
 			new Player('Player2', 3, 'blue')
 		);
 
-		testGame.doAction(stripe);
-		expect(testGame.currentRack.assignmentBalls[0].number).toBe(9);
+		testGame.doAction(new AssignSide('stripe'));
+		expect(testGame.currentRack.assignmentBalls[0].isStripe).toBe(true);
 	});
 
 	it('Player1 claims stripes after misses', () => {
@@ -40,10 +31,10 @@ describe('#teamBallSelect', () => {
 			new Player('Player2', 3, 'blue')
 		);
 
-		testGame.doAction(miss);
-		testGame.doAction(miss);
-		testGame.doAction(stripe);
-		expect(testGame.currentRack.assignmentBalls[0].number).toBe(9);
+		testGame.doAction(new Miss());
+		testGame.doAction(new Miss());
+		testGame.doAction(new AssignSide('stripe'));
+		expect(testGame.currentRack.assignmentBalls[0].isStripe).toBe(true);
 	});
 
 	it('Player1 claims solids', () => {
@@ -52,20 +43,20 @@ describe('#teamBallSelect', () => {
 			new Player('Player2', 3, 'blue')
 		);
 
-		testGame.doAction(solid);
-		expect(testGame.currentRack.assignmentBalls[0].number).toBe(1);
+		testGame.doAction(new AssignSide('solid'));
+		expect(testGame.currentRack.assignmentBalls[0].isStripe).toBe(false);
 	});
 });
 
-describe('#win', () => {
+describe('win', () => {
 	it('player one wins', () => {
 		const testGame = new EightBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 4, 'blue')
 		);
 
-		testGame.doAction(stripe);
-		testGame.doAction(win, 'M8');
+		testGame.doAction(new AssignSide('stripe'));
+		testGame.doAction(new Win('M8'));
 		expect(testGame.currentPlayer.score).toBe(1);
 		expect(testGame.racks.length).toBe(2);
 	});
@@ -77,8 +68,8 @@ describe('#win', () => {
 		);
 
 		for (let i = 0; i < 9; i++) {
-			testGame.doAction(stripe);
-			testGame.doAction(win, 'BNR');
+			testGame.doAction(new AssignSide('stripe'));
+			testGame.doAction(new Win('BNR'));
 		}
 
 		expect(testGame.currentPlayer.score).toBe(5);
@@ -87,15 +78,15 @@ describe('#win', () => {
 	});
 });
 
-describe('#lose', () => {
+describe('lose', () => {
 	it('player one loses', () => {
 		const testGame = new EightBallGame(
 			new Player('Player1', 7, 'red'),
 			new Player('Player2', 4, 'blue')
 		);
 
-		testGame.doAction(stripe);
-		testGame.doAction(lose, 'E8');
+		testGame.doAction(new AssignSide('stripe'));
+		testGame.doAction(new Lose('E8'));
 		expect(testGame.player1.score).toBe(0);
 		expect(testGame.player2.score).toBe(1);
 		expect(testGame.currentPlayer.score).toBe(1);
@@ -109,9 +100,9 @@ describe('#lose', () => {
 		);
 
 		for (let i = 0; i < 7; i++) {
-      testGame.doAction(stripe)
-			testGame.doAction(lose, 'E8');
-			testGame.doAction(miss);
+			testGame.doAction(new AssignSide('stripe'));
+			testGame.doAction(new Lose('E8'));
+			testGame.doAction(new Miss());
 		}
 
 		expect(testGame.player1.score).toBe(0);
@@ -127,7 +118,7 @@ describe('switchTurn', () => {
 			new Player('Player2', 4, 'blue')
 		);
 
-		testGame.doAction(miss);
+		testGame.doAction(new Miss());
 		expect(testGame.currentRack.turn).toBe(1);
 		expect(testGame.currentRack.innings).toBe(0);
 	});
@@ -138,8 +129,8 @@ describe('switchTurn', () => {
 			new Player('Player2', 4, 'blue')
 		);
 
-		testGame.doAction(miss);
-		testGame.doAction(miss);
+		testGame.doAction(new Miss());
+		testGame.doAction(new Miss());
 		expect(testGame.currentRack.turn).toBe(0);
 		expect(testGame.currentRack.innings).toBe(1);
 	});
@@ -152,7 +143,7 @@ describe('safety', () => {
 			new Player('Player2', 4, 'blue')
 		);
 
-		testGame.doAction(safety);
+		testGame.doAction(new Safety());
 		expect(testGame.currentPlayer.safeties).toBe(1);
 	});
 });
@@ -164,7 +155,7 @@ describe('timeout', () => {
 			new Player('Player2', 4, 'blue')
 		);
 
-		testGame.doAction(timeout);
+		testGame.doAction(new Timeout());
 		expect(testGame.currentRack.timeouts[0]).toBe(0);
 	});
 
@@ -174,9 +165,9 @@ describe('timeout', () => {
 			new Player('Player2', 4, 'blue')
 		);
 
-    testGame.doAction(stripe)
-		testGame.doAction(timeout);
-		testGame.doAction(win, 'BNR');
+		testGame.doAction(new AssignSide('stripe'));
+		testGame.doAction(new Timeout());
+		testGame.doAction(new Win('BNR'));
 		expect(testGame.currentRack.timeouts[0]).toBe(1);
 	});
 });

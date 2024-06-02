@@ -114,8 +114,6 @@ export class NineBallGame {
 
 		this.currentRack.pocketedBalls.push(ball);
 		if (this.isPlayerWon()) {
-			console.log('winning click');
-			console.log(this.currentRack);
 			this.killLeftOverBalls();
 		}
 	}
