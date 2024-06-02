@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EightBallGame } from '$lib/eight-ball';
-import { Win, Lose, Miss, Safety, Timeout, Undo, AssignSide } from '$lib/eight-ball/actions';
+import { Win, Lose, Miss, Safety, Timeout, AssignSide } from '$lib/eight-ball/actions';
 import { Player } from '$lib/eight-ball/player';
 
 describe('initialization', () => {

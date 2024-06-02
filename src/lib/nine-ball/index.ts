@@ -1,4 +1,4 @@
-import { type Action, type EndRack, Undo } from './actions';
+import { type Action, type EndRack } from './actions';
 import type { Player } from './player';
 import type { BallModel } from '$lib/components/Ball.svelte';
 
