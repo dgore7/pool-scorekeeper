@@ -62,8 +62,6 @@
 </script>
 
 <div class="flex flex-col gap-4 max-w-full">
-	<Header></Header>
-
 	{#if step === 0}
 		<RuleForm bind:selectedGame bind:selectedRules />
 	{:else}
