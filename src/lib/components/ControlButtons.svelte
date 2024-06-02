@@ -29,13 +29,13 @@
 	}
 </script>
 
-{#each components as component}
+{#each components as { icon, event, label }}
 	<button
-		class="py-4"
-		on:click={() => handleClick(component.event)}
-		disabled={(component.event === 'safety' || component.event === 'timeout') && isGameOver}
-		aria-label={component.label}
+		class="w-8 my-1 active:bg-slate-700 aspect-square rounded flex justify-center items-center transition-colors"
+		on:click={() => handleClick(event)}
+		disabled={(event === 'safety' || event === 'timeout') && isGameOver}
 	>
-		<svelte:component this={component.icon} />
+		<span class="sr-only">{label}</span>
+		<svelte:component this={icon} />
 	</button>
 {/each}

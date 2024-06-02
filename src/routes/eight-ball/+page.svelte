@@ -113,7 +113,7 @@
 	}
 </script>
 
-<div class="container m-auto max-w-xl h-full my-4">
+<div class="container m-auto max-w-xl h-full my-4 flex flex-col">
 	{#if $dialog}
 		<Dialog
 			message={$dialog.message}
@@ -122,34 +122,33 @@
 			on:submitDialog={handleSubmitDialog}
 		/>
 	{/if}
-</div>
+	<Scoreboard {game}>
+		{#each game.players as player, playerNumber}
+			<PlayerStats {player} {game} {playerNumber} />
+		{/each}
+		{#each game.players as player, playerNumber}
+			<ProgressBar {player} reverse={!!playerNumber} />
+		{/each}
+	</Scoreboard>
 
-<Scoreboard {game}>
-	{#each game.players as player, playerNumber}
-		<PlayerStats {player} {game} {playerNumber} />
-	{/each}
-</Scoreboard>
+	<div class="flex-1"></div>
+	<div class="container flex flex-col gap-6">
+		{#if !areTeamsAssigned}
+			<BallSelect {game} on:ballSelect={handleBallSelect} />
+		{:else}
+			<TeamDisplay {game} />
+		{/if}
 
-{#each game.players as player}
-	<ProgressBar {player} />
-{/each}
-
-<div class="container flex flex-col gap-6">
-	{#if !areTeamsAssigned}
-		<BallSelect {game} on:ballSelect={handleBallSelect} />
-	{:else}
-		<TeamDisplay {game} />
-	{/if}
-
-	<EightBallControlPad
-		{isGameOver}
-		{game}
-		on:miss={handleMiss}
-		on:win={handleWin}
-		on:winDialog={handleWinDialog}
-		on:lose={handleLoseDialog}
-		on:undo={handleUndo}
-		on:timeout={handleTimeout}
-		on:safety={handleSafety}
-	/>
+		<EightBallControlPad
+			{isGameOver}
+			{game}
+			on:miss={handleMiss}
+			on:win={handleWin}
+			on:winDialog={handleWinDialog}
+			on:lose={handleLoseDialog}
+			on:undo={handleUndo}
+			on:timeout={handleTimeout}
+			on:safety={handleSafety}
+		/>
+	</div>
 </div>
