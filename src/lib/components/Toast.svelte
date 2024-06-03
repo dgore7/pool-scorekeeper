@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ComponentType } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import CloseToastIcon from './icons/CloseToastIcon.svelte';
+	import CloseIcon from './icons/CloseIcon.svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	export let message: string;
@@ -20,7 +20,7 @@
 	<svelte:component this={icon} />
 	<div class="text">{@html message}</div>
 	<button class="close shrink" on:click={() => dispatch('close')}>
-		<CloseToastIcon width="0.8em" />
+		<CloseIcon width="0.8em" color="#000" />
 	</button>
 </div>
 
