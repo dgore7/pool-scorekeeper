@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Well from './Well.svelte';
+	import type { GameType, RuleType } from '$lib/types';
 
 	const poolGames = [
 		{ type: '9ball', title: '9 Ball' },
@@ -10,8 +11,8 @@
 	];
 	const rules = ['APA', 'BCA', 'Pro'];
 
-	export let selectedGame: string;
-	export let selectedRules: string;
+	export let selectedGame: GameType;
+	export let selectedRules: RuleType;
 </script>
 
 <h2 class="mx-auto">What Type Of Pool Ya Wanna Shoot?</h2>

@@ -10,7 +10,7 @@ const APA_SCORE_REQUIRED = new Map([
 	[9, 75]
 ]);
 
-export class Player {
+export class NineBallPlayer {
 	constructor(name: string, handicap: number, color: string) {
 		this.name = name;
 		this.handicap = handicap;

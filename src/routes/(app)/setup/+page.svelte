@@ -1,19 +1,20 @@
 <script lang="ts">
 	import PlayerForm from '$lib/components/PlayerForm.svelte';
 	import { goto } from '$app/navigation';
-	import { NineBallGame, Player } from '$lib';
+	import { NineBallGame, NineBallPlayer } from '$lib';
+	import { EightBallGame, EightBallPlayer } from '$lib/eight-ball';
 	import { RuleForm, type PlayerFormData } from '$lib/components';
 	import WarningIcon from '$lib/components/WarningIcon.svelte';
 	import { startCase } from 'lodash';
-	import Header from '$lib/components/Header.svelte';
+	import type { GameType, RuleType } from '$lib/types.js';
 
 	export let data;
 	let { game, toast, toastTime } = data;
 
 	let step = 0;
 
-	let selectedGame: string;
-	let selectedRules: string;
+	let selectedGame: GameType;
+	let selectedRules: RuleType;
 
 	let playerFormData: PlayerFormData;
 
@@ -51,13 +52,36 @@
 				class: 'bg-gray-200'
 			};
 		} else {
-			$game = new NineBallGame(
-				new Player(playerFormData.playerOneName, playerFormData.playerOneHandicap, 'bg-[red]'),
-				new Player(playerFormData.playerTwoName, playerFormData.playerTwoHandicap, 'bg-[blue]')
-			);
+			if (selectedGame === '9ball') {
+				$game = new NineBallGame(
+					new NineBallPlayer(
+						playerFormData.playerOneName,
+						playerFormData.playerOneHandicap,
+						'bg-[red]'
+					),
+					new NineBallPlayer(
+						playerFormData.playerTwoName,
+						playerFormData.playerTwoHandicap,
+						'bg-[blue]'
+					)
+				);
+				goto('/nine-ball');
+			} else if (selectedGame === '8ball') {
+				$game = new EightBallGame(
+					new EightBallPlayer(
+						playerFormData.playerOneName,
+						playerFormData.playerOneHandicap,
+						'bg-[red]'
+					),
+					new EightBallPlayer(
+						playerFormData.playerTwoName,
+						playerFormData.playerTwoHandicap,
+						'bg-[blue]'
+					)
+				);
+				goto('/eight-ball');
+			}
 		}
-
-		goto('/');
 	}
 </script>
 
@@ -65,7 +89,7 @@
 	{#if step === 0}
 		<RuleForm bind:selectedGame bind:selectedRules />
 	{:else}
-		<PlayerForm bind:playerFormData />
+		<PlayerForm bind:playerFormData {selectedGame} />
 	{/if}
 
 	<div class="flex">

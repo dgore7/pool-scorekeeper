@@ -1,11 +1,16 @@
 <script lang="ts">
+	import type { GameType } from '$lib/types';
 	import Well from './Well.svelte';
 	import startcase from 'lodash.startcase';
 	export let name: 'player-one' | 'player-two';
 	export let playerName: string | null;
 	export let playerHandicap: number | null;
 
-	let handicaps = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+	export let selectedGame: GameType;
+
+	let NineBallHandicaps = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+	let EightBallHandicaps = [2, 3, 4, 5, 6, 7];
+	let handicaps = selectedGame === '9ball' ? NineBallHandicaps : EightBallHandicaps;
 </script>
 
 <Well>

@@ -3,7 +3,7 @@
 	import ControlButtons from './ControlButtons.svelte';
 	import type { EightBallGame } from '$lib/eight-ball';
 
-	export let isGameOver;
+	export let isGameOver: boolean;
 	export let game: EightBallGame;
 
 	let dispatch = createEventDispatcher();
@@ -39,14 +39,23 @@
 
 <button
 	class="flex justify-center rounded-xl py-4 text-2xl {game.currentPlayer.color}"
-	on:click={handleMiss}>End {game.currentPlayer.name}'s Turn</button
+	on:click={handleMiss}
+	disabled={isGameOver}>End {game.currentPlayer.name}'s Turn</button
 >
 
 <div class="flex justify-center gap-6">
-	<button class="rounded-xl text-2xl text-black bg-green-400 w-full" on:click={handleWin}>
+	<button
+		class="rounded-xl text-2xl text-black bg-green-400 w-full"
+		on:click={handleWin}
+		disabled={isGameOver}
+	>
 		{game.currentPlayer.name} Won!
 	</button>
-	<button class="rounded-xl py-4 text-2xl bg-rose-600 w-full" on:click={handleLose}>
+	<button
+		class="rounded-xl py-4 text-2xl bg-rose-600 w-full"
+		on:click={handleLose}
+		disabled={isGameOver}
+	>
 		{game.currentPlayer.name} Lost...
 	</button>
 </div>

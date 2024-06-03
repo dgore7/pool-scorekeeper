@@ -13,49 +13,67 @@
 
 	import TeamDisplay from '$lib/components/TeamDisplay.svelte';
 
+	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
+
 	import {
 		EightBallGame,
 		Miss,
 		Win,
 		Lose,
 		Undo,
-		Player,
 		Timeout,
 		Safety,
+		AssignSide,
 		type BallType,
 		type EndGameCase,
-		AssignSide
+		type Condition
 	} from '$lib/eight-ball';
 
-	export let data;
-	const { dialog } = data;
+	import type { Writable } from 'svelte/store';
 
-	let game = new EightBallGame(new Player('John', 5, 'bg-[red]'), new Player('George', 5, 'bg-[blue]'));
+	export let data;
+	const { game } = data as Required<{ game: Writable<EightBallGame> }>;
+	const { dialog, toast, toastTime } = data;
+
 	let isGameOver = false;
 
-	$: areTeamsAssigned = game.currentRack.playerBalls.some(
+	$: areTeamsAssigned = $game.currentRack.playerBalls.some(
 		(value: BallType | null) => value !== null
 	);
 
 	function handleBallSelect(e: CustomEvent<BallType>) {
-		game.doAction(new AssignSide(e.detail));
-		game = game;
+		$game.doAction(new AssignSide(e.detail));
+		$game = $game;
 	}
 
 	function handleMiss() {
-		game.doAction(new Miss());
-		game = game;
+		$game.doAction(new Miss());
+		$game = $game;
 	}
 
 	function handleWinDialog() {
-		let message = `How did ${game.currentPlayer.name} win?`;
-		let conditions = getWinConditions();
+		let message = `How did ${$game.currentPlayer.name} win?`;
+		let conditions = getWinConditions() as Condition[];
 		$dialog = { message, conditions };
 	}
 
 	function handleWin(e: CustomEvent<EndGameCase>) {
-		game.doAction(new Win(e.detail));
-		game = game;
+		$game.doAction(new Win(e.detail));
+		$game = $game;
+
+		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
+			handleWinner();
+		}
+	}
+
+	function handleWinner() {
+		isGameOver = true;
+		$toastTime = 5000;
+		$toast = {
+			message: `Player ${$game.currentPlayer.name} wins!`,
+			icon: TrophyIcon,
+			class: 'bg-gray-200'
+		};
 	}
 
 	function handleSubmitDialog(e: CustomEvent<EndGameCase>) {
@@ -68,7 +86,7 @@
 	}
 
 	function getWinConditions() {
-		if (game.currentRack.innings) {
+		if ($game.currentRack.innings) {
 			return [{ id: 'M8', message: 'Made The 8!' }];
 		} else {
 			return [
@@ -79,12 +97,12 @@
 	}
 
 	function handleLoseDialog() {
-		let message = `How did ${game.currentPlayer.name} lose?`;
+		let message = `How did ${$game.currentPlayer.name} lose?`;
 		let conditions = [
 			{ id: 'E8', message: 'Early 8.' },
 			{ id: 'W8', message: '8 In Wrong Pocket.' },
 			{ id: 'S8', message: 'Scratched On 8.' }
-		];
+		] as Condition[];
 		$dialog = { message, conditions };
 	}
 
@@ -93,23 +111,26 @@
 	}
 
 	function handleLose(e: CustomEvent<EndGameCase>) {
-		game.doAction(new Lose(e.detail));
-		game = game;
+		$game.doAction(new Lose(e.detail));
+		$game = $game;
 	}
 
 	function handleUndo() {
-		game.doAction(new Undo());
-		game = game;
+		$game.doAction(new Undo());
+		if (isGameOver) {
+			isGameOver = false;
+		}
+		$game = $game;
 	}
 
 	function handleTimeout() {
-		game.doAction(new Timeout());
-		game = game;
+		$game.doAction(new Timeout());
+		$game = $game;
 	}
 
 	function handleSafety() {
-		game.doAction(new Safety());
-		game = game;
+		$game.doAction(new Safety());
+		$game = $game;
 	}
 </script>
 
@@ -122,11 +143,11 @@
 			on:submitDialog={handleSubmitDialog}
 		/>
 	{/if}
-	<Scoreboard {game}>
-		{#each game.players as player, playerNumber}
-			<PlayerStats {player} {game} {playerNumber} />
+	<Scoreboard game={$game}>
+		{#each $game.players as player, playerNumber}
+			<PlayerStats {player} game={$game} {playerNumber} />
 		{/each}
-		{#each game.players as player, playerNumber}
+		{#each $game.players as player, playerNumber}
 			<ProgressBar {player} reverse={!!playerNumber} />
 		{/each}
 	</Scoreboard>
@@ -134,14 +155,14 @@
 	<div class="flex-1"></div>
 	<div class="container flex flex-col gap-6">
 		{#if !areTeamsAssigned}
-			<BallSelect {game} on:ballSelect={handleBallSelect} />
+			<BallSelect game={$game} on:ballSelect={handleBallSelect} />
 		{:else}
-			<TeamDisplay {game} />
+			<TeamDisplay game={$game} />
 		{/if}
 
 		<EightBallControlPad
 			{isGameOver}
-			{game}
+			game={$game}
 			on:miss={handleMiss}
 			on:win={handleWin}
 			on:winDialog={handleWinDialog}

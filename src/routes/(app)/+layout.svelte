@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../app.pcss';
+	import '../../app.pcss';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import Toast from '$lib/components/Toast.svelte';
 	import Header from '$lib/components/Header.svelte';

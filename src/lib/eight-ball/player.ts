@@ -1,4 +1,4 @@
-export class Player {
+export class EightBallPlayer {
 	constructor(
 		readonly name: string,
 		readonly handicap: number,

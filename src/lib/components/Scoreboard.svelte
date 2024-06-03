@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { NineBallGame, EightBallGame } from '$lib';
+	import type { EightBallGame } from '$lib/eight-ball';
+	import type { NineBallGame } from '$lib';
 
 	export let game: NineBallGame | EightBallGame;
 </script>

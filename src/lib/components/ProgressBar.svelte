@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Player } from '$lib';
+	import type { NineBallPlayer } from '$lib';
+	import type { EightBallPlayer } from '$lib/eight-ball';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 
-	export let player: Player;
+	export let player: NineBallPlayer | EightBallPlayer;
 	let className = '';
 	export { className as class };
 	export let reverse = false;
@@ -14,7 +15,6 @@
 	});
 
 	$: $progress = player.progressPercent;
-  $: console.log(player.progressPercent, player.score, player.scoreRequired)
 </script>
 
 <div
