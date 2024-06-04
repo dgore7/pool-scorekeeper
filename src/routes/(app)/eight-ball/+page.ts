@@ -1,12 +1,25 @@
-import { browser } from '$app/environment';
-import { redirect } from '@sveltejs/kit';
-import { get } from 'svelte/store';
+import { EightBallGame, EightBallRack, EightBallPlayer } from '$lib/eight-ball';
 
-export async function load({ parent }) {
-	const { game } = await parent();
-	const $game = get(game);
+import { persisted } from 'svelte-persisted-store';
 
-	if (browser && !$game) {
-		redirect(303, '/setup');
-	}
+export function load() {
+	const game = persisted<EightBallGame | null>('game', null, {
+		storage: 'session',
+		serializer: {
+			parse: (str) => {
+				const game: EightBallGame = Object.setPrototypeOf(JSON.parse(str), EightBallGame.prototype);
+				game.players.forEach((player: EightBallPlayer) =>
+					Object.setPrototypeOf(player, EightBallPlayer.prototype)
+				);
+				game.racks.forEach((rack) => Object.setPrototypeOf(rack, EightBallRack.prototype));
+				return game;
+			},
+			stringify: JSON.stringify
+		}
+	});
+	return { game };
 }
+
+export const ssr = false;
+export const csr = true;
+export const prerender = false;
