@@ -30,7 +30,10 @@
 	export let data;
 	const { dialog } = data;
 
-	let game = new EightBallGame(new Player('John', 5, 'bg-[red]'), new Player('George', 5, 'bg-[blue]'));
+	let game = new EightBallGame(
+		new Player('John', 5, 'bg-[red]'),
+		new Player('George', 5, 'bg-[blue]')
+	);
 	let isGameOver = false;
 
 	$: areTeamsAssigned = game.currentRack.playerBalls.some(
@@ -56,6 +59,10 @@
 	function handleWin(e: CustomEvent<EndGameCase>) {
 		game.doAction(new Win(e.detail));
 		game = game;
+
+		if (game.currentPlayer.score === game.currentPlayer.scoreRequired) {
+			isGameOver = true;
+		}
 	}
 
 	function handleSubmitDialog(e: CustomEvent<EndGameCase>) {
@@ -65,6 +72,9 @@
 			handleLose(e);
 		}
 		$dialog = null;
+		if (game.currentPlayer.score === game.currentPlayer.scoreRequired) {
+			isGameOver = true;
+		}
 	}
 
 	function getWinConditions() {
@@ -100,6 +110,10 @@
 	function handleUndo() {
 		game.doAction(new Undo());
 		game = game;
+
+		if (isGameOver) {
+			isGameOver = false;
+		}
 	}
 
 	function handleTimeout() {
