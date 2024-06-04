@@ -8,14 +8,16 @@
 	import SettingsIcon from './icons/SettingsIcon.svelte';
 
 	import { fade } from 'svelte/transition';
+	import statefulFade from '$lib/stateful-fade';
+
+	const { state, fadeTo, fadeOut } = statefulFade('close');
 
 	import type { ComponentType } from 'svelte';
 
 	type OptionTitle = 'Score Sheet' | 'Save Game' | 'Settings' | 'End Game';
 	type Option = { title: OptionTitle; icon: ComponentType };
 
-	let isHamburger = false;
-	let hamburgerOptions: Option[] = [
+	const hamburgerOptions: Option[] = [
 		{ title: 'Score Sheet', icon: ScoreSheetIcon },
 		{ title: 'Save Game', icon: SaveIcon },
 		{ title: 'Settings', icon: SettingsIcon },
@@ -23,24 +25,32 @@
 	];
 
 	function handleHamburger() {
-		isHamburger = !isHamburger;
+		if ($state === 'open') {
+			fadeTo('close');
+		} else if ($state === 'close') {
+			fadeTo('open');
+		}
 	}
 
 	function handleOptionClick(title: OptionTitle) {
 		console.log(title);
-		isHamburger = false;
+		fadeTo('close');
 	}
 </script>
 
 <button on:click={handleHamburger}>
-	{#if isHamburger}
-		<CloseIcon color="#FFF" />
-	{:else}
-		<HamburgerIcon />
+	{#if $state === 'open'}
+		<div in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} on:outroend={fadeOut}>
+			<CloseIcon color="#FFF" />
+		</div>
+	{:else if $state === 'close'}
+		<div in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} on:outroend={fadeOut}>
+			<HamburgerIcon />
+		</div>
 	{/if}
 </button>
 
-{#if isHamburger}
+{#if $state === 'open'}
 	<div
 		class="rounded absolute top-16 right-5 text-2xl bg-white overflow-hidden"
 		transition:fade={{ duration: 300 }}
