@@ -123,7 +123,7 @@
 	{:else}
 		<button
 			aria-label="switch innings button"
-			class="rounded-xl py-2 w-full transition-colors {game.currentPlayer.color}"
+			class="rounded-xl py-2 w-full transition-colors bg-{game.currentPlayer.color}-ball"
 			on:click={isRackOver ? handleNewRack : handleMiss}
 			disabled={isDeadBallMode || isGameOver}
 		>

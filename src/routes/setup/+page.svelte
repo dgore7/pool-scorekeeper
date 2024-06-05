@@ -50,9 +50,18 @@
 				class: 'bg-gray-200'
 			};
 		} else {
+			console.log(playerFormData);
 			$game = new NineBallGame(
-				new Player(playerFormData.playerOneName, playerFormData.playerOneHandicap, 'bg-[red]'),
-				new Player(playerFormData.playerTwoName, playerFormData.playerTwoHandicap, 'bg-[blue]')
+				new Player(
+					playerFormData.playerOneName,
+					playerFormData.playerOneHandicap,
+					playerFormData.playerOneColor
+				),
+				new Player(
+					playerFormData.playerTwoName,
+					playerFormData.playerTwoHandicap,
+					playerFormData.playerTwoColor
+				)
 			);
 		}
 
