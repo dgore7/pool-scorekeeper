@@ -1,8 +1,12 @@
+import { browser } from '$app/environment';
 import { NineBallGame, NineBallPlayer, NineBallRack } from '$lib';
+import { redirect } from '@sveltejs/kit';
 
 import { persisted } from 'svelte-persisted-store';
+import { get } from 'svelte/store';
 
-export function load() {
+export async function load({ parent }) {
+	const { game: setupGame } = await parent();
 	const game = persisted<NineBallGame | null>('game', null, {
 		storage: 'session',
 		serializer: {
@@ -17,9 +21,13 @@ export function load() {
 			stringify: JSON.stringify
 		}
 	});
+	if (get(setupGame)) {
+		game.set(get(setupGame));
+	}
+	const $game = get(game);
+	if (browser && (!$game || $game.type !== '9ball')) {
+		redirect(303, '/setup');
+	}
+
 	return { game };
 }
-
-export const ssr = false;
-export const csr = true;
-export const prerender = false;

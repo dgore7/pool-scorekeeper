@@ -26,6 +26,7 @@ class AssertionError extends Error {
 }
 
 export class EightBallGame {
+	readonly type = '8ball';
 	players: [EightBallPlayer, EightBallPlayer];
 	winner: EightBallPlayer | null = null;
 	actions: Action[] = [];

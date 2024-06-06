@@ -1,8 +1,12 @@
+import { browser } from '$app/environment';
 import { EightBallGame, EightBallRack, EightBallPlayer } from '$lib/eight-ball';
+import { redirect } from '@sveltejs/kit';
 
 import { persisted } from 'svelte-persisted-store';
+import { get } from 'svelte/store';
 
-export function load() {
+export async function load({ parent }) {
+	const { game: setupGame } = await parent();
 	const game = persisted<EightBallGame | null>('game', null, {
 		storage: 'session',
 		serializer: {
@@ -17,9 +21,13 @@ export function load() {
 			stringify: JSON.stringify
 		}
 	});
+	if (get(setupGame)) {
+		game.set(get(setupGame));
+	}
+	const $game = get(game);
+	console.log($game);
+	if (browser && (!$game || $game.type !== '8ball')) {
+		redirect(303, '/setup');
+	}
 	return { game };
 }
-
-export const ssr = false;
-export const csr = true;
-export const prerender = false;

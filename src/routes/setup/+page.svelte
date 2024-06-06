@@ -39,10 +39,12 @@
 		return messages.map((message) => `<li class="ml-4">${message}</li>`).join(' ');
 	}
 
-	function handleGameStart() {
+	async function handleGameStart(event: SubmitEvent) {
+		event.preventDefault();
 		const isInvalid = hasMissingData(playerFormData);
 		const messages = deriveMissingFields(playerFormData);
 		const errorList = deriveErrorList(messages);
+		console.log(playerFormData, isInvalid);
 
 		if (isInvalid) {
 			$toastTime = 5000;
@@ -65,7 +67,7 @@
 						'bg-[blue]'
 					)
 				);
-				goto('/nine-ball');
+				await goto('/nine-ball');
 			} else if (selectedGame === '8ball') {
 				$game = new EightBallGame(
 					new EightBallPlayer(
@@ -79,13 +81,13 @@
 						'bg-[blue]'
 					)
 				);
-				goto('/eight-ball');
+				await goto('/eight-ball');
 			}
 		}
 	}
 </script>
 
-<div class="flex flex-col gap-4 max-w-full">
+<form class="flex flex-col gap-4 max-w-full" on:submit={handleGameStart}>
 	{#if step === 0}
 		<RuleForm bind:selectedGame bind:selectedRules />
 	{:else}
@@ -95,6 +97,7 @@
 	<div class="flex">
 		{#if step < 1}
 			<button
+				type="button"
 				class="flex justify-center items-center h-[3.75rem] rounded-[60px] bg-white text-black mx-auto px-10"
 				on:click={handleNext}>Next</button
 			>
@@ -102,12 +105,13 @@
 			<button
 				class="flex justify-center items-center h-[3.75rem] rounded-[60px] bg-white text-black mx-auto px-10"
 				disabled={!step}
+				type="button"
 				on:click={handlePrev}>Back</button
 			>
 			<button
 				class="flex justify-center items-center h-[3.75rem] rounded-[60px] bg-white text-black mx-auto px-10"
-				on:click={handleGameStart}>Let's Rack 'em Up</button
+				>Let's Rack 'em Up</button
 			>
 		{/if}
 	</div>
-</div>
+</form>

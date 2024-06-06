@@ -20,6 +20,7 @@ const BALL_COLORS: string[] = [
 ];
 
 export class NineBallGame {
+	readonly type = '9ball';
 	players: [NineBallPlayer, NineBallPlayer];
 	winner: NineBallPlayer | null = null;
 	racks = [new NineBallRack(0)];

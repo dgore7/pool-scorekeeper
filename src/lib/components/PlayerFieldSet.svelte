@@ -34,7 +34,6 @@
 			aria-label="handicap"
 			class="bg-black h-10 py-2 px-3 rounded invalid:text-[#9ca3af]"
 			bind:value={playerHandicap}
-			required
 		>
 			<option disabled selected value class="hidden">handicap</option>
 			{#each handicaps as handicap}
