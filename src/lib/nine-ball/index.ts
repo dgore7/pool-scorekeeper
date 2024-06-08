@@ -42,6 +42,10 @@ export class NineBallGame {
 		return this.racks.reduce((n, { innings }) => n + innings, 0);
 	}
 
+	get totalDeadBalls() {
+		return this.racks.reduce((n, { deadBalls }) => n + deadBalls.length, 0);
+	}
+
 	get currentRack() {
 		const rack = this.racks.at(-1);
 		if (!rack) throw new AssertionError('current rack should always be defined');
@@ -85,13 +89,15 @@ export class NineBallGame {
 		if (!ball.isDead) {
 			if (ball.number === 9) {
 				this.increment();
-				this.currentRack.leftOverBalls.forEach((ball) => (ball.isDead = true));
+				this.currentRack.leftOverBalls.forEach((ball) => {
+					ball.isDead = true;
+					this.currentRack.deadBalls.push(ball);
+				});
 			}
 			this.increment();
 		}
 
 		this.currentRack.pocketedBalls.push(ball);
-		console.log(this.currentRack.gameBalls);
 	}
 
 	unPocketBall() {
@@ -102,7 +108,10 @@ export class NineBallGame {
 			if (!zombieBall.isDead) {
 				if (zombieBall.number === 9) {
 					this.decrement();
-					this.currentRack.leftOverBalls.forEach((ball) => (ball.isDead = false));
+					this.currentRack.leftOverBalls.forEach((ball) => {
+						ball.isDead = false;
+						this.currentRack.deadBalls.pop();
+					});
 				}
 				this.decrement();
 			}
