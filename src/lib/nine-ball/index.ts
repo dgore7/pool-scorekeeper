@@ -43,6 +43,10 @@ export class NineBallGame {
 		return this.racks.reduce((n, { innings }) => n + innings, 0);
 	}
 
+	get totalDeadBalls() {
+		return this.racks.reduce((n, { deadBalls }) => n + deadBalls.length, 0);
+	}
+
 	get currentRack() {
 		const rack = this.racks.at(-1);
 		if (!rack) throw new AssertionError('current rack should always be defined');
