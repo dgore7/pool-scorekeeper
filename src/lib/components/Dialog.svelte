@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { Condition } from '$lib';
+	import type { Condition, EndGameCase } from '$lib/eight-ball';
 
 	const dispatch = createEventDispatcher<{
-		submitDialog: Condition;
+		submitDialog: EndGameCase;
 		cancelDialog: undefined;
 	}>();
 
@@ -13,7 +13,7 @@
 	let selectedCondition: Condition | null = null;
 
 	function handleSubmit() {
-		dispatch('submitDialog', selectedCondition!);
+		dispatch('submitDialog', selectedCondition!.id);
 	}
 
 	function handleCancel() {

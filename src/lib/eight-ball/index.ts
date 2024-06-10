@@ -1,4 +1,4 @@
-import type { Player } from '$lib/eight-ball/player';
+import type { EightBallPlayer } from '$lib/eight-ball/player';
 import type { Action } from '$lib/eight-ball/actions';
 import type { EndGameCase, BallType } from './types';
 import type { BallModel } from '$lib/components/Ball.svelte';
@@ -26,13 +26,14 @@ class AssertionError extends Error {
 }
 
 export class EightBallGame {
-	players: [Player, Player];
-	winner: Player | null = null;
+	readonly type = '8ball';
+	players: [EightBallPlayer, EightBallPlayer];
+	winner: EightBallPlayer | null = null;
 	actions: Action[] = [];
 	racks: EightBallRack[] = [];
 	undoneActions: Action[] = [];
 
-	constructor(player1: Player, player2: Player) {
+	constructor(player1: EightBallPlayer, player2: EightBallPlayer) {
 		this.players = [player1, player2];
 		this.player1.scoreRequired = this.requiredScores[0];
 		this.player2.scoreRequired = this.requiredScores[1];
@@ -223,11 +224,11 @@ export class EightBallRack {
 	endGameCase: EndGameCase | null = null;
 	playerBalls: BallType[] | null[] = [null, null];
 	assignmentBalls: BallModel[] = this.createBalls();
-	winner: Player | null = null;
+	winner: EightBallPlayer | null = null;
 
 	constructor(
 		public turn: number,
-		readonly playerToBreak: Player
+		readonly playerToBreak: EightBallPlayer
 	) {}
 
 	endTurn() {

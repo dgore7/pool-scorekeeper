@@ -1,11 +1,16 @@
 <script lang="ts">
+	import type { GameType } from '$lib/types';
 	import Well from './Well.svelte';
 	import startcase from 'lodash.startcase';
 	export let name: 'player-one' | 'player-two';
 	export let playerName: string | null;
 	export let playerHandicap: number | null;
 
-	let handicaps = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+	export let selectedGame: GameType;
+
+	let NineBallHandicaps = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+	let EightBallHandicaps = [2, 3, 4, 5, 6, 7];
+	let handicaps = selectedGame === '9ball' ? NineBallHandicaps : EightBallHandicaps;
 </script>
 
 <Well>
@@ -29,7 +34,6 @@
 			aria-label="handicap"
 			class="bg-black h-10 py-2 px-3 rounded invalid:text-[#9ca3af]"
 			bind:value={playerHandicap}
-			required
 		>
 			<option disabled selected value class="hidden">handicap</option>
 			{#each handicaps as handicap}

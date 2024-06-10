@@ -4,7 +4,7 @@
 	import type { EightBallGame } from '$lib/eight-ball';
 	import { cva } from 'class-variance-authority';
 
-	export let isGameOver;
+	export let isGameOver: boolean;
 	export let game: EightBallGame;
 
 	let dispatch = createEventDispatcher();

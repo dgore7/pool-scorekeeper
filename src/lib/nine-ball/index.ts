@@ -1,5 +1,5 @@
 import type { Action, EndRack } from './actions';
-import type { Player } from './player';
+import type { NineBallPlayer } from './player';
 import type { BallModel } from '$lib/components/Ball.svelte';
 
 class AssertionError extends Error {
@@ -20,13 +20,14 @@ const BALL_COLORS: string[] = [
 ];
 
 export class NineBallGame {
-	players: [Player, Player];
-	winner: Player | null = null;
+	readonly type = '9ball';
+	players: [NineBallPlayer, NineBallPlayer];
+	winner: NineBallPlayer | null = null;
 	racks = [new NineBallRack(0)];
 	actions: Action[] = [];
 	undoneActions: Action[] = [];
 
-	constructor(player1: Player, player2: Player) {
+	constructor(player1: NineBallPlayer, player2: NineBallPlayer) {
 		this.players = [player1, player2];
 	}
 
