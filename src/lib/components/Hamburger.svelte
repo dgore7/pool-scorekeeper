@@ -25,11 +25,11 @@
 	];
 
 	function handleHamburger() {
-		if ($state === 'open') {
-			fadeTo('close');
-		} else if ($state === 'close') {
-			fadeTo('open');
-		}
+		fadeTo('open');
+	}
+
+	function handleClose() {
+		fadeTo('close');
 	}
 
 	function handleOptionClick(title: OptionTitle) {
@@ -38,17 +38,27 @@
 	}
 </script>
 
-<button on:click={handleHamburger}>
-	{#if $state === 'open'}
-		<div in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} on:outroend={fadeOut}>
-			<CloseIcon color="#FFF" />
-		</div>
-	{:else if $state === 'close'}
-		<div in:fade={{ duration: 150 }} out:fade={{ duration: 150 }} on:outroend={fadeOut}>
-			<HamburgerIcon />
-		</div>
-	{/if}
-</button>
+{#if $state === 'open'}
+	<button
+		on:click={handleClose}
+		in:fade={{ duration: 150 }}
+		out:fade={{ duration: 150 }}
+		on:outroend={fadeOut}
+		aria-label="Close"
+	>
+		<CloseIcon class="fill-white" />
+	</button>
+{:else if $state === 'close'}
+	<button
+		on:click={handleHamburger}
+		in:fade={{ duration: 150 }}
+		out:fade={{ duration: 150 }}
+		on:outroend={fadeOut}
+		aria-label="Hamburger menu"
+	>
+		<HamburgerIcon />
+	</button>
+{/if}
 
 {#if $state === 'open'}
 	<div
