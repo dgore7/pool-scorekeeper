@@ -83,6 +83,9 @@
 			handleLose(e);
 		}
 		$dialog = null;
+		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
+			isGameOver = true;
+		}
 	}
 
 	function getWinConditions() {

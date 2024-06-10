@@ -109,7 +109,7 @@
 					in:send|global={{ key: ball.number }}
 					out:receive|global={{ key: ball.number }}
 				>
-					<Ball {ball} size={'large'} class="mx-auto" />
+					<Ball {ball} size={'large'} pocketed={ball.isPocketed} class="mx-auto" />
 				</button>
 			{/if}
 		</div>

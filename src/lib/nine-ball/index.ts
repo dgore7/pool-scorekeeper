@@ -92,6 +92,7 @@ export class NineBallGame {
 		}
 
 		this.currentRack.pocketedBalls.push(ball);
+		console.log(this.currentRack.gameBalls);
 	}
 
 	unPocketBall() {
