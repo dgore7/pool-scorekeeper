@@ -3,8 +3,9 @@
 	import type { EightBallPlayer } from '$lib/eight-ball';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
+	import type { StraightPoolPlayer } from '$lib/straight-pool';
 
-	export let player: NineBallPlayer | EightBallPlayer;
+	export let player: NineBallPlayer | EightBallPlayer | StraightPoolPlayer;
 	let className = '';
 	export { className as class };
 	export let reverse = false;
