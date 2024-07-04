@@ -42,7 +42,7 @@
 
 <button
 	class={turnButton({
-		class: [isGameOver ? 'bg-slate-400' : `bg-${game.currentPlayer.color}-ball`]
+		class: isGameOver ? 'bg-slate-400' : game.currentPlayer.color
 	})}
 	on:click={handleMiss}
 	disabled={isGameOver}>End {game.currentPlayer.name}'s Turn</button
