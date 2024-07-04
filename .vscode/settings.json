@@ -11,5 +11,8 @@
 
 	// add support for autocomplete in JS or JS like files
 	"cssvar.extensions": ["css", "postcss", "svelte"],
-	"cSpell.words": ["startcase"]
+	"cSpell.words": [
+		"outroend",
+		"startcase"
+	]
 }

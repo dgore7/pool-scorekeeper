@@ -6,6 +6,7 @@ import { persisted } from 'svelte-persisted-store';
 import { get } from 'svelte/store';
 
 export async function load({ parent }) {
+
 	const { game: setupGame } = await parent();
 	const game = persisted<EightBallGame | null>('game', null, {
 		storage: 'session',
@@ -25,7 +26,6 @@ export async function load({ parent }) {
 		game.set(get(setupGame));
 	}
 	const $game = get(game);
-	console.log($game);
 	if (browser && (!$game || $game.type !== '8ball')) {
 		redirect(303, '/setup');
 	}

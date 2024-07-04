@@ -1,6 +1,6 @@
 <script lang="ts">
 	import PlayerForm from '$lib/components/PlayerForm.svelte';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { NineBallGame, NineBallPlayer } from '$lib';
 	import { EightBallGame, EightBallPlayer } from '$lib/eight-ball';
 	import { RuleForm, type PlayerFormData } from '$lib/components';
@@ -44,7 +44,6 @@
 		const isInvalid = hasMissingData(playerFormData);
 		const messages = deriveMissingFields(playerFormData);
 		const errorList = deriveErrorList(messages);
-		console.log(playerFormData, isInvalid);
 
 		if (isInvalid) {
 			$toastTime = 5000;
@@ -67,7 +66,7 @@
 						playerFormData.playerTwoColor
 					)
 				);
-				await goto('/nine-ball');
+				goto('/nine-ball');
 			} else if (selectedGame === '8ball') {
 				$game = new EightBallGame(
 					new EightBallPlayer(
@@ -81,7 +80,7 @@
 						playerFormData.playerTwoColor
 					)
 				);
-				await goto('/eight-ball');
+				goto('/eight-ball');
 			}
 		}
 	}
