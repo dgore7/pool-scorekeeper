@@ -18,7 +18,7 @@
 	let NineBallHandicaps = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 	let EightBallHandicaps = [2, 3, 4, 5, 6, 7];
 	let handicaps = selectedGame === '9ball' ? NineBallHandicaps : EightBallHandicaps;
-	
+
 	type ColorOption = {
 		label: string;
 		value: string;
