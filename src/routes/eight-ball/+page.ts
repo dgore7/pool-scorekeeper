@@ -6,7 +6,6 @@ import { persisted } from 'svelte-persisted-store';
 import { get } from 'svelte/store';
 
 export async function load({ parent }) {
-
 	const { game: setupGame } = await parent();
 	const game = persisted<EightBallGame | null>('game', null, {
 		storage: 'session',

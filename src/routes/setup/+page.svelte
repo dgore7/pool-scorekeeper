@@ -1,6 +1,6 @@
 <script lang="ts">
 	import PlayerForm from '$lib/components/PlayerForm.svelte';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { NineBallGame, NineBallPlayer } from '$lib';
 	import { EightBallGame, EightBallPlayer } from '$lib/eight-ball';
 	import { RuleForm, type PlayerFormData } from '$lib/components';
