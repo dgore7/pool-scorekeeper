@@ -7,8 +7,8 @@
 		playerTwoName: '',
 		playerOneHandicap: NaN,
 		playerTwoHandicap: NaN,
-		playerOneColor: 'red',
-		playerTwoColor: 'blue'
+		playerOneColor: 'bg-red-ball',
+		playerTwoColor: 'bg-blue-ball'
 	};
 
 	export let selectedGame: GameType;

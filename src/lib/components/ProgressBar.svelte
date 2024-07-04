@@ -14,21 +14,6 @@
 		easing: cubicOut
 	});
 
-	interface ballsMap {
-		[color: string]: string;
-	}
-
-	const balls: ballsMap = {
-		yellow: '#FFB51E',
-		blue: '#313389',
-		red: '#C62627',
-		purple: '#662D68',
-		orange: '#EE7D2B',
-		green: '#24762E',
-		maroon: '#A02A2A',
-		black: '#131313'
-	};
-
 	$: $progress = player.progressPercent;
 </script>
 
@@ -44,11 +29,7 @@
 		class:rounded-t-lg={!reverse}
 		class:rounded-b-lg={reverse}
 	>
-		<div
-			class="progress-bar-inner"
-			style:width="{$progress * 100}%"
-			style:background-color={balls[player.color]}
-		/>
+		<div class="progress-bar-inner {player.color}" style:width="{$progress * 100}%" />
 	</div>
 </div>
 
