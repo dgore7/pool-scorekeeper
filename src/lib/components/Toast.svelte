@@ -19,7 +19,7 @@
 >
 	<svelte:component this={icon} />
 	<div class="text">{@html message}</div>
-	<button class="close shrink" on:click={() => dispatch('close')}>
+	<button aria-label="Close" class="close shrink" on:click={() => dispatch('close')}>
 		<CloseIcon width="0.8em" class={'fill-black'} />
 	</button>
 </div>
