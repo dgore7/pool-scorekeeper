@@ -60,12 +60,12 @@
 					new NineBallPlayer(
 						playerFormData.playerOneName,
 						playerFormData.playerOneHandicap,
-						'bg-[red]'
+						playerFormData.playerOneColor
 					),
 					new NineBallPlayer(
 						playerFormData.playerTwoName,
 						playerFormData.playerTwoHandicap,
-						'bg-[blue]'
+						playerFormData.playerTwoColor
 					)
 				);
 				await goto('/nine-ball');
@@ -74,12 +74,12 @@
 					new EightBallPlayer(
 						playerFormData.playerOneName,
 						playerFormData.playerOneHandicap,
-						'bg-[red]'
+						playerFormData.playerOneColor
 					),
 					new EightBallPlayer(
 						playerFormData.playerTwoName,
 						playerFormData.playerTwoHandicap,
-						'bg-[blue]'
+						playerFormData.playerTwoColor
 					)
 				);
 				await goto('/eight-ball');
