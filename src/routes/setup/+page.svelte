@@ -6,7 +6,6 @@
 	import { RuleForm, type PlayerFormData } from '$lib/components';
 	import WarningIcon from '$lib/components/WarningIcon.svelte';
 	import { startCase } from 'lodash';
-
 	import type { GameType, RuleType } from '$lib/types.js';
 
 	export let data;
@@ -45,7 +44,6 @@
 		const isInvalid = hasMissingData(playerFormData);
 		const messages = deriveMissingFields(playerFormData);
 		const errorList = deriveErrorList(messages);
-		console.log(playerFormData, isInvalid);
 
 		if (isInvalid) {
 			$toastTime = 5000;
@@ -68,7 +66,7 @@
 						playerFormData.playerTwoColor
 					)
 				);
-				await goto('/nine-ball');
+				goto('/nine-ball');
 			} else if (selectedGame === '8ball') {
 				$game = new EightBallGame(
 					new EightBallPlayer(
@@ -82,7 +80,7 @@
 						playerFormData.playerTwoColor
 					)
 				);
-				await goto('/eight-ball');
+				goto('/eight-ball');
 			}
 		}
 	}

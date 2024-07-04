@@ -25,7 +25,6 @@ export async function load({ parent }) {
 		game.set(get(setupGame));
 	}
 	const $game = get(game);
-	console.log($game);
 	if (browser && (!$game || $game.type !== '8ball')) {
 		redirect(303, '/setup');
 	}
