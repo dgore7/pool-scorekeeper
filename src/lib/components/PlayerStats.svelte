@@ -2,9 +2,10 @@
 	import type { NineBallPlayer, NineBallGame } from '$lib';
 	import type { EightBallGame } from '$lib/eight-ball';
 	import type { Player as EightBallPlayer } from '$lib/index/player';
+	import type { StraightPoolGame, StraightPoolPlayer } from '$lib/straight-pool';
 
-	export let player: NineBallPlayer | EightBallPlayer;
-	export let game: NineBallGame | EightBallGame;
+	export let player: NineBallPlayer | EightBallPlayer | StraightPoolPlayer;
+	export let game: NineBallGame | EightBallGame | StraightPoolGame;
 	export let playerNumber: number;
 </script>
 

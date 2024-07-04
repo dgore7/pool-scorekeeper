@@ -6,7 +6,6 @@
 	import { RuleForm, type PlayerFormData } from '$lib/components';
 	import WarningIcon from '$lib/components/WarningIcon.svelte';
 	import { startCase } from 'lodash';
-
 	import type { GameType, RuleType } from '$lib/types.js';
 
 	export let data;
