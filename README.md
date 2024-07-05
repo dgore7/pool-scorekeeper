@@ -12,7 +12,7 @@ You can preview the production build with `npm run preview`.
 
 ### android/ios
 
-build the app with the for using svelte-kit SPA mode (adapter-static) [docs](https://kit.svelte.dev/docs/single-page-apps)
+build the app with svelte-kit SPA mode (adapter-static) [docs](https://kit.svelte.dev/docs/single-page-apps)
 
 ```bash
 npm run build:capacitor
