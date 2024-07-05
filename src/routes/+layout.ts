@@ -13,4 +13,4 @@ export function load() {
 	return { game, toast, toastTime, dialog };
 }
 
-export const ssr = false
+export const ssr = false;
