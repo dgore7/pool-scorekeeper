@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev --host",
 		"build": "vite build",
+		"build:capacitor": "CAPACITOR=true vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -44,6 +45,11 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@capacitor/android": "^6.1.0",
+		"@capacitor/cli": "^6.1.0",
+		"@capacitor/core": "^6.1.0",
+		"@capacitor/ios": "^6.1.0",
+		"@sveltejs/adapter-static": "^3.0.2",
 		"lodash.startcase": "^4.4.0",
 		"open-props": "^1.6.21",
 		"postcss-jit-props": "^1.0.14",

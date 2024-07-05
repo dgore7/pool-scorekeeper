@@ -13,6 +13,4 @@ export function load() {
 	return { game, toast, toastTime, dialog };
 }
 
-export const ssr = false;
-export const csr = true;
-export const prerender = false;
+export const ssr = false
