@@ -7,7 +7,11 @@
 	export let playerNumber: number;
 </script>
 
-<div class="player-score">
+<div class="player-score border-2 m-1 px-2 border-solid rounded-xl">
+	<div class="flex w-full justify-between">
+		<div>{player.name}</div>
+		<div>{player.handicap}</div>
+	</div>
 	<div class="score">
 		{player.score}
 	</div>
@@ -18,12 +22,15 @@
 		<div>
 			T: {game.currentRack.timeouts[playerNumber]}
 		</div>
+		<div>
+			<span>goal</span>
+			<span>{player.scoreRequired}</span>
+		</div>
 	</div>
 </div>
 
 <style>
 	.player-score {
-		border: none;
 		display: flex;
 		align-items: center;
 		justify-content: center;

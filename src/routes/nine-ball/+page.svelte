@@ -131,7 +131,6 @@
 		{/each}
 	</Scoreboard>
 {/if}
-<div class="flex-1"></div>
 <ControlPad
 	game={$game}
 	{isDeadBallMode}
@@ -145,4 +144,3 @@
 	on:deadBallMode={handleDeadBallMode}
 	on:saveDeadBalls={handleDeadBalls}
 />
-<BallReturn game={$game} />

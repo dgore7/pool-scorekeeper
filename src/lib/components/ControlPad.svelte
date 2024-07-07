@@ -84,12 +84,14 @@
 	}
 </script>
 
-<div aria-label="button container" class="container mx-auto py-5 w-full">
+<div
+	class="w-full py-5 h-full flex-auto grid max-h-[36rem] overflow-hidden m-auto mb-0 grid-cols-3 grid-rows-3 gap-2"
+>
 	{#each game.currentRack.gameBalls as ball (ball.number)}
-		<div class="relative h-full w-full mb-4">
+		<div class="relative w-full max-w-full h-full">
 			{#if ball.isDead}
 				<button
-					class="relative h-full w-full"
+					class="relative h-fit w-fit"
 					class:hidden={!ball.isDead}
 					on:click={() => removeDeadBall(ball)}
 					disabled={!isDeadBallMode}
@@ -114,16 +116,18 @@
 			{/if}
 		</div>
 	{/each}
+</div>
+<div class="flex-auto shrink-0">
 	{#if isDeadBallMode}
 		<button
 			aria-label="dead mode exit button"
-			class="rounded-xl bg-slate-600 py-2 w-full"
+			class="rounded-xl bg-slate-600 py-2 w-full h-14"
 			on:click={handleDeadBallSave}>Exit Deadball Mode</button
 		>
 	{:else}
 		<button
 			aria-label="switch innings button"
-			class="rounded-xl py-2 w-full transition-colors {game.currentPlayer.color}"
+			class="rounded-xl py-2 w-full h-14 transition-colors {game.currentPlayer.color}"
 			on:click={isRackOver ? handleNewRack : handleMiss}
 			disabled={isDeadBallMode || isGameOver}
 		>
@@ -136,44 +140,18 @@
 			{/if}
 		</button>
 	{/if}
-	<div
-		aria-label="control button container"
-		class:invisible={isDeadBallMode}
-		class="rounded-xl bg-slate-600 justify-evenly"
-	>
-		<ControlButtons
-			{isGameOver}
-			on:undo={handleUndo}
-			on:safety={handleSafety}
-			on:timeout={handleTimeout}
-			on:deadBallMode={handleDeadBallMode}
-		/>
-	</div>
 </div>
 
-<style>
-	[aria-label='button container'] {
-		display: grid;
-		grid-template-columns: repeat(3, 33%);
-		grid-template-rows: repeat(3, 4rem) repeat(2, 0.5fr);
-		gap: 0.5rem;
-		margin: auto;
-		max-width: 20rem;
-		place-items: center;
-		place-content: center;
-	}
-
-	[aria-label='control button container'] {
-		display: flex;
-		grid-area: 5 / 1 / 5 / 4;
-		justify-self: stretch;
-	}
-
-	[aria-label='switch innings button'] {
-		grid-area: 4 / 1 / 4 / 4;
-	}
-
-	[aria-label='dead mode exit button'] {
-		grid-area: 4 / 1 / 4 / 4;
-	}
-</style>
+<div
+	aria-label="control button container"
+	class:invisible={isDeadBallMode}
+	class="flex flex-auto shrink-0 h-14"
+>
+	<ControlButtons
+		{isGameOver}
+		on:undo={handleUndo}
+		on:safety={handleSafety}
+		on:timeout={handleTimeout}
+		on:deadBallMode={handleDeadBallMode}
+	/>
+</div>

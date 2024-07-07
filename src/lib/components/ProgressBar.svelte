@@ -18,43 +18,32 @@
 </script>
 
 <div
-	class="progress-container {className}"
+	class="progress-container col-span-2 items-center flex flex-col my-4  gap-0.5 {className}"
 	role="progressbar"
 	aria-label="{player.name}'s progress bar"
 	aria-valuenow={player.score}
 	aria-valuemax={player.scoreRequired}
 >
+<div class="flex w-full justify-between">
+  <div>{player.name}</div>
+  <div>{Math.round($progress *100)}%</div>
+</div>
+  
 	<div
-		class="progress-bar-outer rounded-t-lg"
-		class:rounded-t-lg={!reverse}
-		class:rounded-b-lg={reverse}
+		class="progress-bar-outer h-2 rounded bg-white/20"
 	>
 		<div class="progress-bar-inner {player.color}" style:width="{$progress * 100}%" />
 	</div>
 </div>
 
 <style>
-	.progress-container {
-		grid-column: span 2;
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-	}
-
 	.progress-bar-inner {
 		height: 100%;
 	}
 
 	.progress-bar-outer {
-		height: 1rem;
 		display: flex;
 		overflow: hidden;
-		background-color: white;
 		width: 100%;
-		border: 2px solid grey;
-
-		&.reverse {
-			border-radius: 0 0 8px 8px;
-		}
 	}
 </style>

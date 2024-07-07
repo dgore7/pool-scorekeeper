@@ -31,7 +31,7 @@
 
 {#each components as { icon, event, label }}
 	<button
-		class="w-8 my-1 active:bg-slate-700 aspect-square rounded flex justify-center items-center transition-colors"
+		class="my-1 grow active:bg-slate-700 rounded flex justify-center items-center transition-colors"
 		on:click={() => handleClick(event)}
 		disabled={(event === 'safety' || event === 'timeout') && isGameOver}
 	>

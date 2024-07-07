@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	import { cva } from 'class-variance-authority';
 
-	const ballClasses = cva(['transition-colors', 'duration-200', 'h-full']);
+	const ballClasses = cva(['transition-colors', 'duration-200',  'max-h-full']);
 
 	export type BallModel = {
 		number: number;
