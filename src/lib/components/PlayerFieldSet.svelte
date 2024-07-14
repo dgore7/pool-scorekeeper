@@ -25,7 +25,7 @@
 		value: BallColorSpec;
 	};
 
-  // omit black ball from color choices
+	// omit black ball from color choices
 	let colors: ColorOption[] = BALL_COLORS.slice(0, -1).map((ballColor) => ({
 		label: ballColor.label,
 		value: ballColor

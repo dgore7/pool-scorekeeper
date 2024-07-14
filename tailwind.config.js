@@ -44,9 +44,9 @@ export default {
 				primary: '#FFFFFF',
 				secondary: '#AFAFAA'
 			},
-      backgroundSize: {
-        "1.5x": "150%"
-      }
+			backgroundSize: {
+				'1.5x': '150%'
+			}
 		}
 	},
 	plugins: [],
