@@ -1,10 +1,11 @@
 <script lang="ts">
-	import Ball, { type BallModel } from './Ball.svelte';
+	import Ball from './Ball.svelte';
 	import ControlButtons from './ControlButtons.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { NineBallGame } from '$lib';
-	import SkullyIcon from './icons/SkullyIcon.svelte';
+	import deadBallSvg from '$lib/assets/balls/dead/1.svg';
 	import { receive, send } from '$lib/cross-fade';
+	import type { Ball as BallModel } from '$lib/common/ball';
 
 	export let game: NineBallGame;
 	export let isDeadBallMode: boolean;
@@ -47,8 +48,8 @@
 
 	function removeDeadBall(ball: BallModel) {
 		ball.isDead = false;
-		let zomebieBallIndex = deadBallsToAdd.indexOf(ball);
-		deadBallsToAdd.splice(zomebieBallIndex, 1);
+		let zombieBallIndex = deadBallsToAdd.indexOf(ball);
+		deadBallsToAdd.splice(zombieBallIndex, 1);
 		deadBallsToAdd = deadBallsToAdd;
 		game = game;
 	}
@@ -91,7 +92,7 @@
 		<div class="relative w-full max-w-full h-full">
 			{#if ball.isDead}
 				<button
-					class="relative h-fit w-fit"
+					class="active:scale-90 transition-transform aria-pressed:pointer-events-none h-full w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
 					class:hidden={!ball.isDead}
 					on:click={() => removeDeadBall(ball)}
 					disabled={!isDeadBallMode}
@@ -99,7 +100,7 @@
 					out:receive|global={{ key: ball.number }}
 					on:transitionend={(e) => e.currentTarget.classList.remove('absolute')}
 				>
-					<SkullyIcon {ball} class="h-full mx-auto -my-6" />
+					<img src={deadBallSvg} alt="dead ball" class="w-full max-h-[min(100%,6rem)] mx-auto" />
 				</button>
 			{:else}
 				<button
@@ -121,13 +122,15 @@
 	{#if isDeadBallMode}
 		<button
 			aria-label="dead mode exit button"
-			class="rounded-xl bg-slate-600 py-2 w-full h-14"
+			class="rounded-xl bg-slate-600 py-2 w-full h-12"
 			on:click={handleDeadBallSave}>Exit Deadball Mode</button
 		>
 	{:else}
 		<button
 			aria-label="switch innings button"
-			class="rounded-xl py-2 w-full h-14 transition-colors {game.currentPlayer.color}"
+			class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {game.currentPlayer.color.gradient
+				.from} {game.currentPlayer.color.gradient.to} {game.currentPlayer.color
+				.border} border transition-all"
 			on:click={isRackOver ? handleNewRack : handleMiss}
 			disabled={isDeadBallMode || isGameOver}
 		>
@@ -145,7 +148,7 @@
 <div
 	aria-label="control button container"
 	class:invisible={isDeadBallMode}
-	class="flex flex-auto shrink-0 h-14"
+	class="flex flex-auto shrink-0 h-12"
 >
 	<ControlButtons
 		{isGameOver}

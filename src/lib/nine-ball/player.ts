@@ -1,3 +1,5 @@
+import type { BallColorSpec } from '$lib/common/ball';
+
 const APA_SCORE_REQUIRED = new Map([
 	[1, 14],
 	[2, 19],
@@ -11,14 +13,16 @@ const APA_SCORE_REQUIRED = new Map([
 ]);
 
 export class NineBallPlayer {
-	constructor(name: string, handicap: number, color: string) {
+	constructor(
+		name: string,
+		handicap: number,
+		public color: BallColorSpec
+	) {
 		this.name = name;
 		this.handicap = handicap;
-		this.color = color;
 	}
 
 	name = '';
-	color = '';
 	score = 0;
 	safeties = 0;
 	handicap = 9;

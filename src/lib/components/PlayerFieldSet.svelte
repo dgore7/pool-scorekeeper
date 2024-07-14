@@ -4,14 +4,15 @@
 	import startcase from 'lodash.startcase';
 
 	import { cva } from 'class-variance-authority';
+	import { BALL_COLORS, type BallColorSpec } from '$lib/common/ball';
 
-	const colorDisplay = cva(['border-solid', 'border-white', 'border-2', 'rounded']);
+	const colorDisplay = cva(['border-solid', 'border-2', 'rounded']);
 
 	export let name: 'player-one' | 'player-two';
 	export let playerName: string | null;
 	export let playerHandicap: number | null = 0;
 	export let opponentColor;
-	export let selectedColor: string;
+	export let selectedColor: BallColorSpec;
 
 	export let selectedGame: GameType;
 
@@ -21,18 +22,14 @@
 
 	type ColorOption = {
 		label: string;
-		value: string;
+		value: BallColorSpec;
 	};
 
-	let colors: ColorOption[] = [
-		{ label: 'yellow', value: 'bg-yellow-ball' },
-		{ label: 'blue', value: 'bg-blue-ball' },
-		{ label: 'red', value: 'bg-red-ball' },
-		{ label: 'purple', value: 'bg-purple-ball' },
-		{ label: 'orange', value: 'bg-orange-ball' },
-		{ label: 'green', value: 'bg-green-ball' },
-		{ label: 'maroon', value: 'bg-maroon-ball' }
-	];
+  // omit black ball from color choices
+	let colors: ColorOption[] = BALL_COLORS.slice(0, -1).map((ballColor) => ({
+		label: ballColor.label,
+		value: ballColor
+	}));
 	let availableColors: ColorOption[] = [];
 
 	$: if (opponentColor) {
@@ -79,7 +76,7 @@
 			</select>
 			<div
 				class={colorDisplay({
-					class: selectedColor
+					class: `bg-gradient-to-b ${selectedColor.gradient.from} ${selectedColor.gradient.to} ${selectedColor.border}`
 				})}
 			></div>
 		</div>

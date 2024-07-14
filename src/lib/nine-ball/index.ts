@@ -1,23 +1,12 @@
+import { Ball } from '$lib/common/ball';
 import type { Action, EndRack } from './actions';
 import type { NineBallPlayer } from './player';
-import type { BallModel } from '$lib/components/Ball.svelte';
 
 class AssertionError extends Error {
 	constructor(cause: string) {
 		super('Assertion Error: ' + cause);
 	}
 }
-
-const BALL_COLORS: string[] = [
-	'yellow',
-	'blue',
-	'red',
-	'purple',
-	'orange',
-	'green',
-	'maroon',
-	'black'
-];
 
 export class NineBallGame {
 	readonly type = '9ball';
@@ -310,15 +299,7 @@ export class NineBallRack {
 		const balls = [];
 
 		for (let i = 0; i < 9; i++) {
-			const ball: BallModel = {
-				number: i + 1,
-				color: BALL_COLORS[i % BALL_COLORS.length],
-				isStripe: i >= 8,
-				isDead: false,
-				isPocketed: false,
-				isPostKill: false
-			};
-			balls.push(ball);
+			balls.push(Ball.fromIndex(i));
 		}
 		return balls;
 	}

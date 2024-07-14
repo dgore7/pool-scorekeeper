@@ -13,15 +13,25 @@
 	const { state, fadeTo, fadeOut } = statefulFade('close');
 
 	import type { ComponentType } from 'svelte';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	type OptionTitle = 'Score Sheet' | 'Save Game' | 'Settings' | 'End Game';
-	type Option = { title: OptionTitle; icon: ComponentType };
+	type Option = { title: OptionTitle; icon: ComponentType; onClick?: Function };
 
 	const hamburgerOptions: Option[] = [
 		{ title: 'Score Sheet', icon: ScoreSheetIcon },
 		{ title: 'Save Game', icon: SaveIcon },
 		{ title: 'Settings', icon: SettingsIcon },
-		{ title: 'End Game', icon: EndGameIcon }
+		{
+			title: 'End Game',
+			icon: EndGameIcon,
+			onClick() {
+				$page.data.game.set(null);
+				goto('/setup');
+				fadeTo('close');
+			}
+		}
 	];
 
 	function handleHamburger() {
@@ -69,7 +79,7 @@
 			<button
 				class="flex w-full gap-2 py-2 px-6 bg-white text-black hover:bg-slate-300"
 				style:border-bottom={i < hamburgerOptions.length - 1 ? '1px solid black' : ''}
-				on:click={() => handleOptionClick(option.title)}
+				on:click={() => option.onClick?.() ?? handleOptionClick(option.title)}
 			>
 				<svelte:component this={option.icon} />
 				{option.title}

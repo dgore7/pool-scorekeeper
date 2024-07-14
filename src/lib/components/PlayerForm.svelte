@@ -1,14 +1,15 @@
 <script lang="ts">
 	import PlayerFieldSet from './PlayerFieldSet.svelte';
 	import type { GameType } from '$lib/types';
+	import { BALL_COLORS } from '$lib/common/ball';
 
 	export let playerFormData = {
 		playerOneName: '',
 		playerTwoName: '',
 		playerOneHandicap: NaN,
 		playerTwoHandicap: NaN,
-		playerOneColor: 'bg-red-ball',
-		playerTwoColor: 'bg-blue-ball'
+		playerOneColor: BALL_COLORS.find((color) => color.label === 'red')!,
+		playerTwoColor: BALL_COLORS.find((color) => color.label === 'blue')!
 	};
 
 	export let selectedGame: GameType;

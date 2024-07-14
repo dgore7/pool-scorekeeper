@@ -15,13 +15,14 @@
 		icon: ComponentType;
 		event: string;
 		label: string;
+		displayName?: string;
 	};
 
 	let components: ComponentEvent[] = [
 		{ icon: UndoIcon, event: 'undo', label: 'undo' },
 		{ icon: ShieldIcon, event: 'safety', label: 'safety' },
 		{ icon: PauseIcon, event: 'timeout', label: 'timeout' },
-		{ icon: GraveIcon, event: 'deadBallMode', label: 'dead ball mode' }
+		{ icon: GraveIcon, event: 'deadBallMode', label: 'dead ball mode', displayName: 'Dead' }
 	].filter((component) => isNineBall || component.event !== 'deadBallMode');
 
 	function handleClick(eventType: string) {
@@ -29,13 +30,13 @@
 	}
 </script>
 
-{#each components as { icon, event, label }}
+{#each components as { icon, event, label, displayName }}
 	<button
-		class="my-1 grow active:bg-slate-700 rounded flex justify-center items-center transition-colors"
+		class="my-1 grow active:bg-slate-700 rounded flex flex-col justify-center items-center transition-colors text-secondary text-[.625rem] capitalize"
 		on:click={() => handleClick(event)}
 		disabled={(event === 'safety' || event === 'timeout') && isGameOver}
 	>
-		<span class="sr-only">{label}</span>
 		<svelte:component this={icon} />
+		<span>{displayName ?? label}</span>
 	</button>
 {/each}

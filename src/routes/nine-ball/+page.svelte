@@ -119,28 +119,39 @@
 	$: document.body.style.backgroundColor = isDeadBallMode ? 'darkkhaki' : '#131318';
 </script>
 
-{#if isDeadBallMode}
-	<DeadBallTitle />
-{:else}
-	<Scoreboard game={$game}>
-		{#each $game.players as player, playerNumber}
-			<PlayerStats {player} game={$game} {playerNumber} />
-		{/each}
+{#if $game}
+	{#if isDeadBallMode}
+		<DeadBallTitle />
+	{:else}
+		<Scoreboard game={$game}>
+			{#each $game.players as player, playerNumber}
+				<PlayerStats {player} game={$game} {playerNumber} />
+			{/each}
+		</Scoreboard>
 		{#each $game.players as player, playerNumber}
 			<ProgressBar {player} reverse={!!playerNumber} />
 		{/each}
-	</Scoreboard>
+
+		<div class="flex justify-between py-1 items-baseline">
+			<span class="text-xl">
+				{$game.currentPlayer.name}'s Turn
+			</span>
+			<span>
+				Innings: {$game.currentRack.innings}
+			</span>
+		</div>
+	{/if}
+	<ControlPad
+		game={$game}
+		{isDeadBallMode}
+		{isGameOver}
+		on:ballPocket={handleBallPocket}
+		on:miss={handleTurn}
+		on:undo={handleUndo}
+		on:safety={handleSafety}
+		on:timeout={handleTimeout}
+		on:newRack={handleNewRack}
+		on:deadBallMode={handleDeadBallMode}
+		on:saveDeadBalls={handleDeadBalls}
+	/>
 {/if}
-<ControlPad
-	game={$game}
-	{isDeadBallMode}
-	{isGameOver}
-	on:ballPocket={handleBallPocket}
-	on:miss={handleTurn}
-	on:undo={handleUndo}
-	on:safety={handleSafety}
-	on:timeout={handleTimeout}
-	on:newRack={handleNewRack}
-	on:deadBallMode={handleDeadBallMode}
-	on:saveDeadBalls={handleDeadBalls}
-/>

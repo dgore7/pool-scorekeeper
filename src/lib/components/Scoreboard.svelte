@@ -5,23 +5,10 @@
 	export let game: NineBallGame | EightBallGame;
 </script>
 
-<div aria-live="polite" class="rounded-lg overflow-hidden flex-[1_0_auto]">
-	<div aria-label="scoreboard">
-		<slot />
-	</div>
-	<div class="flex justify-between py-1 items-baseline">
-		<span aria-label="turns" class="text-xl">
-			{game.currentPlayer.name}'s Turn
-		</span>
-		<span aria-label="innings">
-			Innings: {game.currentRack.innings}
-		</span>
-	</div>
+<div
+	aria-live="polite"
+	class="rounded-lg overflow-hidden flex-[1_0_auto] flex gap-2"
+	aria-label="scoreboard"
+>
+	<slot />
 </div>
-
-<style>
-	[aria-label='scoreboard'] {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-	}
-</style>
