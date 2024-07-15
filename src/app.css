@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+	.stack {
+		@apply grid place-content-center;
+		> * {
+			grid-area: 1 /1;
+		}
+	}
+}
+
 :root.original {
 	--yellow-ball: #ffb51e;
 	--yellow-ball-2: #231903;

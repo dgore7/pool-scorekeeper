@@ -2,6 +2,7 @@
 	import type { NineBallPlayer, NineBallGame } from '$lib';
 	import type { EightBallGame } from '$lib/eight-ball';
 	import TimeoutIcon from './icons/TimeoutIcon.svelte';
+	import { fly } from 'svelte/transition';
 	import ShieldIcon from './icons/ShieldIcon.svelte';
 
 	export let player: NineBallPlayer;
@@ -21,8 +22,12 @@
 		<div class="font-large">{player.name}</div>
 		<div class="font-light text-secondary">level {player.handicap}</div>
 	</div>
-	<div class="score font-light text-5xl">
-		{player.score}
+	<div class="score font-light text-5xl relative overflow-hidden stack text-center">
+		{#key player.score}
+			<div in:fly={{ y: '100%' }} out:fly={{ y: '-100%' }}>
+				{player.score}
+			</div>
+		{/key}
 	</div>
 	<div class=" py-1 w-full flex justify-between">
 		<div class="flex gap-2 items-center">
