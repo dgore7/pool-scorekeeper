@@ -1,5 +1,4 @@
 <script>
-	import logo from '$lib/assets/brand.svg';
 	import Hamburger from './Hamburger.svelte';
 </script>
 

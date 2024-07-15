@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { NineBallPlayer, NineBallGame } from '$lib';
-	import type { EightBallGame, EightBallPlayer } from '$lib/eight-ball';
+	import type { EightBallGame } from '$lib/eight-ball';
 	import PauseIcon from './icons/PauseIcon.svelte';
 	import ShieldIcon from './icons/ShieldIcon.svelte';
 

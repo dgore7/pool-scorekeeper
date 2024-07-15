@@ -17,7 +17,7 @@
 	import { goto } from '$app/navigation';
 
 	type OptionTitle = 'Score Sheet' | 'Save Game' | 'Settings' | 'End Game';
-	type Option = { title: OptionTitle; icon: ComponentType; onClick?: Function };
+	type Option = { title: OptionTitle; icon: ComponentType; onClick?: () => void };
 
 	const hamburgerOptions: Option[] = [
 		{ title: 'Score Sheet', icon: ScoreSheetIcon },
