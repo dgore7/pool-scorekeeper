@@ -1,10 +1,7 @@
 <script lang="ts">
 	import type { Ball as BallModel } from '$lib/common/ball';
-	export let size: 'large' | 'small';
 	export let ball: BallModel;
 	export let pocketed = false;
-	let className = '';
-	export { className as class };
 
 	async function getImgUrl(pocketed: boolean) {
 		const { default: src } = await (pocketed

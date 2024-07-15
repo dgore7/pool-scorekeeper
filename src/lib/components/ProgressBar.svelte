@@ -6,7 +6,6 @@
 	export let player: NineBallPlayer;
 	let className = '';
 	export { className as class };
-	export let reverse = false;
 
 	const progress = tweened(0, {
 		duration: 500,

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { BallModel } from './Ball.svelte';
+	import type { Ball as BallModel } from '$lib/common/ball';
 	import { createEventDispatcher } from 'svelte';
 	import Ball from './Ball.svelte';
 	import type { BallType } from '$lib/eight-ball';
@@ -16,7 +16,7 @@
 <div class="flex gap-8 justify-center">
 	{#each game.currentRack.assignmentBalls as ball}
 		<button on:click={() => handleBallAssignment(ball)}>
-			<Ball {ball} size="large" />
+			<Ball {ball} />
 		</button>
 	{/each}
 </div>

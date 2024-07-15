@@ -88,7 +88,7 @@ export class NineBallGame {
 		});
 	}
 
-	pocketBall(ball: BallModel) {
+	pocketBall(ball: Ball) {
 		if (this.isPlayerWon()) {
 			return;
 		}
@@ -127,7 +127,7 @@ export class NineBallGame {
 		}
 	}
 
-	killBall(ball: BallModel) {
+	killBall(ball: Ball) {
 		ball.isDead = true;
 		this.currentRack.deadBalls.push(ball);
 
@@ -183,7 +183,7 @@ export class NineBallGame {
 		this.undoneActions.push(action);
 	}
 
-	doAction(action: Action, ball?: BallModel) {
+	doAction(action: Action, ball?: Ball) {
 		switch (action.type) {
 			case 'UNDO':
 				const actionToUndo = this.actions.pop();
@@ -240,8 +240,8 @@ export class NineBallRack {
 	turn = 0;
 	timeouts = [1, 1];
 	gameBalls = this.createBalls();
-	pocketedBalls: BallModel[] = [];
-	deadBalls: BallModel[] = [];
+	pocketedBalls: Ball[] = [];
+	deadBalls: Ball[] = [];
 
 	constructor(turn: number) {
 		this.turn = turn;

@@ -146,12 +146,12 @@
 			on:submitDialog={handleSubmitDialog}
 		/>
 	{/if}
-	<Scoreboard game={$game}>
+	<Scoreboard>
 		{#each $game.players as player, playerNumber}
 			<PlayerStats {player} game={$game} {playerNumber} />
 		{/each}
-		{#each $game.players as player, playerNumber}
-			<ProgressBar {player} reverse={!!playerNumber} />
+		{#each $game.players as player}
+			<ProgressBar {player} />
 		{/each}
 	</Scoreboard>
 
