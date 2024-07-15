@@ -229,7 +229,7 @@ export class EightBallRack {
 	timeouts = [1, 1];
 	endGameCase: EndGameCase | null = null;
 	playerBalls: BallType[] | null[] = [null, null];
-	assignmentBalls: Ball[] = this.createBalls();
+	assignmentBalls = [Ball.fromNumber(1), Ball.fromNumber(9)];
 	winner: EightBallPlayer | null = null;
 
 	constructor(
@@ -271,13 +271,5 @@ export class EightBallRack {
 
 	unUseTimeout() {
 		this.timeouts[this.turn]++;
-	}
-
-	private createBalls() {
-		const ballHolder: Ball[] = [];
-		for (let i = 0; i < 2; i++) {
-			ballHolder.push(Ball.fromIndex(i));
-		}
-		return ballHolder;
 	}
 }

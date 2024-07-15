@@ -94,8 +94,12 @@ export const BALL_COLORS: BallColorSpec[] = [
 
 export class Ball {
 	static fromIndex(index: number) {
-		const colorSpec = BALL_COLORS[index % BALL_COLORS.length];
-		return new Ball(index + 1, colorSpec, index >= 8, false, false, false);
+		return Ball.fromNumber(index + 1);
+	}
+
+	static fromNumber(number: number) {
+		const colorSpec = BALL_COLORS[(number - 1) % BALL_COLORS.length];
+		return new Ball(number, colorSpec, number >= 9, false, false, false);
 	}
 
 	private constructor(
