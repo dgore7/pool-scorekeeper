@@ -18,7 +18,6 @@
 	let deadBallsToAdd: BallModel[] = [];
 
 	function handleBallClick(ball: BallModel) {
-    console.log(isDeadBallMode)
 		if (isDeadBallMode) {
 			addDeadBall(ball);
 		} else {
@@ -49,7 +48,6 @@
 	}
 
 	function removeDeadBall(ball: BallModel) {
-    console.log(isDeadBallMode)
     if (!isDeadBallMode) return
 		ball.isDead = false;
 		let zombieBallIndex = deadBallsToAdd.indexOf(ball);
