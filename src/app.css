@@ -84,19 +84,19 @@ button[disabled] {
 
 @font-face {
 	font-family: 'Mundial';
-	src: url('Mundial-Font/Mundial-Light.otf');
+	src: url('/Mundial-Font/Mundial-Light.otf') format('opentype');
 	font-weight: 400;
 }
 
 @font-face {
 	font-family: 'Mundial';
-	src: url('Mundial-Font/Mundial-Regular.otf');
+	src: url('/Mundial-Font/Mundial-Regular.otf') format('opentype');
 	font-weight: 500;
 }
 
 @font-face {
 	font-family: 'Mundial';
-	src: url('Mundial-Font/Mundial-Demibold.otf');
+	src: url('/Mundial-Font/Mundial-Demibold.otf') format('opentype');
 	font-weight: 600;
 }
 
