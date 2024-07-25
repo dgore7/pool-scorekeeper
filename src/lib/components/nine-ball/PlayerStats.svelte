@@ -11,15 +11,15 @@
 
 <!-- the color-mix below is a trick to add opacity to the given color -->
 <div
-	class="player-score w-full border-2 px-2 py-1 border-solid rounded-xl {player.color.border}"
+	class="player-score w-1/2 border-2 px-2 py-1 border-solid rounded-xl space-y-2 {player.color.border}"
 	class:radial-to-tr={playerNumber === 0}
 	class:radial-to-bl={playerNumber === 1}
 	style:background-image="radial-gradient(var(--position), color-mix(in srgb, {player.color.gradient
 		.stops[0]} 70%, transparent), #1F2026 var(--end-stop))"
 >
 	<div class="flex w-full justify-between">
-		<div class="font-large">{player.name}</div>
-		<div class="font-light text-secondary">level {player.handicap}</div>
+		<div class="font-large truncate">{player.name}</div>
+		<div class="font-light text-secondary whitespace-nowrap ml-2">level {player.handicap}</div>
 	</div>
 	<div class="score font-light text-5xl relative overflow-hidden stack text-center">
 		{#key player.score}
@@ -28,7 +28,7 @@
 			</div>
 		{/key}
 	</div>
-	<div class=" py-1 w-full flex justify-between">
+	<div class="w-full flex justify-between">
 		<div class="flex gap-2 items-center">
 			<ShieldIcon class="w-4" variant="filled" />
 			{player.safeties}
