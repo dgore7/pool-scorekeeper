@@ -48,7 +48,7 @@
 	}
 
 	function removeDeadBall(ball: BallModel) {
-    if (!isDeadBallMode) return
+		if (!isDeadBallMode) return;
 		ball.isDead = false;
 		let zombieBallIndex = deadBallsToAdd.indexOf(ball);
 		deadBallsToAdd.splice(zombieBallIndex, 1);
@@ -99,7 +99,6 @@
 					class:hidden={!ball.isDead}
 					on:click={() => removeDeadBall(ball)}
 					disabled={!isDeadBallMode}
-
 				>
 					<img src={deadBallSvg} alt="dead ball" class="w-full max-h-[min(100%,6rem)] mx-auto" />
 				</button>
