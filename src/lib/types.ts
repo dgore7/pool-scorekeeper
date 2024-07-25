@@ -3,5 +3,5 @@ import type { NineBallGame, NineBallPlayer } from './nine-ball';
 
 export type GameType = '9ball' | '8ball' | '10ball' | 'straightPool' | 'onePocket';
 export type RuleType = 'APA' | 'BCA' | 'Pro';
-export type Player = NineBallPlayer | EightBallPlayer
-export type Game = NineBallGame | EightBallGame
+export type Player = NineBallPlayer | EightBallPlayer;
+export type Game = NineBallGame | EightBallGame;
