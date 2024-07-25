@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
-	import PauseIcon from '../icons/PauseIcon.svelte';
+	import TimeoutIcon from '../icons/TimeoutIcon.svelte';
 	import ShieldIcon from '../icons/ShieldIcon.svelte';
 	import type { Game, Player } from '$lib/types';
 
@@ -34,7 +34,7 @@
 			{player.safeties}
 		</div>
 		<div class="flex gap-2 items-center">
-			<PauseIcon class="w-4" variant="filled" />
+			<TimeoutIcon class="w-4" variant="filled" />
 			{game.currentRack.timeouts[playerNumber]}
 		</div>
 		<div class="bg-white/20 rounded-lg px-1.5 mix-blend-screen">
