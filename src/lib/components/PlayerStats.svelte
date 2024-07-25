@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { NineBallPlayer, NineBallGame } from '$lib';
 	import type { EightBallGame } from '$lib/eight-ball';
-	import PauseIcon from './icons/PauseIcon.svelte';
+	import TimeoutIcon from './icons/TimeoutIcon.svelte';
 	import ShieldIcon from './icons/ShieldIcon.svelte';
 
 	export let player: NineBallPlayer;
@@ -30,7 +30,7 @@
 			{player.safeties}
 		</div>
 		<div class="flex gap-2 items-center">
-			<PauseIcon class="w-4" variant="filled" />
+			<TimeoutIcon class="w-4" variant="filled" />
 			{game.currentRack.timeouts[playerNumber]}
 		</div>
 		<div class="bg-white/20 rounded-lg px-1.5 mix-blend-screen">
