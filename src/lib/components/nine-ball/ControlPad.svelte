@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Ball from './Ball.svelte';
+	import Ball from '../Ball.svelte';
 	import ControlButtons from './ControlButtons.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { NineBallGame } from '$lib';

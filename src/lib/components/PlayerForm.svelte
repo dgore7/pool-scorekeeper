@@ -15,8 +15,6 @@
 	export let selectedGame: GameType;
 </script>
 
-<!-- <h2>Who's Playin?</h2>-->
-
 <p>Cue Count - Crafty Calculations for Cool Cueists</p>
 <PlayerFieldSet
 	name="player-one"

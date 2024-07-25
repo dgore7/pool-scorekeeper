@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { NineBallPlayer } from '$lib';
+	import type { Player } from '$lib/types';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 
-	export let player: NineBallPlayer;
+	export let player: Player;
 	let className = '';
 	export { className as class };
 

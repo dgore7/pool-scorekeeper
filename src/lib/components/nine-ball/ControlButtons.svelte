@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ShieldIcon from './icons/ShieldIcon.svelte';
-	import UndoIcon from './icons/UndoIcon.svelte';
-	import TimeoutIcon from './icons/TimeoutIcon.svelte';
-	import GraveIcon from './icons/GraveIcon.svelte';
+	import ShieldIcon from '../icons/ShieldIcon.svelte';
+	import UndoIcon from '../icons/UndoIcon.svelte';
+	import PauseIcon from '../icons/PauseIcon.svelte';
+	import GraveIcon from '../icons/GraveIcon.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { ComponentType } from 'svelte';
 
@@ -21,7 +21,7 @@
 	let components: ComponentEvent[] = [
 		{ icon: UndoIcon, event: 'undo', label: 'undo' },
 		{ icon: ShieldIcon, event: 'safety', label: 'safety' },
-		{ icon: TimeoutIcon, event: 'timeout', label: 'timeout' },
+		{ icon: PauseIcon, event: 'timeout', label: 'timeout' },
 		{ icon: GraveIcon, event: 'deadBallMode', label: 'dead ball mode', displayName: 'Dead' }
 	].filter((component) => isNineBall || component.event !== 'deadBallMode');
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CrossBonesIcon from './icons/CrossBonesIcon.svelte';
+	import CrossBonesIcon from '../icons/CrossBonesIcon.svelte';
 </script>
 
 <div class="rounded-lg border-solid border-white border-8 flex min-h-60 m-4">

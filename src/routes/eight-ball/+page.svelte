@@ -3,13 +3,13 @@
 
 	import Dialog from '$lib/components/Dialog.svelte';
 
-	import EightBallControlPad from '$lib/components/EightBallControlPad.svelte';
+	import EightBallControlPad from '$lib/components/eight-ball/EightBallControlPad.svelte';
 
-	import PlayerStats from '$lib/components/PlayerStats.svelte';
+	import PlayerStats from '$lib/components/nine-ball/PlayerStats.svelte';
 
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
 
-	import Scoreboard from '$lib/components/Scoreboard.svelte';
+	import Scoreboard from '$lib/components/nine-ball/Scoreboard.svelte';
 
 	import TeamDisplay from '$lib/components/TeamDisplay.svelte';
 
