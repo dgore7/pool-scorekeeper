@@ -239,7 +239,7 @@ export class NineBallRack {
 	scores = [0, 0];
 	turn = 0;
 	timeouts = [1, 1];
-	gameBalls = this.createBalls();
+	readonly gameBalls = this.createBalls();
 	pocketedBalls: Ball[] = [];
 	deadBalls: Ball[] = [];
 
@@ -260,6 +260,11 @@ export class NineBallRack {
 			this.innings--;
 		}
 	}
+
+  isRackOver() {
+    const nineBall = this.gameBalls.at(-1)
+    return !!nineBall?.isPocketed
+  }
 
 	private changeTurn() {
 		this.turn = (this.turn + 1) % 2;

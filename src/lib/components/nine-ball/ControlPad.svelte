@@ -14,7 +14,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	let isRackOver = false;
+	let isRackOver = isGameOver || $game.currentRack.isRackOver();
 	let deadBallsToAdd: BallModel[] = [];
 
 	function handleBallClick(ball: BallModel) {
@@ -62,6 +62,12 @@
 	}
 
 	function handleUndo() {
+		const lastAction = $game.actions.at(-1);
+		if (lastAction && lastAction.type === 'END_RACK') {
+			isRackOver = true;
+		} else {
+			isRackOver = isGameOver;
+		}
 		dispatch('undo');
 	}
 
