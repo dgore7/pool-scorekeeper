@@ -1,8 +1,10 @@
+import type { BallColorSpec } from '$lib/common/ball';
+
 export class EightBallPlayer {
 	constructor(
 		readonly name: string,
 		readonly handicap: number,
-		readonly color: string
+		readonly color: BallColorSpec
 	) {}
 
 	score = 0;

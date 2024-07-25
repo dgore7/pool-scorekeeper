@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root.original {
+	--yellow-ball: #ffb51e;
+	--yellow-ball-2: #231903;
+	--blue-ball: #313389;
+	--blue-ball-2: #001623;
+	--red-ball: #c62627;
+	--red-ball-2: #c62627;
+	--purple-ball: #662d68;
+	--purple-ball-2: #662d68;
+	--orange-ball: #ee7d2b;
+	--orange-ball-2: #ee7d2b;
+	--green-ball: #24762e;
+	--green-ball-2: #24762e;
+	--maroon-ball: #a02a2a;
+	--maroon-ball-2: #a02a2a;
+	--black-ball: #131313;
+	--black-ball-2: #131313;
+}
+
+:root {
+	--yellow-ball: #ffb216;
+	--yellow-ball-stroke: #624409;
+	--yellow-ball-2: #231903;
+	--blue-ball: #0092e6;
+	--blue-ball-stroke: #01395a;
+	--blue-ball-2: #001623;
+	--red-ball: #df3c44;
+	--red-ball-stroke: #70191d;
+	--red-ball-2: #25090b;
+	--purple-ball: #e5aafb;
+	--purple-ball-stroke: #5c3e68;
+	--purple-ball-2: #26132d;
+	--orange-ball: #ff9960;
+	--orange-ball-stroke: #783b18;
+	--orange-ball-2: #301201;
+	--green-ball: #00a864;
+	--green-ball-stroke: #005c37;
+	--green-ball-2: #001a10;
+	--maroon-ball: #9b4c35;
+	--maroon-ball-stroke: #582416;
+	--maroon-ball-2: #190600;
+	--black-ball: #606060;
+	--black-ball-stroke: #373737;
+	--black-ball-2: #09090b;
+}
+
+html {
+	background-color: #131318;
+	color: #fff;
+	@apply font-regular;
+}
+.font-light {
+	font-family: Mundial;
+	font-weight: 400;
+}
+
+.font-regular {
+	font-family: Mundial;
+	font-weight: 500;
+}
+
+.font-large {
+	font-family: Mundial;
+	font-weight: 600;
+}
+
+@font-face {
+	font-family: 'Mundial';
+	src: url('Mundial-Font/Mundial-Light.otf');
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: 'Mundial';
+	src: url('Mundial-Font/Mundial-Regular.otf');
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: 'Mundial';
+	src: url('Mundial-Font/Mundial-Demibold.otf');
+	font-weight: 600;
+}
+
+.font-mundial {
+	font-family: 'Mundial';
+	font-weight: 500;
+}

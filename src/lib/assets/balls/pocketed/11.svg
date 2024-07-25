@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="none" viewBox="0 0 80 80">
+  <circle cx="40" cy="40" r="40" fill="#fff" fill-opacity=".15"/>
+  <path fill="#fff" fill-opacity=".15" fill-rule="evenodd" d="M72.989 62.628A39.815 39.815 0 0 0 80 40a39.818 39.818 0 0 0-7.33-23.086H7.33A39.817 39.817 0 0 0 0 40a39.815 39.815 0 0 0 7.011 22.628H72.99Z" clip-rule="evenodd"/>
+  <path fill="#fff" fill-opacity=".4" d="M24 40c0-8.837 7.163-16 16-16s16 7.163 16 16-7.163 16-16 16-16-7.163-16-16Z"/>
+  <path fill="#303030" d="M38.163 47h-2.9V34.958h-3.105v-2.546h6.005V47Zm8.164 0h-2.9V34.958h-3.105v-2.546h6.005V47Z"/>
+</svg>

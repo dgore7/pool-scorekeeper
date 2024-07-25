@@ -1,10 +1,11 @@
 <script lang="ts">
-	import Ball, { type BallModel } from './Ball.svelte';
+	import Ball from './Ball.svelte';
 	import ControlButtons from './ControlButtons.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { NineBallGame } from '$lib';
-	import SkullyIcon from './icons/SkullyIcon.svelte';
+	import deadBallSvg from '$lib/assets/balls/dead/1.svg';
 	import { receive, send } from '$lib/cross-fade';
+	import type { Ball as BallModel } from '$lib/common/ball';
 
 	export let game: NineBallGame;
 	export let isDeadBallMode: boolean;
@@ -47,8 +48,8 @@
 
 	function removeDeadBall(ball: BallModel) {
 		ball.isDead = false;
-		let zomebieBallIndex = deadBallsToAdd.indexOf(ball);
-		deadBallsToAdd.splice(zomebieBallIndex, 1);
+		let zombieBallIndex = deadBallsToAdd.indexOf(ball);
+		deadBallsToAdd.splice(zombieBallIndex, 1);
 		deadBallsToAdd = deadBallsToAdd;
 		game = game;
 	}
@@ -84,12 +85,14 @@
 	}
 </script>
 
-<div aria-label="button container" class="container mx-auto py-5 w-full">
+<div
+	class="w-full py-5 h-full flex-auto grid max-h-[36rem] overflow-hidden m-auto mb-0 grid-cols-3 grid-rows-3 gap-2"
+>
 	{#each game.currentRack.gameBalls as ball (ball.number)}
-		<div class="relative h-full w-full mb-4">
+		<div class="relative w-full max-w-full h-full">
 			{#if ball.isDead}
 				<button
-					class="relative h-full w-full"
+					class="active:scale-90 transition-transform aria-pressed:pointer-events-none h-full w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
 					class:hidden={!ball.isDead}
 					on:click={() => removeDeadBall(ball)}
 					disabled={!isDeadBallMode}
@@ -97,7 +100,7 @@
 					out:receive|global={{ key: ball.number }}
 					on:transitionend={(e) => e.currentTarget.classList.remove('absolute')}
 				>
-					<SkullyIcon {ball} class="h-full mx-auto -my-6" />
+					<img src={deadBallSvg} alt="dead ball" class="w-full max-h-[min(100%,6rem)] mx-auto" />
 				</button>
 			{:else}
 				<button
@@ -109,21 +112,25 @@
 					in:send|global={{ key: ball.number }}
 					out:receive|global={{ key: ball.number }}
 				>
-					<Ball {ball} size={'large'} pocketed={ball.isPocketed} class="mx-auto" />
+					<Ball {ball} pocketed={ball.isPocketed} />
 				</button>
 			{/if}
 		</div>
 	{/each}
+</div>
+<div class="flex-auto shrink-0">
 	{#if isDeadBallMode}
 		<button
 			aria-label="dead mode exit button"
-			class="rounded-xl bg-slate-600 py-2 w-full"
+			class="rounded-xl bg-slate-600 py-2 w-full h-12"
 			on:click={handleDeadBallSave}>Exit Deadball Mode</button
 		>
 	{:else}
 		<button
 			aria-label="switch innings button"
-			class="rounded-xl py-2 w-full transition-colors {game.currentPlayer.color}"
+			class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {game.currentPlayer.color.gradient
+				.from} {game.currentPlayer.color.gradient.to} {game.currentPlayer.color
+				.border} border transition-all"
 			on:click={isRackOver ? handleNewRack : handleMiss}
 			disabled={isDeadBallMode || isGameOver}
 		>
@@ -136,44 +143,18 @@
 			{/if}
 		</button>
 	{/if}
-	<div
-		aria-label="control button container"
-		class:invisible={isDeadBallMode}
-		class="rounded-xl bg-slate-600 justify-evenly"
-	>
-		<ControlButtons
-			{isGameOver}
-			on:undo={handleUndo}
-			on:safety={handleSafety}
-			on:timeout={handleTimeout}
-			on:deadBallMode={handleDeadBallMode}
-		/>
-	</div>
 </div>
 
-<style>
-	[aria-label='button container'] {
-		display: grid;
-		grid-template-columns: repeat(3, 33%);
-		grid-template-rows: repeat(3, 4rem) repeat(2, 0.5fr);
-		gap: 0.5rem;
-		margin: auto;
-		max-width: 20rem;
-		place-items: center;
-		place-content: center;
-	}
-
-	[aria-label='control button container'] {
-		display: flex;
-		grid-area: 5 / 1 / 5 / 4;
-		justify-self: stretch;
-	}
-
-	[aria-label='switch innings button'] {
-		grid-area: 4 / 1 / 4 / 4;
-	}
-
-	[aria-label='dead mode exit button'] {
-		grid-area: 4 / 1 / 4 / 4;
-	}
-</style>
+<div
+	aria-label="control button container"
+	class:invisible={isDeadBallMode}
+	class="flex flex-auto shrink-0 h-12"
+>
+	<ControlButtons
+		{isGameOver}
+		on:undo={handleUndo}
+		on:safety={handleSafety}
+		on:timeout={handleTimeout}
+		on:deadBallMode={handleDeadBallMode}
+	/>
+</div>

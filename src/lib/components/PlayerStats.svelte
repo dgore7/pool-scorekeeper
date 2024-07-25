@@ -1,41 +1,73 @@
 <script lang="ts">
 	import type { NineBallPlayer, NineBallGame } from '$lib';
-	import type { EightBallGame, EightBallPlayer } from '$lib/eight-ball';
+	import type { EightBallGame } from '$lib/eight-ball';
+	import TimeoutIcon from './icons/TimeoutIcon.svelte';
+	import ShieldIcon from './icons/ShieldIcon.svelte';
 
-	export let player: NineBallPlayer | EightBallPlayer;
+	export let player: NineBallPlayer;
 	export let game: NineBallGame | EightBallGame;
 	export let playerNumber: number;
 </script>
 
-<div class="player-score">
-	<div class="score">
+<!-- the color-mix below is a trick to add opacity to the given color -->
+<div
+	class="player-score w-full border-2 px-2 py-1 border-solid rounded-xl {player.color.border}"
+	class:radial-to-tr={playerNumber === 0}
+	class:radial-to-bl={playerNumber === 1}
+	style:background-image="radial-gradient(var(--position), color-mix(in srgb, {player.color.gradient
+		.stops[0]} 70%, transparent), #1F2026 var(--end-stop))"
+>
+	<div class="flex w-full justify-between">
+		<div class="font-large">{player.name}</div>
+		<div class="font-light text-secondary">level {player.handicap}</div>
+	</div>
+	<div class="score font-light text-5xl">
 		{player.score}
 	</div>
-	<div class="player-info">
-		<div>
-			S: {player.safeties}
+	<div class=" py-1 w-full flex justify-between">
+		<div class="flex gap-2 items-center">
+			<ShieldIcon class="w-4" variant="filled" />
+			{player.safeties}
 		</div>
-		<div>
-			T: {game.currentRack.timeouts[playerNumber]}
+		<div class="flex gap-2 items-center">
+			<TimeoutIcon class="w-4" variant="filled" />
+			{game.currentRack.timeouts[playerNumber]}
+		</div>
+		<div class="bg-white/20 rounded-lg px-1.5 mix-blend-screen">
+			<span class="capitalize text-secondary text-sm leading-4">goal</span>
+			<span class="text-primary">{player.scoreRequired}</span>
 		</div>
 	</div>
 </div>
 
 <style>
 	.player-score {
-		border: none;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
+		background-size: 150% 150%;
+		animation: Animation 8s ease infinite alternate;
+	}
+	@keyframes Animation {
+		0% {
+			background-position: 0% 0%;
+		}
+		50% {
+			background-position: 91% 100%;
+		}
+		100% {
+			background-position: 0% 0%;
+		}
+	}
+	.radial-to-bl {
+		--position: circle at left 70% top 0%;
+		--end-stop: 80%;
+		animation: Animation 8s ease infinite alternate-reverse;
 	}
 
-	.score {
-		font-size: 2rem;
-	}
-
-	.player-info {
-		display: flex;
-		gap: 1em;
+	.radial-to-tr {
+		--position: circle at right 70% bottom 0%;
+		--end-stop: 100%;
 	}
 </style>

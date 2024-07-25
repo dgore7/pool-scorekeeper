@@ -1,7 +1,7 @@
 import type { EightBallPlayer } from '$lib/eight-ball/player';
 import type { Action } from '$lib/eight-ball/actions';
 import type { EndGameCase, BallType } from './types';
-import type { BallModel } from '$lib/components/Ball.svelte';
+import { Ball } from '$lib/common/ball';
 export * from './actions';
 export * from './player';
 export * from './types';
@@ -229,7 +229,7 @@ export class EightBallRack {
 	timeouts = [1, 1];
 	endGameCase: EndGameCase | null = null;
 	playerBalls: BallType[] | null[] = [null, null];
-	assignmentBalls: BallModel[] = this.createBalls();
+	assignmentBalls = [Ball.fromNumber(1), Ball.fromNumber(9)];
 	winner: EightBallPlayer | null = null;
 
 	constructor(
@@ -271,21 +271,5 @@ export class EightBallRack {
 
 	unUseTimeout() {
 		this.timeouts[this.turn]++;
-	}
-
-	private createBalls() {
-		const ballHolder: BallModel[] = [];
-		for (let i = 0; i < 2; i++) {
-			const ball = {
-				number: i === 0 ? 1 : 9,
-				color: '#FFB51E',
-				isStripe: i !== 0,
-				isPocketed: false,
-				isDead: false,
-				isPostKill: false
-			};
-			ballHolder.push(ball);
-		}
-		return ballHolder;
 	}
 }

@@ -6,6 +6,6 @@
 
 <div class="flex justify-between">
 	{#each game.currentRack.assignmentBalls as ball}
-		<Ball {ball} size={'small'} />
+		<Ball {ball} />
 	{/each}
 </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ShieldIcon from './icons/ShieldIcon.svelte';
 	import UndoIcon from './icons/UndoIcon.svelte';
-	import PauseIcon from './icons/PauseIcon.svelte';
+	import TimeoutIcon from './icons/TimeoutIcon.svelte';
 	import GraveIcon from './icons/GraveIcon.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { ComponentType } from 'svelte';
@@ -15,13 +15,14 @@
 		icon: ComponentType;
 		event: string;
 		label: string;
+		displayName?: string;
 	};
 
 	let components: ComponentEvent[] = [
 		{ icon: UndoIcon, event: 'undo', label: 'undo' },
 		{ icon: ShieldIcon, event: 'safety', label: 'safety' },
-		{ icon: PauseIcon, event: 'timeout', label: 'timeout' },
-		{ icon: GraveIcon, event: 'deadBallMode', label: 'dead ball mode' }
+		{ icon: TimeoutIcon, event: 'timeout', label: 'timeout' },
+		{ icon: GraveIcon, event: 'deadBallMode', label: 'dead ball mode', displayName: 'Dead' }
 	].filter((component) => isNineBall || component.event !== 'deadBallMode');
 
 	function handleClick(eventType: string) {
@@ -29,13 +30,13 @@
 	}
 </script>
 
-{#each components as { icon, event, label }}
+{#each components as { icon, event, label, displayName }}
 	<button
-		class="w-8 my-1 active:bg-slate-700 aspect-square rounded flex justify-center items-center transition-colors"
+		class="my-1 grow active:bg-slate-700 rounded flex flex-col justify-center items-center transition-colors text-secondary text-[.625rem] capitalize"
 		on:click={() => handleClick(event)}
 		disabled={(event === 'safety' || event === 'timeout') && isGameOver}
 	>
-		<span class="sr-only">{label}</span>
 		<svelte:component this={icon} />
+		<span>{displayName ?? label}</span>
 	</button>
 {/each}

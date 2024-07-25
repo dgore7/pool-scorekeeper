@@ -2,12 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { EightBallGame } from '$lib/eight-ball';
 import { Win, Lose, Miss, Safety, Timeout, AssignSide } from '$lib/eight-ball/actions';
 import { EightBallPlayer } from '$lib/eight-ball/player';
+import type { BallColorSpec } from '$lib/common/ball';
+
+// we don't care about the actual color values for these tests
+const red = {} as unknown as BallColorSpec;
+const blue = {} as unknown as BallColorSpec;
 
 describe('initialization', () => {
 	it('a 6 vs 3 has a 5/2 race', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 6, 'red'),
-			new EightBallPlayer('Player2', 3, 'blue')
+			new EightBallPlayer('Player1', 6, red),
+			new EightBallPlayer('Player2', 3, blue)
 		);
 		expect(testGame.player1.scoreRequired).toBe(5);
 		expect(testGame.player2.scoreRequired).toBe(2);
@@ -17,8 +22,8 @@ describe('initialization', () => {
 describe('teamBallSelect', () => {
 	it('Player1 claims stripes', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 6, 'red'),
-			new EightBallPlayer('Player2', 3, 'blue')
+			new EightBallPlayer('Player1', 6, red),
+			new EightBallPlayer('Player2', 3, blue)
 		);
 
 		testGame.doAction(new AssignSide('stripe'));
@@ -27,8 +32,8 @@ describe('teamBallSelect', () => {
 
 	it('Player1 claims stripes after misses', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 6, 'red'),
-			new EightBallPlayer('Player2', 3, 'blue')
+			new EightBallPlayer('Player1', 6, red),
+			new EightBallPlayer('Player2', 3, blue)
 		);
 
 		testGame.doAction(new Miss());
@@ -39,8 +44,8 @@ describe('teamBallSelect', () => {
 
 	it('Player1 claims solids', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 6, 'red'),
-			new EightBallPlayer('Player2', 3, 'blue')
+			new EightBallPlayer('Player1', 6, red),
+			new EightBallPlayer('Player2', 3, blue)
 		);
 
 		testGame.doAction(new AssignSide('solid'));
@@ -51,8 +56,8 @@ describe('teamBallSelect', () => {
 describe('win', () => {
 	it('player one wins', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		testGame.doAction(new AssignSide('stripe'));
@@ -63,8 +68,8 @@ describe('win', () => {
 
 	it('player cannot win over expected amount', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		for (let i = 0; i < 9; i++) {
@@ -81,8 +86,8 @@ describe('win', () => {
 describe('lose', () => {
 	it('player one loses', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		testGame.doAction(new AssignSide('stripe'));
@@ -95,8 +100,8 @@ describe('lose', () => {
 
 	it('player cannot over lose', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		for (let i = 0; i < 7; i++) {
@@ -114,8 +119,8 @@ describe('lose', () => {
 describe('switchTurn', () => {
 	it('player one misses', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		testGame.doAction(new Miss());
@@ -125,8 +130,8 @@ describe('switchTurn', () => {
 
 	it('both players miss', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		testGame.doAction(new Miss());
@@ -139,8 +144,8 @@ describe('switchTurn', () => {
 describe('safety', () => {
 	it('Player1 does safety', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		testGame.doAction(new Safety());
@@ -151,8 +156,8 @@ describe('safety', () => {
 describe('timeout', () => {
 	it('Player1 uses timeout', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		testGame.doAction(new Timeout());
@@ -161,8 +166,8 @@ describe('timeout', () => {
 
 	it('Player1 uses timeout, wins, then new rack', () => {
 		const testGame = new EightBallGame(
-			new EightBallPlayer('Player1', 7, 'red'),
-			new EightBallPlayer('Player2', 4, 'blue')
+			new EightBallPlayer('Player1', 7, red),
+			new EightBallPlayer('Player2', 4, blue)
 		);
 
 		testGame.doAction(new AssignSide('stripe'));

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../app.pcss';
+	import '../app.css';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import Toast from '$lib/components/Toast.svelte';
 	import Header from '$lib/components/Header.svelte';
@@ -27,9 +27,9 @@
 	{@html webManifestLink}
 </svelte:head>
 
-<div class="flex flex-col h-full">
+<div class="flex flex-col mx-auto max-w-xl w-full h-dvh px-4">
 	<Header />
-	<main class="container w-full py-4 px-4 mt-4 mb-auto mx-auto max-w-96 flex flex-col flex-1">
+	<main class="container mb-auto flex flex-col flex-1">
 		{#if $toast}
 			<Toast
 				on:close={handleToastClose}

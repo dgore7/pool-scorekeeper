@@ -17,11 +17,9 @@
 	import PlayerStats from '$lib/components/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
 	import ControlPad from '$lib/components/ControlPad.svelte';
-	import BallReturn from '$lib/components/BallReturn.svelte';
 	import DeadBallTitle from '$lib/components/DeadBallTitle.svelte';
 	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
-
-	import type { BallModel } from '$lib/components/Ball.svelte';
+	import type { Ball } from '$lib/common/ball.js';
 
 	export let data;
 
@@ -31,7 +29,7 @@
 	let isDeadBallMode = false;
 	let isGameOver = false;
 
-	function handlePocket(ball: BallModel) {
+	function handlePocket(ball: Ball) {
 		$game.doAction(new Increment(), ball);
 		$game = $game;
 
@@ -98,13 +96,13 @@
 		};
 	}
 
-	function handleBallPocket(event: CustomEvent<BallModel>) {
+	function handleBallPocket(event: CustomEvent<Ball>) {
 		const pocketedBall = event.detail;
 		handlePocket(pocketedBall);
 		$game = $game;
 	}
 
-	function handleDeadBalls(event: CustomEvent<BallModel[]>) {
+	function handleDeadBalls(event: CustomEvent<Ball[]>) {
 		handleDeadBallMode();
 		const deadBalls = event.detail;
 		deadBalls.forEach((ball) => {
@@ -119,30 +117,39 @@
 	$: document.body.style.backgroundColor = isDeadBallMode ? 'darkkhaki' : '#131318';
 </script>
 
-{#if isDeadBallMode}
-	<DeadBallTitle />
-{:else}
-	<Scoreboard game={$game}>
-		{#each $game.players as player, playerNumber}
-			<PlayerStats {player} game={$game} {playerNumber} />
+{#if $game}
+	{#if isDeadBallMode}
+		<DeadBallTitle />
+	{:else}
+		<Scoreboard>
+			{#each $game.players as player, playerNumber}
+				<PlayerStats {player} game={$game} {playerNumber} />
+			{/each}
+		</Scoreboard>
+		{#each $game.players as player}
+			<ProgressBar {player} />
 		{/each}
-		{#each $game.players as player, playerNumber}
-			<ProgressBar {player} reverse={!!playerNumber} />
-		{/each}
-	</Scoreboard>
+
+		<div class="flex justify-between py-1 items-baseline">
+			<span class="text-xl">
+				{$game.currentPlayer.name}'s Turn
+			</span>
+			<span>
+				Innings: {$game.currentRack.innings}
+			</span>
+		</div>
+	{/if}
+	<ControlPad
+		game={$game}
+		{isDeadBallMode}
+		{isGameOver}
+		on:ballPocket={handleBallPocket}
+		on:miss={handleTurn}
+		on:undo={handleUndo}
+		on:safety={handleSafety}
+		on:timeout={handleTimeout}
+		on:newRack={handleNewRack}
+		on:deadBallMode={handleDeadBallMode}
+		on:saveDeadBalls={handleDeadBalls}
+	/>
 {/if}
-<div class="flex-1"></div>
-<ControlPad
-	game={$game}
-	{isDeadBallMode}
-	{isGameOver}
-	on:ballPocket={handleBallPocket}
-	on:miss={handleTurn}
-	on:undo={handleUndo}
-	on:safety={handleSafety}
-	on:timeout={handleTimeout}
-	on:newRack={handleNewRack}
-	on:deadBallMode={handleDeadBallMode}
-	on:saveDeadBalls={handleDeadBalls}
-/>
-<BallReturn game={$game} />
