@@ -7,6 +7,8 @@
 	export let player: Player;
 	export let game: Game;
 	export let playerNumber: number;
+
+	$: timeouts = game.currentRack.timeouts[playerNumber];
 </script>
 
 <!-- the color-mix below is a trick to add opacity to the given color -->
@@ -30,13 +32,25 @@
 		{/key}
 	</div>
 	<div class="w-full flex justify-between">
-		<div class="flex gap-2 items-center">
+		<div class="flex gap-2 min-w-10 items-center">
 			<ShieldIcon class="w-4" variant="filled" />
-			{player.safeties}
+			<div class="stack relative">
+				{#key player.safeties}
+					<div in:fly={{ y: '80%' }} out:fly={{ y: '-80%', duration: 50 }}>
+						{player.safeties}
+					</div>
+				{/key}
+			</div>
 		</div>
-		<div class="flex gap-2 items-center">
+		<div class="flex gap-2 min-w-10 items-center">
 			<TimeoutIcon class="w-4" variant="filled" />
-			{game.currentRack.timeouts[playerNumber]}
+			<div class="stack relative">
+				{#key timeouts}
+					<div in:fly={{ y: '80%' }} out:fly={{ y: '-80%', duration: 50 }}>
+						{timeouts}
+					</div>
+				{/key}
+			</div>
 		</div>
 		<div class="bg-white/20 rounded-lg px-1.5 mix-blend-screen">
 			<span class="capitalize text-secondary text-sm leading-4">goal</span>
