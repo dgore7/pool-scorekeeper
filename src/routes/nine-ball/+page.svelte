@@ -140,7 +140,7 @@
 		</div>
 	{/if}
 	<ControlPad
-		game={$game}
+		{game}
 		{isDeadBallMode}
 		{isGameOver}
 		on:ballPocket={handleBallPocket}

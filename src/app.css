@@ -62,6 +62,11 @@ html {
 	color: #fff;
 	@apply font-regular;
 }
+
+button[disabled] {
+  pointer-events: none;
+}
+
 .font-light {
 	font-family: Mundial;
 	font-weight: 400;
