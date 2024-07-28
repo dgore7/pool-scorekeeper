@@ -7,6 +7,7 @@ export default defineConfig({
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},
+	assetsInclude: ['**/*.otf'],
 	optimizeDeps: {
 		include: ['postcss', 'autoprefixer', 'postcss-jit-props', 'open-props']
 	},
