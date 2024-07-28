@@ -2,12 +2,13 @@
 	import PlayerFieldSet from './PlayerFieldSet.svelte';
 	import type { GameType } from '$lib/types';
 	import { BALL_COLORS } from '$lib/common/ball';
+	import { dev } from '$app/environment';
 
 	export let playerFormData = {
-		playerOneName: '',
-		playerTwoName: '',
-		playerOneHandicap: NaN,
-		playerTwoHandicap: NaN,
+		playerOneName: dev ? 'Shane Van Boening' : '',
+		playerTwoName: dev ? 'Adam Stanley' : '',
+		playerOneHandicap: dev ? 9 : NaN,
+		playerTwoHandicap: dev ? 1 : NaN,
 		playerOneColor: BALL_COLORS.find((color) => color.label === 'red')!,
 		playerTwoColor: BALL_COLORS.find((color) => color.label === 'blue')!
 	};
