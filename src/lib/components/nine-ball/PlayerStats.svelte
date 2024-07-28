@@ -13,7 +13,7 @@
 
 <!-- the color-mix below is a trick to add opacity to the given color -->
 <div
-	class="player-score w-1/2 border-2 px-2 py-1 border-solid rounded-xl space-y-2 {player.color
+	class="player-score w-1/2 border-2 px-2 py-1 border-solid rounded-xl flex flex-col justify-between {player.color
 		.border}"
 	class:radial-to-tr={playerNumber === 0}
 	class:radial-to-bl={playerNumber === 1}
@@ -61,10 +61,6 @@
 
 <style>
 	.player-score {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
 		background-size: 150% 150%;
 		animation: Animation 8s ease infinite alternate;
 	}
