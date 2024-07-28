@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ShieldIcon from './icons/ShieldIcon.svelte';
-	import UndoIcon from './icons/UndoIcon.svelte';
-	import TimeoutIcon from './icons/TimeoutIcon.svelte';
-	import GraveIcon from './icons/GraveIcon.svelte';
+	import ShieldIcon from '../icons/ShieldIcon.svelte';
+	import UndoIcon from '../icons/UndoIcon.svelte';
+	import TimeoutIcon from '../icons/TimeoutIcon.svelte';
+	import GraveIcon from '../icons/GraveIcon.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import type { ComponentType } from 'svelte';
 

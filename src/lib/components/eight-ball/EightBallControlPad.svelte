@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import ControlButtons from './ControlButtons.svelte';
+	import ControlButtons from '../nine-ball/ControlButtons.svelte';
 	import type { EightBallGame } from '$lib/eight-ball';
 	import { cva } from 'class-variance-authority';
 

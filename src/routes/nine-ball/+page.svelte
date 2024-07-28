@@ -13,11 +13,11 @@
 	} from '$lib/nine-ball/actions.js';
 	import GraveIcon from '$lib/components/icons/GraveIcon.svelte';
 	import WarningIcon from '$lib/components/WarningIcon.svelte';
-	import Scoreboard from '$lib/components/Scoreboard.svelte';
-	import PlayerStats from '$lib/components/PlayerStats.svelte';
+	import Scoreboard from '$lib/components/nine-ball/Scoreboard.svelte';
+	import PlayerStats from '$lib/components/nine-ball/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
-	import ControlPad from '$lib/components/ControlPad.svelte';
-	import DeadBallTitle from '$lib/components/DeadBallTitle.svelte';
+	import ControlPad from '$lib/components/nine-ball/ControlPad.svelte';
+	import DeadBallTitle from '$lib/components/nine-ball/DeadBallTitle.svelte';
 	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
 	import type { Ball } from '$lib/common/ball.js';
 

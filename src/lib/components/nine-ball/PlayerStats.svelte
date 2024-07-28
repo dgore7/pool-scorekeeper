@@ -1,12 +1,11 @@
 <script lang="ts">
-	import type { NineBallPlayer, NineBallGame } from '$lib';
-	import type { EightBallGame } from '$lib/eight-ball';
-	import TimeoutIcon from './icons/TimeoutIcon.svelte';
 	import { fly } from 'svelte/transition';
-	import ShieldIcon from './icons/ShieldIcon.svelte';
+	import TimeoutIcon from '../icons/TimeoutIcon.svelte';
+	import ShieldIcon from '../icons/ShieldIcon.svelte';
+	import type { Game, Player } from '$lib/types';
 
-	export let player: NineBallPlayer;
-	export let game: NineBallGame | EightBallGame;
+	export let player: Player;
+	export let game: Game;
 	export let playerNumber: number;
 </script>
 
