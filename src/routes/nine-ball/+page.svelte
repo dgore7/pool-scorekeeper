@@ -27,7 +27,6 @@
 	const { toast, toastTime } = data;
 
 	let isDeadBallMode = false;
-	let isGameOver = false;
 
 	function handlePocket(ball: Ball) {
 		$game.doAction(new Increment(), ball);
@@ -56,10 +55,6 @@
 	function handleUndo() {
 		$game.doAction(new Undo());
 		$game = $game;
-
-		if (isGameOver) {
-			isGameOver = false;
-		}
 	}
 
 	function handleNewRack() {
@@ -87,7 +82,6 @@
 	}
 
 	function handleWinner() {
-		isGameOver = true;
 		$toastTime = 5000;
 		$toast = {
 			message: `Player ${$game.currentPlayer.name} wins!`,
@@ -108,7 +102,7 @@
 		deadBalls.forEach((ball) => {
 			if (ball.isPocketed) {
 				$game.doAction(new PostKill(), ball);
-			} else if ((isGameOver && ball.number === 9) || ball.number < 9) {
+			} else if (($game.isGameOver && ball.number === 9) || ball.number < 9) {
 				$game.doAction(new DeadBall(), ball);
 			}
 		});
@@ -142,7 +136,6 @@
 	<ControlPad
 		{game}
 		{isDeadBallMode}
-		{isGameOver}
 		on:ballPocket={handleBallPocket}
 		on:miss={handleTurn}
 		on:undo={handleUndo}

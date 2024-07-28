@@ -11,7 +11,9 @@ export async function load({ parent }) {
 		storage: 'session',
 		serializer: {
 			parse: (str) => {
-				const game: NineBallGame = Object.setPrototypeOf(JSON.parse(str), NineBallGame.prototype);
+				const parsed = JSON.parse(str);
+				if (!parsed) return null;
+				const game: NineBallGame = Object.setPrototypeOf(parsed, NineBallGame.prototype);
 				game.players.forEach((player: NineBallPlayer) =>
 					Object.setPrototypeOf(player, NineBallPlayer.prototype)
 				);
@@ -35,6 +37,7 @@ export async function load({ parent }) {
 	return { game };
 }
 
+// expose game onto window object for debugging in the console
 function makeGlobal(game: NineBallGame) {
 	if (!window || 'game' in window) return;
 	Object.defineProperty(window, 'game', {

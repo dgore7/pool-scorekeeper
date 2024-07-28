@@ -10,11 +10,9 @@
 
 	export let game: Writable<NineBallGame>;
 	export let isDeadBallMode: boolean = false;
-	export let isGameOver: boolean = false;
 
 	const dispatch = createEventDispatcher();
 
-	let isRackOver = isGameOver || $game.currentRack.isRackOver();
 	let deadBallsToAdd: BallModel[] = [];
 
 	function handleBallClick(ball: BallModel) {
@@ -29,16 +27,11 @@
 		if (pocketedBall.isPocketed) {
 			return;
 		}
-
-		if (pocketedBall.number === 9) {
-			isRackOver = true;
-		}
-
 		dispatch('ballPocket', pocketedBall);
 	}
 
 	function addDeadBall(ball: BallModel) {
-		if (ball.number === 9 && !isGameOver) {
+		if (ball.number === 9 && !$game.isGameOver) {
 			return;
 		}
 
@@ -62,8 +55,6 @@
 	}
 
 	function handleUndo() {
-		const lastAction = $game.actions.at(-1);
-		isRackOver = !!lastAction && lastAction.type === 'END_RACK';
 		dispatch('undo');
 	}
 
@@ -80,7 +71,6 @@
 	}
 
 	function handleNewRack() {
-		isRackOver = false;
 		dispatch('newRack');
 	}
 
@@ -111,7 +101,7 @@
 						aria-pressed={(ball.isPocketed || ball.isDead) && !isDeadBallMode}
 						class:hidden={ball.isDead}
 						on:click={() => handleBallClick(ball)}
-						disabled={ball.isDead || (isGameOver && !isDeadBallMode)}
+						disabled={ball.isDead || ($game.isGameOver && !isDeadBallMode)}
 						in:send|global={{ key: ball.number }}
 						out:receive|global={{ key: ball.number }}
 					>
@@ -134,12 +124,12 @@
 				class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {$game.currentPlayer.color.gradient
 					.from} {$game.currentPlayer.color.gradient.to} {$game.currentPlayer.color
 					.border} border transition-all"
-				on:click={isRackOver ? handleNewRack : handleMiss}
-				disabled={isDeadBallMode || isGameOver}
+				on:click={$game.isRackOver ? handleNewRack : handleMiss}
+				disabled={isDeadBallMode || $game.isGameOver}
 			>
-				{#if isRackOver}
+				{#if $game.isRackOver}
 					New Rack
-				{:else if isGameOver}
+				{:else if $game.isGameOver}
 					{$game.currentPlayer.name} Wins!
 				{:else}
 					End {$game.currentPlayer.name}'s Turn
@@ -154,7 +144,7 @@
 		class="flex flex-auto shrink-0 h-12"
 	>
 		<ControlButtons
-			{isGameOver}
+			isGameOver={$game.isGameOver}
 			on:undo={handleUndo}
 			on:safety={handleSafety}
 			on:timeout={handleTimeout}

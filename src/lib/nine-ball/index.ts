@@ -47,6 +47,14 @@ export class NineBallGame {
 		return this.players[prevPlayer];
 	}
 
+	get isRackOver() {
+		return this.currentRack.isRackOver();
+	}
+
+	get isGameOver() {
+		return this.hasPlayerWon();
+	}
+
 	endRack() {
 		const additionalDeadBalls = this.currentRack.endRack();
 		this.racks.push(new NineBallRack(this.currentRack.turn));
@@ -185,7 +193,7 @@ export class NineBallGame {
 	}
 
 	doAction(action: Action, ball?: Ball) {
-    if (action.type !== 'UNDO' && this.hasPlayerWon()) return
+		if (action.type !== 'UNDO' && this.hasPlayerWon()) return;
 		switch (action.type) {
 			case 'UNDO':
 				const actionToUndo = this.actions.pop();
