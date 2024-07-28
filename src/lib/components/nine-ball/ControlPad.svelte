@@ -63,11 +63,7 @@
 
 	function handleUndo() {
 		const lastAction = $game.actions.at(-1);
-		if (lastAction && lastAction.type === 'END_RACK') {
-			isRackOver = true;
-		} else {
-			isRackOver = isGameOver;
-		}
+		isRackOver = !!lastAction && lastAction.type === 'END_RACK';
 		dispatch('undo');
 	}
 
