@@ -25,9 +25,21 @@ export async function load({ parent }) {
 		game.set(get(setupGame));
 	}
 	const $game = get(game);
+	if ($game) {
+		makeGlobal($game);
+	}
 	if (browser && (!$game || $game.type !== '9ball')) {
 		redirect(303, '/setup');
 	}
 
 	return { game };
+}
+
+function makeGlobal(game: NineBallGame) {
+	if (!window || 'game' in window) return;
+	Object.defineProperty(window, 'game', {
+		get() {
+			return game;
+		}
+	});
 }
