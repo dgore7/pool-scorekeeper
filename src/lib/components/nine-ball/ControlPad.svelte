@@ -6,10 +6,11 @@
 	import deadBallSvg from '$lib/assets/balls/dead/1.svg';
 	import { receive, send } from '$lib/cross-fade';
 	import type { Ball as BallModel } from '$lib/common/ball';
+	import type { Writable } from 'svelte/store';
 
-	export let game: NineBallGame;
-	export let isDeadBallMode: boolean;
-	export let isGameOver: boolean;
+	export let game: Writable<NineBallGame>;
+	export let isDeadBallMode: boolean = false;
+	export let isGameOver: boolean = false;
 
 	const dispatch = createEventDispatcher();
 
@@ -43,15 +44,17 @@
 
 		ball.isDead = true;
 		deadBallsToAdd.push(ball);
-		game = game;
+		$game = $game;
 	}
 
 	function removeDeadBall(ball: BallModel) {
+		if (!isDeadBallMode) return;
 		ball.isDead = false;
 		let zombieBallIndex = deadBallsToAdd.indexOf(ball);
 		deadBallsToAdd.splice(zombieBallIndex, 1);
 		deadBallsToAdd = deadBallsToAdd;
-		game = game;
+
+		$game = $game;
 	}
 
 	function handleMiss() {
@@ -88,7 +91,7 @@
 <div
 	class="w-full py-5 h-full flex-auto grid max-h-[36rem] overflow-hidden m-auto mb-0 grid-cols-3 grid-rows-3 gap-2"
 >
-	{#each game.currentRack.gameBalls as ball (ball.number)}
+	{#each $game.currentRack.gameBalls as ball (ball.number)}
 		<div class="relative w-full max-w-full h-full">
 			{#if ball.isDead}
 				<button
@@ -96,9 +99,6 @@
 					class:hidden={!ball.isDead}
 					on:click={() => removeDeadBall(ball)}
 					disabled={!isDeadBallMode}
-					in:send|global={{ key: ball.number }}
-					out:receive|global={{ key: ball.number }}
-					on:transitionend={(e) => e.currentTarget.classList.remove('absolute')}
 				>
 					<img src={deadBallSvg} alt="dead ball" class="w-full max-h-[min(100%,6rem)] mx-auto" />
 				</button>
@@ -128,8 +128,8 @@
 	{:else}
 		<button
 			aria-label="switch innings button"
-			class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {game.currentPlayer.color.gradient
-				.from} {game.currentPlayer.color.gradient.to} {game.currentPlayer.color
+			class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {$game.currentPlayer.color.gradient
+				.from} {$game.currentPlayer.color.gradient.to} {$game.currentPlayer.color
 				.border} border transition-all"
 			on:click={isRackOver ? handleNewRack : handleMiss}
 			disabled={isDeadBallMode || isGameOver}
@@ -137,9 +137,9 @@
 			{#if isRackOver}
 				New Rack
 			{:else if isGameOver}
-				{game.currentPlayer.name} Wins!
+				{$game.currentPlayer.name} Wins!
 			{:else}
-				End {game.currentPlayer.name}'s Turn
+				End {$game.currentPlayer.name}'s Turn
 			{/if}
 		</button>
 	{/if}
