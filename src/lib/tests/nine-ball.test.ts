@@ -25,8 +25,8 @@ describe('pocketBall', () => {
 		);
 		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[0]);
 		expect(testGame.player1.score).toBe(1);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(1);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(1);
 	});
 
@@ -37,8 +37,8 @@ describe('pocketBall', () => {
 		);
 		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[8]);
 		expect(testGame.player1.score).toBe(2);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
-		expect(testGame.currentRack.deadBalls.length).toBe(8);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(1);
+		expect(testGame.currentRack.deadBallStack.length).toBe(8);
 		expect(testGame.currentRack.scores[0]).toBe(2);
 	});
 
@@ -52,8 +52,8 @@ describe('pocketBall', () => {
 		}
 
 		expect(testGame.player1.score).toBe(10);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(9);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(9);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(10);
 
 		testGame.doAction(new EndRack());
@@ -62,8 +62,8 @@ describe('pocketBall', () => {
 			testGame.doAction(new Increment(), testGame.currentRack.gameBalls[j]);
 		}
 		expect(testGame.player1.score).toBe(14);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(4);
-		expect(testGame.currentRack.deadBalls.length).toBe(5);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(4);
+		expect(testGame.currentRack.deadBallStack.length).toBe(5);
 		expect(testGame.currentRack.scores[0]).toBe(4);
 	});
 
@@ -78,8 +78,8 @@ describe('pocketBall', () => {
 		}
 		expect(testGame.player1.score).toBe(3);
 		expect(testGame.player2.score).toBe(0);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(3);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(3);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(3);
 		expect(testGame.currentRack.scores[1]).toBe(0);
 
@@ -91,8 +91,8 @@ describe('pocketBall', () => {
 
 		expect(testGame.player1.score).toBe(3);
 		expect(testGame.player2.score).toBe(3);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(6);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(6);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(3);
 		expect(testGame.currentRack.scores[1]).toBe(3);
 	});
@@ -106,15 +106,15 @@ describe('unPocketBalls', () => {
 		);
 		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[0]);
 		expect(testGame.player1.score).toBe(1);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(1);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(1);
 
 		testGame.doAction(new Undo());
 
 		expect(testGame.player1.score).toBe(0);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(0);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(0);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(0);
 	});
 
@@ -125,15 +125,15 @@ describe('unPocketBalls', () => {
 		);
 		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[8]);
 		expect(testGame.player1.score).toBe(2);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
-		expect(testGame.currentRack.deadBalls.length).toBe(8);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(1);
+		expect(testGame.currentRack.deadBallStack.length).toBe(8);
 		expect(testGame.currentRack.scores[0]).toBe(2);
 
 		testGame.doAction(new Undo());
 
 		expect(testGame.player1.score).toBe(0);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(0);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(0);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(0);
 	});
 
@@ -155,8 +155,8 @@ describe('unPocketBalls', () => {
 		testGame.doAction(new Undo());
 
 		expect(testGame.player1.score).toBe(13);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(3);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(3);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
 		expect(testGame.currentRack.scores[0]).toBe(3);
 	});
 });
@@ -205,7 +205,7 @@ describe('killBall', () => {
 		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[0]);
 		testGame.doAction(new DeadBall(), testGame.currentRack.gameBalls[1]);
 		expect(testGame.player1.score).toBe(1);
-		expect(testGame.currentRack.deadBalls.length).toBe(1);
+		expect(testGame.currentRack.deadBallStack.length).toBe(1);
 	});
 
 	it('player makes one ball then kills it postmortem', () => {
@@ -216,7 +216,7 @@ describe('killBall', () => {
 		testGame.doAction(new Increment(), testGame.currentRack.gameBalls[0]);
 		testGame.doAction(new PostKill(), testGame.currentRack.gameBalls[0]);
 		expect(testGame.player1.score).toBe(0);
-		expect(testGame.currentRack.deadBalls.length).toBe(1);
+		expect(testGame.currentRack.deadBallStack.length).toBe(1);
 	});
 });
 
@@ -228,8 +228,8 @@ describe('reviveBall', () => {
 		);
 		testGame.doAction(new DeadBall(), testGame.currentRack.gameBalls[1]);
 		testGame.doAction(new Undo());
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(0);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(0);
 	});
 
 	it('player makes one ball, kills it by accident, and unKills it (leaving it pocketed) ', () => {
@@ -241,8 +241,8 @@ describe('reviveBall', () => {
 		testGame.doAction(new PostKill(), testGame.currentRack.gameBalls[1]);
 		testGame.doAction(new Undo());
 		expect(testGame.player1.score).toBe(1);
-		expect(testGame.currentRack.deadBalls.length).toBe(0);
-		expect(testGame.currentRack.pocketedBalls.length).toBe(1);
+		expect(testGame.currentRack.deadBallStack.length).toBe(0);
+		expect(testGame.currentRack.pocketedBallStack.length).toBe(1);
 	});
 });
 

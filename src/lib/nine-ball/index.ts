@@ -47,6 +47,14 @@ export class NineBallGame {
 		return this.players[prevPlayer];
 	}
 
+	get isRackOver() {
+		return this.currentRack.isRackOver();
+	}
+
+	get isGameOver() {
+		return this.hasPlayerWon();
+	}
+
 	endRack() {
 		const additionalDeadBalls = this.currentRack.endRack();
 		this.racks.push(new NineBallRack(this.currentRack.turn));
@@ -70,26 +78,26 @@ export class NineBallGame {
 		}
 	}
 
-	isPlayerWon() {
+	hasPlayerWon() {
 		return this.currentPlayer.score === this.currentPlayer.scoreRequired;
 	}
 
 	killLeftOverBalls() {
 		this.currentRack.leftOverBalls.forEach((ball) => {
 			ball.isDead = true;
-			this.currentRack.deadBalls.push(ball);
+			this.currentRack.deadBallStack.push(ball.number);
 		});
 	}
 
 	reviveLeftOverBalls() {
 		this.currentRack.leftOverBalls.forEach((ball) => {
 			ball.isDead = false;
-			this.currentRack.deadBalls.pop();
+			this.currentRack.deadBallStack.pop();
 		});
 	}
 
 	pocketBall(ball: Ball) {
-		if (this.isPlayerWon()) {
+		if (this.hasPlayerWon()) {
 			return;
 		}
 
@@ -102,19 +110,20 @@ export class NineBallGame {
 			this.increment();
 		}
 
-		this.currentRack.pocketedBalls.push(ball);
-		if (this.isPlayerWon()) {
+		this.currentRack.pocketedBallStack.push(ball.number);
+		if (this.hasPlayerWon()) {
 			this.killLeftOverBalls();
 		}
 	}
 
 	unPocketBall() {
-		if (this.isPlayerWon()) {
+		if (this.hasPlayerWon()) {
 			this.reviveLeftOverBalls();
 		}
 
-		if (this.currentRack.pocketedBalls.length) {
-			const zombieBall = this.currentRack.pocketedBalls.pop()!;
+		const ballNumberToRevive = this.currentRack.pocketedBallStack.pop();
+		if (ballNumberToRevive) {
+			const zombieBall = this.currentRack.getBall(ballNumberToRevive);
 			zombieBall.isPocketed = false;
 
 			if (!zombieBall.isDead) {
@@ -129,7 +138,7 @@ export class NineBallGame {
 
 	killBall(ball: Ball) {
 		ball.isDead = true;
-		this.currentRack.deadBalls.push(ball);
+		this.currentRack.deadBallStack.push(ball.number);
 
 		if (!ball.isPocketed) {
 			this.pocketBall(ball);
@@ -137,9 +146,9 @@ export class NineBallGame {
 	}
 
 	unKillBall() {
-		if (this.currentRack.deadBalls.length) {
-			const zombieBall = this.currentRack.deadBalls.pop()!;
-
+		const ballNumberToRevive = this.currentRack.deadBallStack.pop();
+		if (ballNumberToRevive) {
+			const zombieBall = this.currentRack.getBall(ballNumberToRevive);
 			if (!zombieBall.isPostKill) {
 				this.unPocketBall();
 			} else {
@@ -184,6 +193,7 @@ export class NineBallGame {
 	}
 
 	doAction(action: Action, ball?: Ball) {
+		if (action.type !== 'UNDO' && this.hasPlayerWon()) return;
 		switch (action.type) {
 			case 'UNDO':
 				const actionToUndo = this.actions.pop();
@@ -224,11 +234,9 @@ export class NineBallGame {
 				throw new AssertionError('unexpected action');
 		}
 
-		if (!this.isPlayerWon()) {
-			this.actions.push(action);
-			// clear undone actions because history has been overridden
-			this.undoneActions.length = 0;
-		}
+		this.actions.push(action);
+		// clear undone actions because history has been overridden
+		this.undoneActions.length = 0;
 	}
 }
 
@@ -239,9 +247,9 @@ export class NineBallRack {
 	scores = [0, 0];
 	turn = 0;
 	timeouts = [1, 1];
-	gameBalls = this.createBalls();
-	pocketedBalls: Ball[] = [];
-	deadBalls: Ball[] = [];
+	readonly gameBalls = this.createBalls();
+	pocketedBallStack: number[] = [];
+	deadBallStack: number[] = [];
 
 	constructor(turn: number) {
 		this.turn = turn;
@@ -259,6 +267,11 @@ export class NineBallRack {
 		if (this.turn === 1) {
 			this.innings--;
 		}
+	}
+
+	isRackOver() {
+		const nineBall = this.gameBalls.at(-1);
+		return !!nineBall?.isPocketed;
 	}
 
 	private changeTurn() {
@@ -293,6 +306,10 @@ export class NineBallRack {
 	unUseTimeout() {
 		//since you use a timeout while its a players turn, undoing actions should always lead to it being this.turn
 		this.timeouts[this.turn]++;
+	}
+
+	getBall(ballNumber: number) {
+		return this.gameBalls.find((ball) => ball.number === ballNumber)!;
 	}
 
 	private createBalls() {
