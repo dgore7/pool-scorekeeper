@@ -13,8 +13,8 @@
 
 <!-- the color-mix below is a trick to add opacity to the given color -->
 <div
-	class="player-score w-1/2 border-2 px-2 py-1 border-solid rounded-xl flex flex-col justify-between {player.color
-		.border}"
+	class="player-score w-1/2 border-2 px-2 py-1 border-solid rounded-xl flex flex-col justify-between {player
+		.color.border}"
 	class:radial-to-tr={playerNumber === 0}
 	class:radial-to-bl={playerNumber === 1}
 	style:background-image="radial-gradient(var(--position), color-mix(in srgb, {player.color.gradient

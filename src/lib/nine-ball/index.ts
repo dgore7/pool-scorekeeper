@@ -261,10 +261,10 @@ export class NineBallRack {
 		}
 	}
 
-  isRackOver() {
-    const nineBall = this.gameBalls.at(-1)
-    return !!nineBall?.isPocketed
-  }
+	isRackOver() {
+		const nineBall = this.gameBalls.at(-1);
+		return !!nineBall?.isPocketed;
+	}
 
 	private changeTurn() {
 		this.turn = (this.turn + 1) % 2;
