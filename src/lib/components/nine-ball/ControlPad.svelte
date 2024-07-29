@@ -136,7 +136,7 @@
 				aria-label="switch innings button"
 				class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {$game.currentPlayer.color
 					.border} border transition-all"
-        style:--tw-gradient-stops="{$fromColor}, {$toColor}"
+				style:--tw-gradient-stops="{$fromColor}, {$toColor}"
 				on:click={$game.isRackOver ? handleNewRack : handleMiss}
 				disabled={isDeadBallMode || $game.isGameOver}
 			>
