@@ -121,7 +121,7 @@
 			{/each}
 		</Scoreboard>
 		{#each $game.players as player}
-			<ProgressBar {player} />
+			<ProgressBar {player} game={$game} />
 		{/each}
 
 		<div class="flex justify-between py-1 items-baseline">
