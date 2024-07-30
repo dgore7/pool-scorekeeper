@@ -8,6 +8,23 @@
 	import { startCase } from 'lodash';
 	import type { GameType, RuleType } from '$lib/types.js';
 
+	import { cva } from 'class-variance-authority';
+
+	const buttonClass = cva([
+		'flex',
+		'justify-center',
+		'items-center',
+		'h-[3.75rem]',
+		'rounded',
+		'bg-gradient-to-b',
+		'from-[#018FE0]',
+		'to-[#011A29]',
+		'text-white',
+		'mx-auto',
+		'px-10',
+		'w-full'
+	]);
+
 	export let data;
 	let { game, toast, toastTime } = data;
 
@@ -18,9 +35,6 @@
 
 	let playerFormData: PlayerFormData;
 
-	function handlePrev() {
-		step--;
-	}
 	function handleNext() {
 		step++;
 	}
@@ -86,31 +100,18 @@
 	}
 </script>
 
-<form class="flex flex-col gap-4 max-w-full" on:submit={handleGameStart}>
+<form class="flex flex-col gap-4 max-w-full flex-grow my-4" on:submit={handleGameStart}>
 	{#if step === 0}
 		<RuleForm bind:selectedGame bind:selectedRules />
 	{:else}
-		<PlayerForm bind:playerFormData {selectedGame} />
+		<PlayerForm bind:playerFormData bind:step {selectedGame} />
 	{/if}
 
 	<div class="flex">
 		{#if step < 1}
-			<button
-				type="button"
-				class="flex justify-center items-center h-[3.75rem] rounded-[60px] bg-white text-black mx-auto px-10"
-				on:click={handleNext}>Next</button
-			>
+			<button type="button" class={buttonClass()} on:click={handleNext}>Next</button>
 		{:else}
-			<button
-				class="flex justify-center items-center h-[3.75rem] rounded-[60px] bg-white text-black mx-auto px-10"
-				disabled={!step}
-				type="button"
-				on:click={handlePrev}>Back</button
-			>
-			<button
-				class="flex justify-center items-center h-[3.75rem] rounded-[60px] bg-white text-black mx-auto px-10"
-				>Let's Rack 'em Up</button
-			>
+			<button class={buttonClass()} type="submit">Let's Rack 'em Up</button>
 		{/if}
 	</div>
 </form>
