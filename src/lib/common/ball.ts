@@ -13,7 +13,7 @@ export const BALL_COLORS: BallColorSpec[] = [
 	{
 		label: 'yellow',
 		gradient: {
-			stops: ['var(--yellow-ball)', 'var(--yellow-ball-2)'],
+			stops: ['--yellow-ball', '--yellow-ball-2'],
 			from: 'from-yellow-ball',
 			to: 'to-yellow-ball-2'
 		},
@@ -23,7 +23,7 @@ export const BALL_COLORS: BallColorSpec[] = [
 	{
 		label: 'blue',
 		gradient: {
-			stops: ['var(--blue-ball)', 'var(--blue-ball-2)'],
+			stops: ['--blue-ball', '--blue-ball-2'],
 			from: 'from-blue-ball',
 			to: 'to-blue-ball-2'
 		},
@@ -33,7 +33,7 @@ export const BALL_COLORS: BallColorSpec[] = [
 	{
 		label: 'red',
 		gradient: {
-			stops: ['var(--red-ball)', 'var(--red-ball-2)'],
+			stops: ['--red-ball', '--red-ball-2'],
 			from: 'from-red-ball',
 			to: 'to-red-ball-2'
 		},
@@ -43,7 +43,7 @@ export const BALL_COLORS: BallColorSpec[] = [
 	{
 		label: 'purple',
 		gradient: {
-			stops: ['var(--purple-ball)', 'var(--purple-ball-2)'],
+			stops: ['--purple-ball', '--purple-ball-2'],
 			from: 'from-purple-ball',
 			to: 'to-purple-ball-2'
 		},
@@ -53,7 +53,7 @@ export const BALL_COLORS: BallColorSpec[] = [
 	{
 		label: 'orange',
 		gradient: {
-			stops: ['var(--orange-ball)', 'var(--orange-ball-2)'],
+			stops: ['--orange-ball', '--orange-ball-2'],
 			from: 'from-orange-ball',
 			to: 'to-orange-ball-2'
 		},
@@ -63,7 +63,7 @@ export const BALL_COLORS: BallColorSpec[] = [
 	{
 		label: 'green',
 		gradient: {
-			stops: ['var(--green-ball)', 'var(--green-ball-2)'],
+			stops: ['--green-ball', '--green-ball-2'],
 			from: 'from-green-ball',
 			to: 'to-green-ball-2'
 		},
@@ -73,7 +73,7 @@ export const BALL_COLORS: BallColorSpec[] = [
 	{
 		label: 'maroon',
 		gradient: {
-			stops: ['var(--maroon-ball)', 'var(--maroon-ball-2)'],
+			stops: ['--maroon-ball', '--maroon-ball-2'],
 			from: 'from-maroon-ball',
 			to: 'to-maroon-ball-2'
 		},
@@ -83,7 +83,7 @@ export const BALL_COLORS: BallColorSpec[] = [
 	{
 		label: 'black',
 		gradient: {
-			stops: ['var(--black-ball)', 'var(--black-ball-2)'],
+			stops: ['--black-ball', '--black-ball-2'],
 			from: 'from-black-ball',
 			to: 'to-black-ball-2'
 		},

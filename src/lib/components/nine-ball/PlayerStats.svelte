@@ -3,22 +3,28 @@
 	import TimeoutIcon from '../icons/TimeoutIcon.svelte';
 	import ShieldIcon from '../icons/ShieldIcon.svelte';
 	import type { Game, Player } from '$lib/types';
+	import { tweened } from 'svelte/motion';
 
 	export let player: Player;
 	export let game: Game;
 	export let playerNumber: number;
 
+	const transparency = tweened();
+
 	$: timeouts = game.currentRack.timeouts[playerNumber];
+	$: isActive = game.currentPlayer === player;
+	$: border = isActive ? player.color.border : 'border-[#28282C]';
+	$: $transparency = isActive ? 70 : 0;
 </script>
 
 <!-- the color-mix below is a trick to add opacity to the given color -->
 <div
-	class="player-score w-1/2 border-2 px-2 py-1 border-solid rounded-xl flex flex-col justify-between {player
-		.color.border}"
+	class="player-score w-1/2 border-2 px-2 py-1 border-solid rounded-xl flex flex-col justify-between {border} bg-[#28282C]"
 	class:radial-to-tr={playerNumber === 0}
 	class:radial-to-bl={playerNumber === 1}
-	style:background-image="radial-gradient(var(--position), color-mix(in srgb, {player.color.gradient
-		.stops[0]} 70%, transparent), #1F2026 var(--end-stop))"
+	style:--transparency="{$transparency}%"
+	style:--from-stop="var({player.color.gradient.stops[0]})"
+	style:background-image={'radial-gradient(var(--position), color-mix(in srgb, var(--from-stop) var(--transparency), transparent), #1F2026 var(--end-stop))'}
 >
 	<div class="flex w-full justify-between">
 		<div class="font-large truncate">{player.name}</div>
