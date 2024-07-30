@@ -6,6 +6,7 @@
 
 	import { BALL_COLORS, type BallColorSpec } from '$lib/common/ball';
 	import Input from './Input.svelte';
+	import ColorBox from './ColorBox.svelte';
 
 	type Option<T> = {
 		value: T;
@@ -63,15 +64,14 @@
 			options={handicaps}
 			label={'Choose Level'}
 			name={'handicap'}
-			ariaLabel="handicap"
 		/>
 		<Select
 			bind:selectedItem={selectedColor}
 			options={availableColors}
 			label="Choose Color"
 			name="color"
-			ariaLabel="color"
-			isColorSelect
-		/>
+		>
+			<ColorBox color={selectedColor} />
+		</Select>
 	</fieldset>
 </Well>

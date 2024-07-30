@@ -31,6 +31,6 @@
 		bind:value
 		class="flex items-end bg-[#686870] bg-opacity-50 pt-6 pb-1 px-3 rounded-xl flex-grow"
 		on:focus={handleFocus}
-    on:blur={handleBlur}
+		on:blur={handleBlur}
 	/>
 </label>

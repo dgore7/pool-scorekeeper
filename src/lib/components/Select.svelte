@@ -2,23 +2,19 @@
 	import type { BallColorSpec } from '$lib/common/ball';
 	import type { GameType, RuleType, APAHandicaps } from '$lib/types';
 	import DownCaret from './icons/DownCaret.svelte';
-	import ColorBox from './ColorBox.svelte';
 
 	export let selectedItem: GameType | RuleType | APAHandicaps | BallColorSpec;
 	export let options;
 	export let label;
 	export let name;
-	export let isColorSelect = false;
 </script>
 
 <label class="relative flex">
 	<div class="text-[#DADADA] absolute top-1 left-4 text-xs">{label}</div>
-	<div class="absolute top-3 right-10 pointer-events-none">
-		{#if isColorSelect && typeof selectedItem === 'object'}
-			<ColorBox color={selectedItem} />
-		{:else}
+	<div class="absolute top-3 right-4 pointer-events-none">
+		<slot>
 			<DownCaret />
-		{/if}
+		</slot>
 	</div>
 	<select
 		bind:value={selectedItem}

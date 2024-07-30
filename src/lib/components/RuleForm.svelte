@@ -34,11 +34,6 @@
 			label={'Choose Game'}
 			name="game"
 		/>
-		<Select
-			bind:selectedItem={selectedRules}
-			options={rules}
-			label={'Choose Rules'}
-			name="rules"
-		/>
+		<Select bind:selectedItem={selectedRules} options={rules} label={'Choose Rules'} name="rules" />
 	</fieldset>
 </div>

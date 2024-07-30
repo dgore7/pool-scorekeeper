@@ -2,7 +2,7 @@
 	import PlayerFieldSet from './PlayerFieldSet.svelte';
 	import BackIcon from './icons/BackIcon.svelte';
 	import SwapIcon from './icons/SwapIcon.svelte';
-	import type { APAHandicaps, GameType } from '$lib/types';
+	import type { GameType } from '$lib/types';
 	import { BALL_COLORS } from '$lib/common/ball';
 	import { dev } from '$app/environment';
 
