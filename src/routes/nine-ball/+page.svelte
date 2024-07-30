@@ -108,7 +108,6 @@
 		});
 		$game = $game;
 	}
-
 </script>
 
 {#if $game}
