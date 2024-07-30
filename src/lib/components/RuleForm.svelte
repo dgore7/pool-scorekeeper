@@ -33,14 +33,12 @@
 			options={poolGames}
 			label={'Choose Game'}
 			name="game"
-			ariaLabel="game"
 		/>
 		<Select
 			bind:selectedItem={selectedRules}
 			options={rules}
 			label={'Choose Rules'}
 			name="rules"
-			ariaLabel="rules"
 		/>
 	</fieldset>
 </div>

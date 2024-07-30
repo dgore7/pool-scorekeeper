@@ -7,6 +7,11 @@
 	import { BALL_COLORS, type BallColorSpec } from '$lib/common/ball';
 	import Input from './Input.svelte';
 
+	type Option<T> = {
+		value: T;
+		label: string;
+	};
+
 	export let name: 'player-one' | 'player-two';
 	export let playerName: string | null;
 	export let playerHandicap: APAHandicaps = 0;
@@ -15,32 +20,27 @@
 
 	export let selectedGame: GameType;
 
-	let NineBallHandicaps = [];
-	let EightBallHandicaps = [];
+	let NineBallHandicaps: Option<APAHandicaps>[] = [];
+	let EightBallHandicaps: Option<APAHandicaps>[] = [];
 
-	for (let i = 1; i < 10; i++) {
-		const handicap = { value: i as APAHandicaps, label: i.toString() };
+	for (let i = 1; i <= 9; i++) {
+		const handicap = { value: i, label: i.toString() };
 		NineBallHandicaps.push(handicap);
 	}
 
-	for (let i = 2; i < 8; i++) {
-		const handicap = { value: i as APAHandicaps, label: i.toString() };
+	for (let i = 2; i <= 7; i++) {
+		const handicap = { value: i, label: i.toString() };
 		EightBallHandicaps.push(handicap);
 	}
 
 	let handicaps = selectedGame === '9ball' ? NineBallHandicaps : EightBallHandicaps;
 
-	type ColorOption = {
-		label: string;
-		value: BallColorSpec;
-	};
-
 	// omit black ball from color choices
-	let colors: ColorOption[] = BALL_COLORS.slice(0, -1).map((ballColor) => ({
+	let colors: Option<BallColorSpec>[] = BALL_COLORS.slice(0, -1).map((ballColor) => ({
 		label: ballColor.label,
 		value: ballColor
 	}));
-	let availableColors: ColorOption[] = [];
+	let availableColors: Option<BallColorSpec>[] = [];
 
 	$: if (opponentColor) {
 		availableColors = colors.filter((color) => color.value !== opponentColor);

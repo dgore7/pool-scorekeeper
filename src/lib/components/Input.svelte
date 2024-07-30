@@ -9,16 +9,10 @@
 		isFocus = true;
 	}
 
-	function handleClick(e: MouseEvent) {
-		const { target } = e;
-		const input = document.querySelector(`input[name='${name}']`);
-		if (!input?.contains(target as HTMLElement)) {
-			isFocus = false;
-		}
+	function handleBlur() {
+		isFocus = false;
 	}
 </script>
-
-<svelte:window on:click={handleClick} />
 
 <label class="relative flex">
 	<div
@@ -36,6 +30,7 @@
 		aria-label={ariaLabel}
 		bind:value
 		class="flex items-end bg-[#686870] bg-opacity-50 pt-6 pb-1 px-3 rounded-xl flex-grow"
-		on:click={handleFocus}
+		on:focus={handleFocus}
+    on:blur={handleBlur}
 	/>
 </label>

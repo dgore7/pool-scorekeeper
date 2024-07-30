@@ -9,8 +9,8 @@
 	export let playerFormData = {
 		playerOneName: dev ? 'Shane Van Boening' : '',
 		playerTwoName: dev ? 'Adam Stanley' : '',
-		playerOneHandicap: dev ? (9 as APAHandicaps) : (NaN as APAHandicaps),
-		playerTwoHandicap: dev ? (1 as APAHandicaps) : (NaN as APAHandicaps),
+		playerOneHandicap: dev ? 9 : NaN,
+		playerTwoHandicap: dev ? 1 : NaN,
 		playerOneColor: BALL_COLORS.find((color) => color.label === 'red')!,
 		playerTwoColor: BALL_COLORS.find((color) => color.label === 'blue')!
 	};
@@ -20,18 +20,14 @@
 	export let step: number;
 
 	function swapPlayers() {
-		const holderOne = {
+		playerFormData = {
 			playerOneName: playerFormData.playerTwoName,
 			playerOneHandicap: playerFormData.playerTwoHandicap,
-			playerOneColor: playerFormData.playerTwoColor
-		};
-		const holderTwo = {
+			playerOneColor: playerFormData.playerTwoColor,
 			playerTwoName: playerFormData.playerOneName,
 			playerTwoHandicap: playerFormData.playerOneHandicap,
 			playerTwoColor: playerFormData.playerOneColor
 		};
-
-		playerFormData = { ...holderOne, ...holderTwo };
 	}
 
 	function handleBack() {

@@ -8,7 +8,6 @@
 	export let options;
 	export let label;
 	export let name;
-	export let ariaLabel;
 	export let isColorSelect = false;
 </script>
 
@@ -24,7 +23,6 @@
 	<select
 		bind:value={selectedItem}
 		{name}
-		aria-label={ariaLabel}
 		class="flex items-end bg-[#686870] bg-opacity-50 h-12 py-2 px-3 rounded-xl flex-grow capitalize invalid:text-[#9ca3af]"
 		required
 	>
