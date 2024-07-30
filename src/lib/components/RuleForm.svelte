@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { GameType, RuleType } from '$lib/types';
+	import MainBackgroundIcon from './icons/MainBackgroundIcon.svelte';
 	import Select from './Select.svelte';
 
 	const poolGames = [
@@ -20,8 +21,13 @@
 </script>
 
 <div
-	class="flex flex-col flex-grow gap-6 p-4 bg-gradient-to-b from-[#686870] to-black rounded-2xl justify-end"
+	class="relative flex flex-col flex-grow gap-6 p-4 rounded-2xl justify-end overflow-hidden"
+	style="background:linear-gradient(40deg in oklab, black, #002B48 40%, #4FBEFD);"
 >
+	<div class="absolute pointer-events-none scale-125 top-2 left-5">
+		<MainBackgroundIcon />
+	</div>
+
 	<div>
 		<h4 class="text-xl color-[#D5D5D5]">POOL SCOREKEEPER</h4>
 		<h1 class="text-5xl">Rack'em Up!</h1>
