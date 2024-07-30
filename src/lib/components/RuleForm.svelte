@@ -1,47 +1,46 @@
 <script lang="ts">
-	import Well from './Well.svelte';
 	import type { GameType, RuleType } from '$lib/types';
+	import Select from './Select.svelte';
 
 	const poolGames = [
-		{ type: '9ball', title: '9 Ball' },
-		{ type: '8ball', title: '8 Ball' },
-		{ type: '10ball', title: '10 Ball' },
-		{ type: 'straightPool', title: 'Straight Pool' },
-		{ type: 'onePocket', title: 'One Pocket' }
+		{ value: '9ball', label: '9 Ball' },
+		{ value: '8ball', label: '8 Ball' },
+		{ value: '10ball', label: '10 Ball' },
+		{ value: 'straightPool', label: 'Straight Pool' },
+		{ value: 'onePocket', label: 'One Pocket' }
 	];
-	const rules = ['APA', 'BCA', 'Pro'];
+	const rules = [
+		{ value: 'APA', label: 'APA' },
+		{ value: 'BCA', label: 'BCA' },
+		{ value: 'Pro', label: 'Pro' }
+	];
 
 	export let selectedGame: GameType;
 	export let selectedRules: RuleType;
 </script>
 
-<h2 class="mx-auto">What Type Of Pool Ya Wanna Shoot?</h2>
+<div
+	class="flex flex-col flex-grow gap-6 p-4 bg-gradient-to-b from-[#686870] to-black rounded-2xl justify-end"
+>
+	<div>
+		<h4 class="text-xl color-[#D5D5D5]">POOL SCOREKEEPER</h4>
+		<h1 class="text-5xl">Rack'em Up!</h1>
+	</div>
 
-<Well>
-	<fieldset class="flex flex-col gap-4">
-		<label>
-			Game
-			<select
-				bind:value={selectedGame}
-				class="bg-black h-10 py-2 px-3 rounded invalid:text-[#9ca3af]"
-				required
-			>
-				{#each poolGames as game}
-					<option value={game.type}>{game.title}</option>
-				{/each}
-			</select>
-		</label>
-		<label>
-			Rules
-			<select
-				bind:value={selectedRules}
-				class="bg-black h-10 py-2 px-3 rounded invalid:text-[#9ca3af]"
-				required
-			>
-				{#each rules as rule}
-					<option value={rule}>{rule}</option>
-				{/each}
-			</select>
-		</label>
+	<fieldset class="grid gap-6 w-full justify-items-stretch">
+		<Select
+			bind:selectedItem={selectedGame}
+			options={poolGames}
+			label={'Choose Game'}
+			name="game"
+			ariaLabel="game"
+		/>
+		<Select
+			bind:selectedItem={selectedRules}
+			options={rules}
+			label={'Choose Rules'}
+			name="rules"
+			ariaLabel="rules"
+		/>
 	</fieldset>
-</Well>
+</div>
