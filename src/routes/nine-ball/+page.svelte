@@ -108,7 +108,6 @@
 		});
 		$game = $game;
 	}
-	$: document.body.style.backgroundColor = isDeadBallMode ? 'darkkhaki' : '#131318';
 </script>
 
 {#if $game}
