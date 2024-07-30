@@ -115,8 +115,8 @@
 		{#if isDeadBallMode}
 			<button
 				aria-label="dead mode exit button"
-				class="rounded-xl bg-slate-600 py-2 w-full h-12"
-				on:click={handleDeadBallSave}>Exit Deadball Mode</button
+				class="border-2 border-[#6e6d6d] border-solid rounded-xl bg-gradient-to-b from-[#5c5c65] to-[#282727] py-2 w-full h-12"
+				on:click={handleDeadBallSave}>Save and Exit Deadball Mode</button
 			>
 		{:else}
 			<button
