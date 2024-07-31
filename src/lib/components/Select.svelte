@@ -21,7 +21,7 @@
 
 <label class="relative flex">
 	<div
-		class="text-[#DADADA] absolute top-1 left-4 text-xs {selectedItem
+		class="text-[#DADADA] absolute transition-transform top-1 left-4 text-xs {selectedItem
 			? 'top-1'
 			: isFocus
 				? 'top-1'
