@@ -12,7 +12,7 @@
 		PostKill
 	} from '$lib/nine-ball/actions.js';
 	import GraveIcon from '$lib/components/icons/GraveIcon.svelte';
-	import WarningIcon from '$lib/components/WarningIcon.svelte';
+	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
 	import Scoreboard from '$lib/components/nine-ball/Scoreboard.svelte';
 	import PlayerStats from '$lib/components/nine-ball/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
@@ -76,7 +76,7 @@
 			$toast = {
 				message: 'You Have Re-Entered the World of the Living.',
 				icon: WarningIcon,
-				class: 'bg-gray-200'
+				class: 'scale-150'
 			};
 		}
 	}

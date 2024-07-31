@@ -4,7 +4,7 @@
 	import { NineBallGame, NineBallPlayer } from '$lib';
 	import { EightBallGame, EightBallPlayer } from '$lib/eight-ball';
 	import { RuleForm, type PlayerFormData } from '$lib/components';
-	import WarningIcon from '$lib/components/WarningIcon.svelte';
+	import WarningIcon from '$lib/components/icons/WarningIcon.svelte';
 	import { startCase } from 'lodash';
 	import type { GameType, RuleType } from '$lib/types.js';
 
@@ -62,9 +62,9 @@
 		if (isInvalid) {
 			$toastTime = 5000;
 			$toast = {
-				message: `Missing required player information: <ul class="list-disc">${errorList}</ul>`,
+				message: `Missing required player information: <ul class="list-disc text-[#AFAFAA]">${errorList}</ul>`,
 				icon: WarningIcon,
-				class: 'bg-gray-200'
+				class: 'scale-150'
 			};
 		} else {
 			if (selectedGame === '9ball') {
