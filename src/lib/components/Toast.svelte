@@ -13,37 +13,18 @@
 </script>
 
 <div
-	class="toast-dialog fixed left-5 right-5 top-10 max-w-xl rounded-lg {className}"
+	class="flex shadow-sm justify-between gap-6 fixed left-5 right-5 top-10 py-4 px-6 max-w-xl rounded-lg bg-black text-white border-2 border-[#323233] border-solid z-10"
+	style="box-shadow: 0 .5em 1em black"
 	role="alert"
 	transition:fade
 >
 	<svelte:component this={icon} />
-	<div class="text">{@html message}</div>
-	<button aria-label="Close" class="close shrink" on:click={() => dispatch('close')}>
-		<CloseIcon width="0.8em" class={'fill-black'} />
+	<div class="">{@html message}</div>
+	<button
+		aria-label="Close"
+		class="flex shrink border-none bg-transparent p-0 self-start"
+		on:click={() => dispatch('close')}
+	>
+		<CloseIcon width="0.8em" class={'fill-white'} />
 	</button>
 </div>
-
-<style>
-	.toast-dialog {
-		color: black;
-		padding: 0.75rem 1.5rem;
-		display: flex;
-		align-items: center;
-		margin: 0 auto;
-	}
-
-	.text {
-		margin: 1rem;
-	}
-
-	button {
-		color: white;
-		background: transparent;
-		border: 0 none;
-		padding: 0;
-		margin: 0 0 0 auto;
-		line-height: 1;
-		font-size: 1rem;
-	}
-</style>
