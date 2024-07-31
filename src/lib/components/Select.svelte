@@ -7,10 +7,28 @@
 	export let options;
 	export let label;
 	export let name;
+
+	let isFocus = false;
+
+	function handleFocus() {
+		isFocus = true;
+	}
+
+	function handleBlur() {
+		isFocus = false;
+	}
 </script>
 
 <label class="relative flex">
-	<div class="text-[#DADADA] absolute top-1 left-4 text-xs">{label}</div>
+	<div
+		class="text-[#DADADA] absolute transition-transform top-1 left-4 text-xs {selectedItem
+			? 'top-1'
+			: isFocus
+				? 'top-1'
+				: 'translate-x-6 translate-y-3 scale-[1.75]'}"
+	>
+		{label}
+	</div>
 	<div class="absolute top-3 right-4 pointer-events-none">
 		<slot>
 			<DownCaret />
@@ -19,6 +37,8 @@
 	<select
 		bind:value={selectedItem}
 		{name}
+		on:focus={handleFocus}
+		on:blur={handleBlur}
 		class="flex items-end bg-[#686870] bg-opacity-50 h-12 py-2 px-3 rounded-xl flex-grow capitalize invalid:text-[#9ca3af]"
 		required
 	>
