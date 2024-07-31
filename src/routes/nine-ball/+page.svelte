@@ -20,6 +20,8 @@
 	import DeadBallTitle from '$lib/components/nine-ball/DeadBallTitle.svelte';
 	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
 	import type { Ball } from '$lib/common/ball.js';
+	import HeaderRight from '$lib/components/HeaderRight.svelte';
+	import HeaderLeft from '$lib/components/HeaderLeft.svelte';
 
 	export let data;
 
@@ -110,38 +112,51 @@
 	}
 </script>
 
-{#if $game}
-	{#if isDeadBallMode}
-		<DeadBallTitle />
-	{:else}
-		<Scoreboard>
-			{#each $game.players as player, playerNumber}
-				<PlayerStats {player} game={$game} {playerNumber} />
-			{/each}
-		</Scoreboard>
-		{#each $game.players as player}
-			<ProgressBar {player} game={$game} />
-		{/each}
-
-		<div class="flex justify-between py-1 items-baseline">
-			<span class="text-xl">
-				{$game.currentPlayer.name}'s Turn
-			</span>
-			<span>
-				Innings: {$game.currentRack.innings}
-			</span>
+<div class="flex-[1_0_auto] flex gap-4 portrait:flex-col">
+	{#if $game}
+		{#if isDeadBallMode}
+			<DeadBallTitle />
+		{:else}
+			<div
+				class="grid grid-rows-[auto_1fr_auto] landscape:flex-[1_1_50%] bg-[#131318] portrait:py-4 px-6 portrait:-mx-6 landscape:h-full"
+			>
+				<HeaderLeft {game} />
+				<Scoreboard>
+					{#each $game.players as player, playerNumber}
+						<PlayerStats {player} game={$game} {playerNumber} />
+					{/each}
+				</Scoreboard>
+				<div class="self-end">
+					{#each $game.players as player}
+						<ProgressBar {player} game={$game} />
+					{/each}
+				</div>
+			</div>
+		{/if}
+		<div class="flex flex-col flex-[1_1_50%] bg-[#0a0a0a] px-4 -mx-4">
+			<HeaderRight {game} />
+			<div class="flex flex-col landscape:flex-row grow">
+				<div class="flex justify-between py-1 items-baseline landscape:hidden">
+					<span class="text-xl truncate">
+						{$game.currentPlayer.name}'s Turn
+					</span>
+					<span class="text-secondary whitespace-nowrap">
+						Innings: {$game.currentRack.innings}
+					</span>
+				</div>
+				<ControlPad
+					{game}
+					{isDeadBallMode}
+					on:ballPocket={handleBallPocket}
+					on:miss={handleTurn}
+					on:undo={handleUndo}
+					on:safety={handleSafety}
+					on:timeout={handleTimeout}
+					on:newRack={handleNewRack}
+					on:deadBallMode={handleDeadBallMode}
+					on:saveDeadBalls={handleDeadBalls}
+				/>
+			</div>
 		</div>
 	{/if}
-	<ControlPad
-		{game}
-		{isDeadBallMode}
-		on:ballPocket={handleBallPocket}
-		on:miss={handleTurn}
-		on:undo={handleUndo}
-		on:safety={handleSafety}
-		on:timeout={handleTimeout}
-		on:newRack={handleNewRack}
-		on:deadBallMode={handleDeadBallMode}
-		on:saveDeadBalls={handleDeadBalls}
-	/>
-{/if}
+</div>

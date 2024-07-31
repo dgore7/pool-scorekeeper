@@ -94,67 +94,75 @@
 </script>
 
 {#if $game}
-	<div
-		class="w-full py-5 h-full flex-auto grid max-h-[36rem] overflow-hidden m-auto mb-0 grid-cols-3 grid-rows-3 gap-2"
-	>
-		{#each $game.currentRack.gameBalls as ball (ball.number)}
-			<div class="relative w-full max-w-full h-full">
-				{#if ball.isDead}
-					<button
-						class="active:scale-90 transition-transform aria-pressed:pointer-events-none h-full w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-						class:hidden={!ball.isDead}
-						on:click={() => removeDeadBall(ball)}
-						disabled={!isDeadBallMode}
-					>
-						<img src={deadBallSvg} alt="dead ball" class="w-full max-h-[min(100%,6rem)] mx-auto" />
-					</button>
-				{:else}
-					<button
-						class="active:scale-90 transition-transform aria-pressed:pointer-events-none h-full w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-						aria-pressed={(ball.isPocketed || ball.isDead) && !isDeadBallMode}
-						class:hidden={ball.isDead}
-						on:click={() => handleBallClick(ball)}
-						disabled={ball.isDead || ($game.isGameOver && !isDeadBallMode)}
-						in:send|global={{ key: ball.number }}
-						out:receive|global={{ key: ball.number }}
-					>
-						<Ball {ball} pocketed={ball.isPocketed} />
-					</button>
-				{/if}
-			</div>
-		{/each}
-	</div>
-	<div class="flex-auto shrink-0">
-		{#if isDeadBallMode}
-			<button
-				aria-label="dead mode exit button"
-				class="border-2 border-[#6e6d6d] border-solid rounded-xl bg-gradient-to-b from-[#5c5c65] to-[#282727] py-2 w-full h-12"
-				on:click={handleDeadBallSave}>Save and Exit Deadball Mode</button
-			>
-		{:else}
-			<button
-				aria-label="switch innings button"
-				class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {$game.currentPlayer.color
-					.border} border transition-all"
-				style:--tw-gradient-stops="{$fromColor}, {$toColor}"
-				on:click={$game.isRackOver ? handleNewRack : handleMiss}
-				disabled={isDeadBallMode || $game.isGameOver}
-			>
-				{#if $game.isRackOver}
-					New Rack
-				{:else if $game.isGameOver}
-					{$game.currentPlayer.name} Wins!
-				{:else}
-					End {$game.currentPlayer.name}'s Turn
-				{/if}
-			</button>
-		{/if}
+	<div class="w-full h-full flex-auto flex flex-col">
+		<div
+			class="grid w-full h-full max-h-[36rem] overflow-hidden m-auto portrait:mb-0 grid-cols-3 grid-rows-3 gap-2 py-4"
+		>
+			{#each $game.currentRack.gameBalls as ball (ball.number)}
+				<div class="relative w-full max-w-full h-full">
+					{#if ball.isDead}
+						<button
+							class="active:scale-90 transition-transform aria-pressed:pointer-events-none h-full w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+							class:hidden={!ball.isDead}
+							on:click={() => removeDeadBall(ball)}
+							disabled={!isDeadBallMode}
+							in:send|global={{ key: ball.number }}
+							out:receive|global={{ key: ball.number }}
+						>
+							<img
+								src={deadBallSvg}
+								alt="dead ball"
+								class="w-full max-h-[min(100%,6rem)] mx-auto"
+							/>
+						</button>
+					{:else}
+						<button
+							class="active:scale-90 transition-transform aria-pressed:pointer-events-none h-full w-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+							aria-pressed={(ball.isPocketed || ball.isDead) && !isDeadBallMode}
+							class:hidden={ball.isDead}
+							on:click={() => handleBallClick(ball)}
+							disabled={ball.isDead || ($game.isGameOver && !isDeadBallMode)}
+							in:send|global={{ key: ball.number }}
+							out:receive|global={{ key: ball.number }}
+						>
+							<Ball {ball} pocketed={ball.isPocketed} />
+						</button>
+					{/if}
+				</div>
+			{/each}
+		</div>
+		<div class="landscape:h-20 grid items-center">
+			{#if isDeadBallMode}
+				<button
+					aria-label="dead mode exit button"
+					class="border-2 border-[#6e6d6d] border-solid rounded-xl bg-gradient-to-b from-[#5c5c65] to-[#282727] py-2 w-full h-12"
+					on:click={handleDeadBallSave}>Save and Exit Deadball Mode</button
+				>
+			{:else}
+				<button
+					aria-label="switch innings button"
+					class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {$game.currentPlayer.color
+						.border} border transition-all"
+					style:--tw-gradient-stops="{$fromColor}, {$toColor}"
+					on:click={$game.isRackOver ? handleNewRack : handleMiss}
+					disabled={isDeadBallMode || $game.isGameOver}
+				>
+					{#if $game.isRackOver}
+						New Rack
+					{:else if $game.isGameOver}
+						{$game.currentPlayer.name} Wins!
+					{:else}
+						End {$game.currentPlayer.name}'s Turn
+					{/if}
+				</button>
+			{/if}
+		</div>
 	</div>
 
 	<div
 		aria-label="control button container"
 		class:invisible={isDeadBallMode}
-		class="flex flex-auto shrink-0 h-12"
+		class="flex flex-auto shrink-0 portrait:h-12 landscape:w-20 landscape:flex-col"
 	>
 		<ControlButtons
 			isGameOver={$game.isGameOver}
