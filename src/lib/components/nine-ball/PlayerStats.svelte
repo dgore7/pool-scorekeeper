@@ -19,25 +19,27 @@
 
 <!-- the color-mix below is a trick to add opacity to the given color -->
 <div
-	class="player-score w-1/2 border-2 px-2 py-1 border-solid rounded-xl flex flex-col justify-between {border} bg-[#28282C]"
+	class="player-score portrait:w-1/2 landscape:h-1/2 border-2 max-h-60 px-2 py-1 border-solid rounded-xl grid grid-rows-[auto_1fr_auto] grid-cols-1 landscape:grid-rows-[min-content_min-content] landscape:grid-cols-2 gap-y-2 content-between {border} bg-[#28282C] overflow-clip"
 	class:radial-to-tr={playerNumber === 0}
 	class:radial-to-bl={playerNumber === 1}
 	style:--transparency="{$transparency}%"
 	style:--from-stop="var({player.color.gradient.stops[0]})"
 	style:background-image={'radial-gradient(var(--position), color-mix(in srgb, var(--from-stop) var(--transparency), transparent), #1F2026 var(--end-stop))'}
 >
-	<div class="flex w-full justify-between">
-		<div class="font-large truncate">{player.name}</div>
-		<div class="font-light text-secondary whitespace-nowrap ml-2">level {player.handicap}</div>
+	<div class="flex landscape:block w-full justify-between overflow-hidden">
+		<div class="font-large truncate mr-2">{player.name}</div>
+		<div class="font-light text-secondary whitespace-nowrap">level {player.handicap}</div>
 	</div>
-	<div class="score font-light text-5xl relative overflow-hidden stack text-center">
+	<div
+		class="score font-light text-5xl relative overflow-hidden stack text-center landscape:justify-end row-span-2 self-center landscape:text-7xl landscape:mx-4"
+	>
 		{#key player.score}
 			<div in:fly={{ y: '100%' }} out:fly={{ y: '-100%' }}>
 				{player.score}
 			</div>
 		{/key}
 	</div>
-	<div class="w-full flex justify-between">
+	<div class="w-full flex portrait:justify-between landscape:gap-2">
 		<div class="flex gap-2 min-w-10 items-center">
 			<ShieldIcon class="w-4" variant="filled" />
 			<div class="stack relative">
@@ -58,7 +60,7 @@
 				{/key}
 			</div>
 		</div>
-		<div class="bg-white/20 rounded-lg px-1.5 mix-blend-screen">
+		<div class="bg-white/20 rounded-lg px-1.5 mix-blend-screen whitespace-nowrap">
 			<span class="capitalize text-secondary text-sm leading-4">goal</span>
 			<span class="text-primary">{player.scoreRequired}</span>
 		</div>

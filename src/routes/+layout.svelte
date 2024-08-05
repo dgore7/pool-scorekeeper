@@ -27,9 +27,11 @@
 	{@html webManifestLink}
 </svelte:head>
 
-<div class="flex flex-col mx-auto max-w-xl w-full h-dvh px-4">
+<div
+	class="flex flex-col mx-auto max-w-xl landscape:max-w-none w-full h-dvh landscape:h- portrait:px-4"
+>
 	<Header />
-	<main class="container mb-auto flex flex-col flex-1">
+	<main class="mb-auto flex flex-col flex-1 justify-between">
 		{#if $toast}
 			<Toast
 				on:close={handleToastClose}

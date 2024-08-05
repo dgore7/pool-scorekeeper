@@ -13,7 +13,7 @@
 </script>
 
 <div
-	class="toast-dialog fixed left-5 right-5 top-10 max-w-xl rounded-lg {className}"
+	class="toast-dialog fixed left-5 right-5 z-10 top-10 max-w-xl rounded-lg {className}"
 	role="alert"
 	transition:fade
 >

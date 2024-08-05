@@ -72,7 +72,7 @@
 
 {#if $state === 'open'}
 	<div
-		class="rounded absolute top-16 right-5 text-2xl bg-white overflow-hidden"
+		class="rounded absolute top-16 right-5 text-2xl z-10 bg-white overflow-hidden"
 		transition:fade={{ duration: 300 }}
 	>
 		{#each hamburgerOptions as option, i}
