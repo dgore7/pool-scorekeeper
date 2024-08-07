@@ -5,6 +5,8 @@
 	import { interpolateLab } from 'd3-interpolate';
 	import { getCssPropertyValue } from '$lib/colors';
 
+	export let isBarSizeSelect: boolean;
+	export let barSize;
 	export let game: Game;
 	export let player: Player;
 	let className = '';
@@ -17,6 +19,10 @@
 
 	function getColor(isActive: boolean) {
 		return isActive ? getCssPropertyValue(player.color.gradient.stops[0]) : '#AFAFAA';
+	}
+
+	function handleBarClick() {
+		isBarSizeSelect = true;
 	}
 
 	const barColor = tweened(getColor(game.currentPlayer === player), {
@@ -39,11 +45,15 @@
 		<div class="text-secondary">{Math.round($progress * 100)}%</div>
 	</div>
 
-	<div class="flex overflow-hidden w-full h-1 rounded bg-white/20">
+	<div
+		role="button"
+		on:click={handleBarClick}
+		class="flex overflow-hidden w-full rounded bg-white/20 {barSize}"
+	>
 		<div
 			class="bg-gradient-to-l rounded-r bg-right bg-1.5x"
 			style:--tw-gradient-stops="{$barColor}, black"
 			style:width="{$progress * 100}%"
 		/>
-	</div>
+</div>
 </div>
