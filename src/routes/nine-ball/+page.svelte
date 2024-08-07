@@ -31,7 +31,7 @@
 	export let data;
 
 	const { game } = data as Required<{ game: Writable<NineBallGame> }>;
-	const { toast, toastTime } = data;
+	const { toast, toastTime, barSize } = data;
 
 	let isDeadBallMode = false;
 	let isBarSizeSelect = false;
@@ -41,8 +41,6 @@
 		{ label: 'Medium', value: 'h-2' },
 		{ label: 'Large', value: 'h-4' }
 	];
-
-	let barSize = barSizes[1].value;
 
 	let barDivHeight: number;
 	const radioDivHeight: radioHeightType = { 108: 'h-[108px]', 116: 'h-[116px]', 132: 'h-[132px]' };
@@ -162,7 +160,7 @@
 				{#if !isBarSizeSelect}
 					<div class="self-end" bind:clientHeight={barDivHeight}>
 						{#each $game.players as player}
-							<ProgressBar {player} game={$game} {barSize} bind:isBarSizeSelect />
+							<ProgressBar {player} game={$game} barSize={$barSize} bind:isBarSizeSelect />
 						{/each}
 					</div>
 				{:else}
@@ -171,7 +169,7 @@
 							{#each barSizes as size}
 								<label
 									for={size.label}
-									class="bg-[#3C3C46] rounded-lg py-1 px-2 transition-all {barSize === size.value
+									class="bg-[#3C3C46] rounded-lg py-1 px-2 transition-all {$barSize === size.value
 										? `bg-gradient-to-b  text-white ${$game.currentPlayer.color.border}`
 										: ''}"
 									style:--tw-gradient-stops="{$fromColor}, {$toColor}">{size.label}</label
@@ -179,7 +177,7 @@
 								<input
 									id={size.label}
 									type="radio"
-									bind:group={barSize}
+									bind:group={$barSize}
 									value={size.value}
 									class="fixed pointer-events-none opacity-0"
 								/>
