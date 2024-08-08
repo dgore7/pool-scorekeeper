@@ -36,17 +36,6 @@
 	let isDeadBallMode = false;
 	let isBarSizeSelect = false;
 
-	const barSizes = [
-		{ label: 'Small', value: 'h-1' },
-		{ label: 'Medium', value: 'h-2' },
-		{ label: 'Large', value: 'h-4' }
-	];
-
-	let barDivHeight: number;
-	const radioDivHeight: radioHeightType = { 108: 'h-[108px]', 116: 'h-[116px]', 132: 'h-[132px]' };
-
-	$: boxHeight = radioDivHeight[barDivHeight as keyof typeof radioDivHeight];
-
 	function handlePocket(ball: Ball) {
 		$game.doAction(new Increment(), ball);
 		$game = $game;
@@ -128,10 +117,6 @@
 		$game = $game;
 	}
 
-	function handleBarSizeSubmit() {
-		isBarSizeSelect = false;
-	}
-
 	const fromColor = tweened(getCssPropertyValue($game.currentPlayer.color.gradient.stops[0]), {
 		interpolate: interpolateLab
 	});
@@ -157,37 +142,12 @@
 						<PlayerStats {player} game={$game} {playerNumber} />
 					{/each}
 				</Scoreboard>
-				{#if !isBarSizeSelect}
-					<div class="self-end" bind:clientHeight={barDivHeight}>
-						{#each $game.players as player}
-							<ProgressBar {player} game={$game} barSize={$barSize} bind:isBarSizeSelect />
-						{/each}
-					</div>
-				{:else}
-					<div class="flex w-full gap-6 p-4 items-center {boxHeight}">
-						<div class="flex gap-2">
-							{#each barSizes as size}
-								<label
-									for={size.label}
-									class="bg-[#3C3C46] rounded-lg py-1 px-2 transition-all {$barSize === size.value
-										? `bg-gradient-to-b  text-white ${$game.currentPlayer.color.border}`
-										: ''}"
-									style:--tw-gradient-stops="{$fromColor}, {$toColor}">{size.label}</label
-								>
-								<input
-									id={size.label}
-									type="radio"
-									bind:group={$barSize}
-									value={size.value}
-									class="fixed pointer-events-none opacity-0"
-								/>
-							{/each}
-						</div>
-						<button on:click={handleBarSizeSubmit} class="bg-[#3C3C46] rounded-lg py-1 px-2"
-							>Save Bar Size</button
-						>
-					</div>
-				{/if}
+
+				<div class="self-end">
+					{#each $game.players as player}
+						<ProgressBar {player} game={$game} barSize={$barSize} bind:isBarSizeSelect />
+					{/each}
+				</div>
 			</div>
 		{/if}
 		<div class="flex flex-col flex-[1_1_50%] bg-[#0a0a0a] px-4 -mx-4">
