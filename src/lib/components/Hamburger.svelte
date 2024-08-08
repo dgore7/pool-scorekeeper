@@ -47,7 +47,7 @@
 
 	function handleClose() {
 		fadeTo('close');
-		goto('/nine-ball');
+		history.back()
 	}
 
 	function handleOptionClick(title: OptionTitle) {
