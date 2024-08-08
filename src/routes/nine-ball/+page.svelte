@@ -22,13 +22,19 @@
 	import type { Ball } from '$lib/common/ball.js';
 	import HeaderRight from '$lib/components/HeaderRight.svelte';
 	import HeaderLeft from '$lib/components/HeaderLeft.svelte';
+	import { tweened } from 'svelte/motion';
+	import { getCssPropertyValue } from '$lib/colors';
+	import { interpolateLab } from 'd3-interpolate';
+
+	type radioHeightType = { 108: string; 116: string; 132: string };
 
 	export let data;
 
 	const { game } = data as Required<{ game: Writable<NineBallGame> }>;
-	const { toast, toastTime } = data;
+	const { toast, toastTime, barSize } = data;
 
 	let isDeadBallMode = false;
+	let isBarSizeSelect = false;
 
 	function handlePocket(ball: Ball) {
 		$game.doAction(new Increment(), ball);
@@ -110,6 +116,16 @@
 		});
 		$game = $game;
 	}
+
+	const fromColor = tweened(getCssPropertyValue($game.currentPlayer.color.gradient.stops[0]), {
+		interpolate: interpolateLab
+	});
+
+	const toColor = tweened(getCssPropertyValue($game.currentPlayer.color.gradient.stops[1]), {
+		interpolate: interpolateLab
+	});
+
+	$: [$fromColor, $toColor] = $game.currentPlayer.color.gradient.stops.map(getCssPropertyValue);
 </script>
 
 <div class="flex-[1_0_auto] flex gap-4 portrait:flex-col">
@@ -126,9 +142,10 @@
 						<PlayerStats {player} game={$game} {playerNumber} />
 					{/each}
 				</Scoreboard>
+
 				<div class="self-end">
 					{#each $game.players as player}
-						<ProgressBar {player} game={$game} />
+						<ProgressBar {player} game={$game} barSize={$barSize} bind:isBarSizeSelect />
 					{/each}
 				</div>
 			</div>

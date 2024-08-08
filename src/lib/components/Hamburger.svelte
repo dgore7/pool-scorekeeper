@@ -22,7 +22,13 @@
 	const hamburgerOptions: Option[] = [
 		{ title: 'Score Sheet', icon: ScoreSheetIcon },
 		{ title: 'Save Game', icon: SaveIcon },
-		{ title: 'Settings', icon: SettingsIcon },
+		{
+			title: 'Settings',
+			icon: SettingsIcon,
+			onClick() {
+				goto('/settings');
+			}
+		},
 		{
 			title: 'End Game',
 			icon: EndGameIcon,
@@ -36,10 +42,12 @@
 
 	function handleHamburger() {
 		fadeTo('open');
+		goto('/settings');
 	}
 
 	function handleClose() {
 		fadeTo('close');
+		history.back()
 	}
 
 	function handleOptionClick(title: OptionTitle) {
@@ -70,7 +78,7 @@
 	</button>
 {/if}
 
-{#if $state === 'open'}
+<!-- {#if $state === 'open'}
 	<div
 		class="rounded absolute top-16 right-5 text-2xl z-10 bg-white overflow-hidden"
 		transition:fade={{ duration: 300 }}
@@ -86,4 +94,4 @@
 			</button>
 		{/each}
 	</div>
-{/if}
+{/if} -->
