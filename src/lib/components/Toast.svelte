@@ -13,7 +13,7 @@
 </script>
 
 <div
-	class="flex shadow-sm justify-between gap-6 fixed left-5 right-5 top-10 py-4 px-6 max-w-xl rounded-lg bg-black text-white border-2 border-[#323233] border-solid z-10"
+	class="flex shadow-sm justify-between gap-6 fixed  mx-auto top-10 py-4 px-6 max-w-xl grow rounded-lg bg-black text-white border-2 border-[#323233] border-solid z-10"
 	style="box-shadow: 0 .5em 1em black"
 	role="alert"
 	transition:fade
