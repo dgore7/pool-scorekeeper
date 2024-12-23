@@ -52,6 +52,10 @@ export class EightBallGame {
 		return this.racks.reduce((n, { innings }) => n + innings, 0);
 	}
 
+	get totalTimeoutsUsed() {
+		return [0, 0];
+	}
+
 	get currentRack() {
 		const rack = this.racks.at(-1);
 		if (!rack) throw new AssertionError('current rack should always be defined');

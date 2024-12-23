@@ -28,6 +28,16 @@ export class NineBallGame {
 		return this.players[1];
 	}
 
+	get totalTimeoutsUsed() {
+		const totalTimeoutsUsedArray = [0, 0];
+		this.racks.forEach((rack) => {
+			this.players.forEach((_player, index) => {
+				if (!rack.timeouts[index]) totalTimeoutsUsedArray[index]++;
+			});
+		});
+		return totalTimeoutsUsedArray;
+	}
+
 	get totalInnings() {
 		return this.racks.reduce((n, { innings }) => n + innings, 0);
 	}
@@ -171,6 +181,7 @@ export class NineBallGame {
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties--;
+				this.currentRack.decrementSafety();
 				break;
 			case 'MISS':
 				this.currentRack.unEndTurn();
@@ -211,6 +222,7 @@ export class NineBallGame {
 				break;
 			case 'SAFETY':
 				this.currentPlayer.safeties++;
+				this.currentRack.incrementSafety();
 				break;
 			case 'MISS':
 				this.currentRack.endTurn();
@@ -245,6 +257,7 @@ export class NineBallRack {
 	innings = 0;
 	deadBallCount = 0;
 	scores = [0, 0];
+	safeties = [0, 0];
 	turn = 0;
 	timeouts = [1, 1];
 	readonly gameBalls = this.createBalls();
@@ -310,6 +323,16 @@ export class NineBallRack {
 
 	getBall(ballNumber: number) {
 		return this.gameBalls.find((ball) => ball.number === ballNumber)!;
+	}
+
+	incrementSafety() {
+		this.safeties[this.turn]++;
+	}
+
+	decrementSafety() {
+		if (this.safeties) {
+			this.safeties[this.turn]--;
+		}
 	}
 
 	private createBalls() {
