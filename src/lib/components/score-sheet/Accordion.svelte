@@ -1,4 +1,5 @@
 <script lang="ts">
+	import InfoBox from './InfoBox.svelte';
 	import { slide } from 'svelte/transition';
 	import RightArrow from '../icons/RightArrow.svelte';
 	let isOpen = false;
@@ -7,10 +8,10 @@
 	}
 </script>
 
-<div class="py-2 accordion">
-	<div class="flex justify-between">
+<InfoBox transparency={70}>
+	<div class="flex justify-between items-center">
 		<slot name="header" />
-		<div class="transition-opacity {isOpen ? 'opacity-0' : 'opacity-100'}">
+		<div class="transition-opacity duration-300 {isOpen ? 'opacity-0' : 'opacity-100'}">
 			<slot name="points" />
 		</div>
 		<button on:click={toggle} class="transition scale-50" class:rotate={isOpen}>
@@ -22,12 +23,9 @@
 			<slot name="info" />
 		</div>
 	{/if}
-</div>
+</InfoBox>
 
 <style>
-	.accordion {
-		border-bottom: 1px solid grey;
-	}
 	.rotate {
 		transform: rotate(90deg) scale(0.5);
 	}

@@ -344,12 +344,20 @@ export class NineBallRack {
 		return balls;
 	}
 
+	private getWinningPlayerIndex() {
+		return this.scores[0] > this.scores[1] ? 0 : 1
+	}
+
 	get total() {
 		return this.scores.reduce((a, b) => a + b);
 	}
 
 	get leftOverBalls() {
 		return this.gameBalls.filter((ball) => !ball.isPocketed);
+	}
+
+	get winningPlayerIndex() {
+		return this.scores[0] === this.scores[1] ? -1 : this.getWinningPlayerIndex()
 	}
 }
 
