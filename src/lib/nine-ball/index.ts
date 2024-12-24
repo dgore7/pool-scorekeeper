@@ -1,5 +1,5 @@
 import { Ball } from '$lib/common/ball';
-import type { Action, EndRack } from './actions';
+import type { Action } from './actions';
 import type { NineBallPlayer } from './player';
 
 class AssertionError extends Error {
@@ -11,7 +11,6 @@ class AssertionError extends Error {
 export class NineBallGame {
 	readonly type = '9ball';
 	players: [NineBallPlayer, NineBallPlayer];
-	winner: NineBallPlayer | null = null;
 	racks = [new NineBallRack(0)];
 	actions: Action[] = [];
 	undoneActions: Action[] = [];
@@ -42,6 +41,10 @@ export class NineBallGame {
 		return this.racks.reduce((n, { innings }) => n + innings, 0);
 	}
 
+	get totalDeadBalls() {
+		return this.racks.reduce((n, { deadBallCount }) => n + deadBallCount, 0);
+	}
+
 	get currentRack() {
 		const rack = this.racks.at(-1);
 		if (!rack) throw new AssertionError('current rack should always be defined');
@@ -65,15 +68,19 @@ export class NineBallGame {
 		return this.hasPlayerWon();
 	}
 
-	endRack() {
-		const additionalDeadBalls = this.currentRack.endRack();
-		this.racks.push(new NineBallRack(this.currentRack.turn));
-		return additionalDeadBalls;
+	get winner() {
+		if (this.isGameOver) {
+			return this.players.filter((player) => player.score === player.scoreRequired)[0];
+		}
+		return null;
 	}
 
-	unEndRack(action: EndRack) {
+	endRack() {
+		this.racks.push(new NineBallRack(this.currentRack.turn));
+	}
+
+	unEndRack() {
 		this.racks.pop();
-		this.currentRack.unEndRack(action.deadBallCount);
 	}
 
 	increment() {
@@ -121,7 +128,7 @@ export class NineBallGame {
 		}
 
 		this.currentRack.pocketedBallStack.push(ball.number);
-		if (this.hasPlayerWon()) {
+		if (this.hasPlayerWon() && ball.number !== 9) {
 			this.killLeftOverBalls();
 		}
 	}
@@ -188,7 +195,7 @@ export class NineBallGame {
 				break;
 			case 'END_RACK':
 				// save deadBalls for use in redo
-				this.unEndRack(action);
+				this.unEndRack();
 				break;
 			case 'TIMEOUT':
 				this.currentRack.unUseTimeout();
@@ -232,7 +239,7 @@ export class NineBallGame {
 				break;
 			case 'END_RACK':
 				// save deadBalls for use in redo
-				action.deadBallCount = this.endRack();
+				this.endRack();
 				break;
 			case 'DEAD_BALL':
 				this.killBall(ball!);
@@ -255,7 +262,6 @@ export class NineBallGame {
 export class NineBallRack {
 	static RACK_POINTS = 10;
 	innings = 0;
-	deadBallCount = 0;
 	scores = [0, 0];
 	safeties = [0, 0];
 	turn = 0;
@@ -289,17 +295,6 @@ export class NineBallRack {
 
 	private changeTurn() {
 		this.turn = (this.turn + 1) % 2;
-	}
-
-	// returns additional dead balls
-	endRack() {
-		const additional = NineBallRack.RACK_POINTS - this.deadBallCount - this.total;
-		this.deadBallCount += additional;
-		return additional;
-	}
-
-	unEndRack(deadBallsToRestore: number) {
-		this.deadBallCount -= deadBallsToRestore;
 	}
 
 	increment() {
@@ -345,7 +340,7 @@ export class NineBallRack {
 	}
 
 	private getWinningPlayerIndex() {
-		return this.scores[0] > this.scores[1] ? 0 : 1
+		return this.scores[0] > this.scores[1] ? 0 : 1;
 	}
 
 	get total() {
@@ -356,8 +351,12 @@ export class NineBallRack {
 		return this.gameBalls.filter((ball) => !ball.isPocketed);
 	}
 
+	get deadBallCount() {
+		return this.deadBallStack.length;
+	}
+
 	get winningPlayerIndex() {
-		return this.scores[0] === this.scores[1] ? -1 : this.getWinningPlayerIndex()
+		return this.scores[0] === this.scores[1] ? -1 : this.getWinningPlayerIndex();
 	}
 }
 

@@ -11,6 +11,8 @@
 
 	export let data;
 	const { game } = data;
+
+	console.log($game);
 </script>
 
 <div class="grid gap-4">
@@ -22,11 +24,11 @@
 	</Scoreboard>
 
 	<InfoBox transparency={70}>
-		{#if $game?.winner}
-			<InfoLine title="Winner" amount={$game.winner.name} />
+		{#if $game?.isGameOver}
+			<InfoLine title="Winner" amount={$game.winner?.name} />
 		{/if}
 		<InfoLine title="Total Innings" amount={$game.totalInnings} />
-		<InfoLine title="Total Dead Balls" amount={$game.totalInnings} />
+		<InfoLine title="Total Dead Balls" amount={$game.totalDeadBalls} />
 	</InfoBox>
 </div>
 
