@@ -7,13 +7,14 @@
 	import InfoBox from '$lib/components/score-sheet/InfoBox.svelte';
 	import InfoLine from '$lib/components/score-sheet/InfoLine.svelte';
 	import RackNumber from '$lib/components/score-sheet/RackNumber.svelte';
+	import SectionTitle from '$lib/components/score-sheet/SectionTitle.svelte';
 
 	export let data;
 	const { game } = data;
 </script>
 
 <div class="grid gap-4">
-	<h2 class="flex m-auto text-2xl">Match Details:</h2>
+	<SectionTitle>Match Details:</SectionTitle>
 	<Scoreboard>
 		{#each $game.players as player, playerNumber}
 			<PlayerStats {player} game={$game} {playerNumber} isScoreSheet />
@@ -29,9 +30,7 @@
 	</InfoBox>
 </div>
 
-<ScoreSheetTitle padding={'p2'}>
-	<h2 class="m-auto">Rack Break Downs:</h2>
-</ScoreSheetTitle>
+<SectionTitle>Rack by Rack:</SectionTitle>
 
 {#each $game?.racks as rack, i}
 	<Accordion>

@@ -81,6 +81,7 @@
 					class="flex w-full gap-2 py-2 px-6 bg-white text-black hover:bg-slate-300"
 					style:border-bottom={i < hamburgerOptions.length - 1 ? '1px solid black' : ''}
 					href={option.href}
+					on:click={handleClose}
 				>
 					<svelte:component this={option.icon} />
 					{option.title}
