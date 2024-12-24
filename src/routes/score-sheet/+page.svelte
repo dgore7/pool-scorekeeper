@@ -1,5 +1,4 @@
 <script lang="ts">
-	import ScoreSheetTitle from '$lib/components/score-sheet/ScoreSheetTitle.svelte';
 	import Accordion from '$lib/components/score-sheet/Accordion.svelte';
 	import RackAtGlance from '$lib/components/score-sheet/RackAtGlance.svelte';
 	import Scoreboard from '$lib/components/nine-ball/Scoreboard.svelte';
@@ -8,11 +7,10 @@
 	import InfoLine from '$lib/components/score-sheet/InfoLine.svelte';
 	import RackNumber from '$lib/components/score-sheet/RackNumber.svelte';
 	import SectionTitle from '$lib/components/score-sheet/SectionTitle.svelte';
+	import Winner from '$lib/components/score-sheet/Winner.svelte';
 
 	export let data;
 	const { game } = data;
-
-	console.log($game);
 </script>
 
 <div class="grid gap-4">
@@ -25,7 +23,7 @@
 
 	<InfoBox transparency={70}>
 		{#if $game?.isGameOver}
-			<InfoLine title="Winner" amount={$game.winner?.name} />
+			<Winner player={$game.winner} />
 		{/if}
 		<InfoLine title="Total Innings" amount={$game.totalInnings} />
 		<InfoLine title="Total Dead Balls" amount={$game.totalDeadBalls} />
