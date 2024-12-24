@@ -12,5 +12,5 @@
 </script>
 
 {#await getImgUrl(pocketed) then src}
-	<img class="w-full max-h-[min(100%,6rem)] m-auto" {src} alt="{ball.number} ball" />
+	<img class="w-full max-h-[min(100%,6rem)] m-auto" {src} alt="{ball.number} ball {ball.color}" />
 {/await}

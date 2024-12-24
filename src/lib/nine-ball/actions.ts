@@ -12,12 +12,10 @@ interface ISafety {
 
 interface IMiss {
 	readonly type: 'MISS';
-	readonly deadBallCount: number;
 }
 
 interface IEndRack {
 	type: 'END_RACK';
-	deadBallCount: number;
 }
 
 interface IUndo {
@@ -54,12 +52,10 @@ export class Safety implements ISafety {
 
 export class Miss implements IMiss {
 	readonly type = 'MISS';
-	constructor(readonly deadBallCount: number = 0) {}
 }
 
 export class EndRack implements IEndRack {
 	readonly type = 'END_RACK';
-	deadBallCount = 0;
 }
 
 export class Undo implements IUndo {

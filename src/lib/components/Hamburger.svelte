@@ -17,10 +17,10 @@
 	import { goto } from '$app/navigation';
 
 	type OptionTitle = 'Score Sheet' | 'Save Game' | 'Settings' | 'End Game';
-	type Option = { title: OptionTitle; icon: ComponentType; onClick?: () => void };
+	type Option = { title: OptionTitle; icon: ComponentType; onClick?: () => void; href?: string };
 
 	const hamburgerOptions: Option[] = [
-		{ title: 'Score Sheet', icon: ScoreSheetIcon },
+		{ title: 'Score Sheet', icon: ScoreSheetIcon, href: '/score-sheet' },
 		{ title: 'Save Game', icon: SaveIcon },
 		{ title: 'Settings', icon: SettingsIcon },
 		{
@@ -76,14 +76,26 @@
 		transition:fade={{ duration: 300 }}
 	>
 		{#each hamburgerOptions as option, i}
-			<button
-				class="flex w-full gap-2 py-2 px-6 bg-white text-black hover:bg-slate-300"
-				style:border-bottom={i < hamburgerOptions.length - 1 ? '1px solid black' : ''}
-				on:click={() => option.onClick?.() ?? handleOptionClick(option.title)}
-			>
-				<svelte:component this={option.icon} />
-				{option.title}
-			</button>
+			{#if option.href}
+				<a
+					class="flex w-full gap-2 py-2 px-6 bg-white text-black hover:bg-slate-300"
+					style:border-bottom={i < hamburgerOptions.length - 1 ? '1px solid black' : ''}
+					href={option.href}
+					on:click={handleClose}
+				>
+					<svelte:component this={option.icon} />
+					{option.title}
+				</a>
+			{:else}
+				<button
+					class="flex w-full gap-2 py-2 px-6 bg-white text-black hover:bg-slate-300"
+					style:border-bottom={i < hamburgerOptions.length - 1 ? '1px solid black' : ''}
+					on:click={() => option.onClick?.() ?? handleOptionClick(option.title)}
+				>
+					<svelte:component this={option.icon} />
+					{option.title}
+				</button>
+			{/if}
 		{/each}
 	</div>
 {/if}
