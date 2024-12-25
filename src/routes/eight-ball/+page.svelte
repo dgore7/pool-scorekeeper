@@ -1,20 +1,11 @@
 <script lang="ts">
-	import BallSelect from '$lib/components/BallSelect.svelte';
-
+	import BallSelect from '$lib/components/eight-ball/BallSelect.svelte';
 	import Dialog from '$lib/components/Dialog.svelte';
-
 	import EightBallControlPad from '$lib/components/eight-ball/EightBallControlPad.svelte';
-
-	import PlayerStats from '$lib/components/nine-ball/PlayerStats.svelte';
-
+	import PlayerStats from '$lib/components/eight-ball/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
-
 	import Scoreboard from '$lib/components/nine-ball/Scoreboard.svelte';
-
-	import TeamDisplay from '$lib/components/TeamDisplay.svelte';
-
 	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
-
 	import {
 		EightBallGame,
 		Miss,
@@ -137,42 +128,56 @@
 	}
 </script>
 
-<div class="container m-auto max-w-xl h-full my-4 flex flex-col">
-	{#if $dialog}
-		<Dialog
-			message={$dialog.message}
-			conditions={$dialog.conditions}
-			on:cancelDialog={handleCancelDialog}
-			on:submitDialog={handleSubmitDialog}
-		/>
-	{/if}
-	<Scoreboard>
-		{#each $game.players as player, playerNumber}
-			<PlayerStats {player} game={$game} {playerNumber} />
-		{/each}
-		{#each $game.players as player}
-			<ProgressBar {player} />
-		{/each}
-	</Scoreboard>
-
-	<div class="flex-1"></div>
-	<div class="container flex flex-col gap-6">
-		{#if !areTeamsAssigned}
-			<BallSelect game={$game} on:ballSelect={handleBallSelect} />
-		{:else}
-			<TeamDisplay game={$game} />
+<div class="flex-[1_0_auto] flex gap-4 portrait:flex-col">
+	<div class="container m-auto max-w-xl h-full my-4 flex flex-col">
+		{#if $dialog}
+			<Dialog
+				message={$dialog.message}
+				conditions={$dialog.conditions}
+				on:cancelDialog={handleCancelDialog}
+				on:submitDialog={handleSubmitDialog}
+			/>
 		{/if}
 
-		<EightBallControlPad
-			{isGameOver}
-			game={$game}
-			on:miss={handleMiss}
-			on:win={handleWin}
-			on:winDialog={handleWinDialog}
-			on:lose={handleLoseDialog}
-			on:undo={handleUndo}
-			on:timeout={handleTimeout}
-			on:safety={handleSafety}
-		/>
+		<div
+			class="grid grid-rows-[auto_1fr_auto] landscape:flex-[1_1_50%] bg-[#131318] portrait:py-4 px-6 portrait:-mx-6 landscape:h-full"
+		>
+			<Scoreboard>
+				{#each $game.players as player, playerNumber}
+					<PlayerStats {player} game={$game} {playerNumber} {areTeamsAssigned} />
+				{/each}
+			</Scoreboard>
+			<div class="self-end">
+				{#each $game.players as player}
+					<ProgressBar {player} game={$game} />
+				{/each}
+			</div>
+		</div>
+
+		<div class="flex-1"></div>
+		<div class="container flex flex-col gap-6">
+			{#if !areTeamsAssigned}
+				<BallSelect game={$game} on:ballSelect={handleBallSelect} />
+			{/if}
+
+			<div class="bg-gray-600 rounded-xl p-2">
+				<div>Rack Innings: {$game.currentRack.innings}</div>
+				{#if areTeamsAssigned}
+					<div>Total Innings: {$game.totalInnings}</div>
+				{/if}
+			</div>
+
+			<EightBallControlPad
+				{isGameOver}
+				game={$game}
+				on:miss={handleMiss}
+				on:win={handleWin}
+				on:winDialog={handleWinDialog}
+				on:lose={handleLoseDialog}
+				on:undo={handleUndo}
+				on:timeout={handleTimeout}
+				on:safety={handleSafety}
+			/>
+		</div>
 	</div>
 </div>

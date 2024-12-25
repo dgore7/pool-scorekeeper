@@ -3,13 +3,15 @@
 	import ControlButtons from '../nine-ball/ControlButtons.svelte';
 	import type { EightBallGame } from '$lib/eight-ball';
 	import { cva } from 'class-variance-authority';
+	import TurnButton from '../TurnButton.svelte';
+	import EngGameButton from './EndGameButton.svelte';
+	import EndGameButton from './EndGameButton.svelte';
 
 	export let isGameOver: boolean;
 	export let game: EightBallGame;
 
 	let dispatch = createEventDispatcher();
 	const endGameButtons = cva(['rounded-xl', 'text-2xl', 'w-full']);
-	const turnButton = cva(['flex', 'justify-center', 'rounded-xl', 'py-4', 'text-2xl']);
 
 	function handleMiss() {
 		dispatch('miss');
@@ -40,33 +42,17 @@
 	}
 </script>
 
-<button
-	class={turnButton({
-		class: isGameOver ? 'bg-slate-400' : game.currentPlayer.color
-	})}
-	on:click={handleMiss}
-	disabled={isGameOver}>End {game.currentPlayer.name}'s Turn</button
+<TurnButton {game} disabled={isGameOver} on:miss={handleMiss}
+	>End {game.currentPlayer.name}'s Turn</TurnButton
 >
 
 <div class="flex justify-center gap-6">
-	<button
-		class={endGameButtons({
-			class: ['text-black', isGameOver ? 'bg-slate-400' : 'bg-green-400']
-		})}
-		on:click={handleWin}
-		disabled={isGameOver}
-	>
+	<EngGameButton on:win={handleWin} disabled={isGameOver}>
 		{game.currentPlayer.name} Won!
-	</button>
-	<button
-		class={endGameButtons({
-			class: [isGameOver ? 'bg-slate-400' : 'bg-rose-600']
-		})}
-		on:click={handleLose}
-		disabled={isGameOver}
-	>
+	</EngGameButton>
+	<EndGameButton on:lose={handleLose} disabled={isGameOver} isWin={false}>
 		{game.currentPlayer.name} Lost...
-	</button>
+	</EndGameButton>
 </div>
 
 <div
