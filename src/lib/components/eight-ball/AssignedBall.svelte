@@ -8,11 +8,7 @@
 
 <div class="absolute scale-[2] right-0 top-6">
 	{#each game.currentRack.gameBalls as ball, i}
-		{#if team === 'stripes'}
-			{#if game.currentPlayer.color === ball.color && i > 8}
-				<Ball {ball} />
-			{/if}
-		{:else if game.currentPlayer.color === ball.color && i < 8}
+		{#if (team === 'stripes' && game.currentPlayer.color === ball.color && i > 8) || (team !== 'stripes' && game.currentPlayer.color === ball.color && i < 8)}
 			<Ball {ball} />
 		{/if}
 	{/each}
