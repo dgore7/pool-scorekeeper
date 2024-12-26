@@ -159,9 +159,10 @@
 		</div>
 
 		<div class="flex-1"></div>
+
 		<div class="container flex flex-col gap-2">
 			<InfoBox>
-				<div class="grid grid-cols-2 h-32">
+				<div class="grid grid-cols-2 h-32 relative">
 					<div>
 						<div class="text-xl my-2">
 							{#if areTeamsAssigned}

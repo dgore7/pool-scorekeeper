@@ -5,7 +5,7 @@
 	export let game: Game;
 </script>
 
-<div class="w-16 h-16 place-self-center">
+<div class="absolute scale-[2] right-0 top-6">
   {#each game.currentRack.assignmentBalls as ball, i}
     {#if game.players[i].name === game.currentPlayer.name}
       <Ball {ball} />
