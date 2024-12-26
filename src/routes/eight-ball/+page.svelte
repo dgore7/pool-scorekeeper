@@ -23,6 +23,7 @@
 	import type { Writable } from 'svelte/store';
 	import InfoBox from '$lib/components/score-sheet/InfoBox.svelte';
 	import AssignedBall from '$lib/components/eight-ball/AssignedBall.svelte';
+	import Ball from '$lib/components/Ball.svelte';
 
 	export let data;
 	const { game } = data as Required<{ game: Writable<EightBallGame> }>;
@@ -176,7 +177,7 @@
 					{#if !areTeamsAssigned}
 						<BallSelect game={$game} on:ballSelect={handleBallSelect} />
 					{:else}
-						<AssignedBall game={$game} />
+						<AssignedBall game={$game}/>
 					{/if}
 				</div>
 			</InfoBox>
