@@ -28,7 +28,6 @@ class AssertionError extends Error {
 export class EightBallGame {
 	readonly type = '8ball';
 	players: [EightBallPlayer, EightBallPlayer];
-	winner: EightBallPlayer | null = null;
 	actions: Action[] = [];
 	racks: EightBallRack[] = [];
 	undoneActions: Action[] = [];
@@ -136,19 +135,19 @@ export class EightBallGame {
 
 	assignStripe() {
 		if (this.currentRack.turn) {
-			this.currentRack.playerBalls = ['solid', 'stripe'];
+			this.currentRack.teams = ['solids', 'stripes'];
 		} else {
-			this.currentRack.playerBalls = ['stripe', 'solid'];
+			this.currentRack.teams = ['stripes', 'solids'];
 			this.currentRack.assignmentBalls.reverse();
 		}
 	}
 
 	assignSolid() {
 		if (this.currentRack.turn) {
-			this.currentRack.playerBalls = ['stripe', 'solid'];
+			this.currentRack.teams = ['stripes', 'solids'];
 			this.currentRack.assignmentBalls.reverse();
 		} else {
-			this.currentRack.playerBalls = ['solid', 'stripe'];
+			this.currentRack.teams = ['solids', 'stripes'];
 		}
 	}
 
@@ -224,14 +223,23 @@ export class EightBallRack {
 	scores = [0, 0];
 	timeouts = [1, 1];
 	endGameCase: EndGameCase | null = null;
-	playerBalls: BallType[] | null[] = [null, null];
+	teams: BallType[] | null[] = [null, null];
 	assignmentBalls = [Ball.fromNumber(1), Ball.fromNumber(9)];
-	winner: EightBallPlayer | null = null;
+	readonly gameBalls = this.createBalls()
 
 	constructor(
 		public turn: number,
 		readonly playerToBreak: EightBallPlayer
 	) {}
+
+	private createBalls() {
+		const balls = [];
+
+		for (let i = 0; i < 15; i++) {
+			balls.push(Ball.fromIndex(i));
+		}
+		return balls;
+	}
 
 	endTurn() {
 		this.changeTurn();

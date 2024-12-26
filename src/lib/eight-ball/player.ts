@@ -5,6 +5,7 @@ export class EightBallPlayer {
 		readonly name: string,
 		readonly handicap: number,
 		readonly color: BallColorSpec
+
 	) {}
 
 	score = 0;

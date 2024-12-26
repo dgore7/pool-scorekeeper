@@ -14,7 +14,8 @@
 </script>
 
 <div class="flex gap-2 justify-center items-center">
-		{#each game.currentRack.assignmentBalls as ball}
+	{#each game.currentRack.gameBalls as ball}
+		{#if ball.color === game.currentPlayer.color}
 			<div class="grid gap-1">
 				<div class="m-auto">
 					{#if ball.number < 8}
@@ -27,5 +28,6 @@
 					<Ball {ball} />
 				</button>
 			</div>
-		{/each}
+		{/if}
+	{/each}
 </div>

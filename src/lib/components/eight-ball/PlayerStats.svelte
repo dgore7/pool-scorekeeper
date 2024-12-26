@@ -4,12 +4,10 @@
 	import ShieldIcon from '../icons/ShieldIcon.svelte';
 	import type { Game, Player } from '$lib/types';
 	import { tweened } from 'svelte/motion';
-	import Ball from '../Ball.svelte';
 
 	export let player: Player;
 	export let game: Game;
 	export let playerNumber: number;
-	export let areTeamsAssigned: boolean;
 
 	const transparency = tweened();
 
@@ -37,11 +35,7 @@
 	<div
 		class="score font-light text-5xl relative overflow-hidden stack text-center landscape:justify-end row-span-2 self-center landscape:text-7xl landscape:mx-4"
 	>
-  {#if areTeamsAssigned}
-  <div class="h-10 w-10 absolute -left-14">
-    <Ball ball={game.currentRack.assignmentBalls[playerNumber]} />
-  </div>
-{/if}
+
 		{#key player.score}
 			<div in:fly={{ y: '100%' }} out:fly={{ y: '-100%' }}>
 				{player.score}
