@@ -1,6 +1,6 @@
 <script lang="ts">
 	import BallSelect from '$lib/components/eight-ball/BallSelect.svelte';
-	import Dialog from '$lib/components/Dialog.svelte';
+	import LoseDialog from '$lib/components/eight-ball/LoseDialog.svelte';
 	import EightBallControlPad from '$lib/components/eight-ball/EightBallControlPad.svelte';
 	import PlayerStats from '$lib/components/eight-ball/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
@@ -21,6 +21,8 @@
 	} from '$lib/eight-ball';
 
 	import type { Writable } from 'svelte/store';
+	import InfoBox from '$lib/components/score-sheet/InfoBox.svelte';
+	import AssignedBall from '$lib/components/eight-ball/AssignedBall.svelte';
 
 	export let data;
 	const { game } = data as Required<{ game: Writable<EightBallGame> }>;
@@ -45,7 +47,7 @@
 	function handleWinDialog() {
 		let message = `How did ${$game.currentPlayer.name} win?`;
 		let conditions = getWinConditions() as Condition[];
-		$dialog = { message, conditions };
+		$dialog = { message, conditions, game: $game };
 	}
 
 	function handleWin(e: CustomEvent<EndGameCase>) {
@@ -97,7 +99,7 @@
 			{ id: 'W8', message: '8 In Wrong Pocket.' },
 			{ id: 'S8', message: 'Scratched On 8.' }
 		] as Condition[];
-		$dialog = { message, conditions };
+		$dialog = { message, conditions, game: $game };
 	}
 
 	function handleCancelDialog() {
@@ -131,7 +133,8 @@
 <div class="flex-[1_0_auto] flex gap-4 portrait:flex-col">
 	<div class="container m-auto max-w-xl h-full my-4 flex flex-col">
 		{#if $dialog}
-			<Dialog
+			<LoseDialog
+				game={$game}
 				message={$dialog.message}
 				conditions={$dialog.conditions}
 				on:cancelDialog={handleCancelDialog}
@@ -155,17 +158,28 @@
 		</div>
 
 		<div class="flex-1"></div>
-		<div class="container flex flex-col gap-6">
-			{#if !areTeamsAssigned}
-				<BallSelect game={$game} on:ballSelect={handleBallSelect} />
-			{/if}
+		<div class="container flex flex-col gap-2">
+			<InfoBox>
+				<div class="grid grid-cols-2 h-32">
+					<div>
+						<div class="text-xl my-2">
+							{#if areTeamsAssigned}
+								{$game.currentPlayer.name} is:
+							{:else}
+								Assign {$game.currentPlayer.name} to:
+							{/if}
+						</div>
+						<div>Rack Innings: {$game.currentRack.innings}</div>
+						<div>Total Innings: {$game.totalInnings}</div>
+					</div>
 
-			<div class="bg-gray-600 rounded-xl p-2">
-				<div>Rack Innings: {$game.currentRack.innings}</div>
-				{#if areTeamsAssigned}
-					<div>Total Innings: {$game.totalInnings}</div>
-				{/if}
-			</div>
+					{#if !areTeamsAssigned}
+						<BallSelect game={$game} on:ballSelect={handleBallSelect} />
+					{:else}
+						<AssignedBall game={$game} />
+					{/if}
+				</div>
+			</InfoBox>
 
 			<EightBallControlPad
 				{isGameOver}

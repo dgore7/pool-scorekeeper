@@ -7,7 +7,7 @@
 	import { receive, send } from '$lib/cross-fade';
 	import type { Ball as BallModel } from '$lib/common/ball';
 	import type { Writable } from 'svelte/store';
-	import TurnButton from '../TurnButton.svelte';
+	import PlayerColorButton from '../PlayerColorButton.svelte';
 
 	export let game: Writable<NineBallGame>;
 	export let isDeadBallMode: boolean = false;
@@ -79,7 +79,6 @@
 		dispatch('saveDeadBalls', deadBallsToAdd);
 		deadBallsToAdd = [];
 	}
-
 </script>
 
 {#if $game}
@@ -128,10 +127,13 @@
 					on:click={handleDeadBallSave}>Save and Exit Deadball Mode</button
 				>
 			{:else}
-				<TurnButton
-					game={$game}
+				<PlayerColorButton
+					player={$game.currentPlayer}
 					disabled={isDeadBallMode || $game.isGameOver}
-					on:miss={$game.isGameOver ? handleNewRack : handleMiss}
+					dispatchEvent={$game.isGameOver ? 'newRack' : 'miss'}
+					on:miss={handleMiss}
+					on:newRack={handleNewRack}
+					isTurnButton
 				>
 					{#if $game.isRackOver}
 						New Rack
@@ -140,7 +142,7 @@
 					{:else}
 						End {$game.currentPlayer.name}'s Turn
 					{/if}
-				</TurnButton>
+				</PlayerColorButton>
 			{/if}
 		</div>
 	</div>

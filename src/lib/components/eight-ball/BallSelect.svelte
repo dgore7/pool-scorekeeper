@@ -13,20 +13,19 @@
 	}
 </script>
 
-<div class="flex gap-8 justify-center">
-	Assign {game.currentPlayer.name} to:
-	{#each game.currentRack.assignmentBalls as ball}
-		<div class="grid gap-2">
-			<div class="m-auto">
-				{#if ball.number < 8}
-					Solids
-				{:else}
-					Stripes
-				{/if}
+<div class="flex gap-2 justify-center items-center">
+		{#each game.currentRack.assignmentBalls as ball}
+			<div class="grid gap-1">
+				<div class="m-auto">
+					{#if ball.number < 8}
+						Solids
+					{:else}
+						Stripes
+					{/if}
+				</div>
+				<button on:click={() => handleBallAssignment(ball)} class="h-16 w-16">
+					<Ball {ball} />
+				</button>
 			</div>
-			<button on:click={() => handleBallAssignment(ball)}>
-				<Ball {ball} />
-			</button>
-		</div>
-	{/each}
+		{/each}
 </div>
