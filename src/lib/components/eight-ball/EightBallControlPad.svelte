@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import ControlButtons from '../nine-ball/ControlButtons.svelte';
-	import type { EightBallGame } from '$lib/eight-ball';
+	import type { EightBallGame, EndGameCase } from '$lib/eight-ball';
 	import PlayerColorButton from '../PlayerColorButton.svelte';
+	import EightBallButton from './EightBallButton.svelte';
 
 	export let isGameOver: boolean;
 	export let game: EightBallGame;
@@ -21,8 +22,8 @@
 		}
 	}
 
-	function handleLose() {
-		dispatch('lose');
+	function handleLose(e: CustomEvent<EndGameCase>) {
+		dispatch('lose', e.detail);
 	}
 
 	function handleUndo() {
@@ -47,13 +48,23 @@
 >
 
 <div class="flex justify-center gap-6">
-	<PlayerColorButton player={game.currentPlayer} disabled={isGameOver} dispatchEvent="win" on:win={handleWin}>
+	<PlayerColorButton
+		player={game.currentPlayer}
+		disabled={isGameOver}
+		dispatchEvent="win"
+		on:win={handleWin}
+	>
 		{game.currentPlayer.name} Won!
 	</PlayerColorButton>
 
-	<PlayerColorButton player={game.previousPlayer} disabled={isGameOver} dispatchEvent="lose" on:lose={handleLose}>
+	<div>
+		<EightBallButton detail="S8" on:lose={handleLose}>Scratch</EightBallButton>
+		<EightBallButton detail="E8" on:lose={handleLose}>Early</EightBallButton>
+		<EightBallButton detail="W8" on:lose={handleLose}>Wrong Pocket</EightBallButton>
+	</div>
+	<!-- <PlayerColorButton player={game.previousPlayer} disabled={isGameOver} dispatchEvent="lose" on:lose={handleLose}>
 		{game.currentPlayer.name} Lost...
-	</PlayerColorButton>
+	</PlayerColorButton> -->
 </div>
 
 <div

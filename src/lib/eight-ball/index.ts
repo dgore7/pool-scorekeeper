@@ -126,14 +126,14 @@ export class EightBallGame {
 	}
 
 	assignSide(side: BallType) {
-		if (side === 'solid') {
-			this.assignSolid();
+		if (side === 'solids') {
+			this.assignSolids();
 		} else {
-			this.assignStripe();
+			this.assignStripes();
 		}
 	}
 
-	assignStripe() {
+	assignStripes() {
 		if (this.currentRack.turn) {
 			this.currentRack.teams = ['solids', 'stripes'];
 		} else {
@@ -142,7 +142,7 @@ export class EightBallGame {
 		}
 	}
 
-	assignSolid() {
+	assignSolids() {
 		if (this.currentRack.turn) {
 			this.currentRack.teams = ['stripes', 'solids'];
 			this.currentRack.assignmentBalls.reverse();
@@ -225,7 +225,7 @@ export class EightBallRack {
 	endGameCase: EndGameCase | null = null;
 	teams: BallType[] | null[] = [null, null];
 	assignmentBalls = [Ball.fromNumber(1), Ball.fromNumber(9)];
-	readonly gameBalls = this.createBalls()
+	readonly gameBalls = this.createBalls();
 
 	constructor(
 		public turn: number,

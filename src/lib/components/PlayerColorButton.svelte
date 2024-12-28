@@ -2,7 +2,7 @@
 	import { getCssPropertyValue } from '$lib/colors';
 	import { tweened } from 'svelte/motion';
 	import { interpolateLab } from 'd3-interpolate';
-	import type { Game, Player } from '$lib/types';
+	import type { Player } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
 
 	export let player: Player

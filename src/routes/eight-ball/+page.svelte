@@ -1,6 +1,4 @@
 <script lang="ts">
-	import BallSelect from '$lib/components/eight-ball/BallSelect.svelte';
-	import LoseDialog from '$lib/components/eight-ball/LoseDialog.svelte';
 	import EightBallControlPad from '$lib/components/eight-ball/EightBallControlPad.svelte';
 	import PlayerStats from '$lib/components/eight-ball/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
@@ -22,7 +20,7 @@
 
 	import type { Writable } from 'svelte/store';
 	import InfoBox from '$lib/components/score-sheet/InfoBox.svelte';
-	import AssignedBall from '$lib/components/eight-ball/AssignedBall.svelte';
+	import TeamSelectAndInfoSlider from '$lib/components/eight-ball/TeamSelectAndInfoSlider.svelte';
 
 	export let data;
 	const { game } = data as Required<{ game: Writable<EightBallGame> }>;
@@ -30,9 +28,9 @@
 
 	let isGameOver = false;
 
-	$: areTeamsAssigned = $game.currentRack.teams.some(
-		(value: BallType | null) => value !== null
-	);
+	let showGameInfo = false;
+
+	$: areTeamsAssigned = $game.currentRack.teams.some((value: BallType | null) => value !== null);
 
 	function handleBallSelect(e: CustomEvent<BallType>) {
 		$game.doAction(new AssignSide(e.detail));
@@ -69,18 +67,6 @@
 		};
 	}
 
-	function handleSubmitDialog(e: CustomEvent<EndGameCase>) {
-		if (e.detail === '8OB' || e.detail === 'BNR') {
-			handleWin(e);
-		} else {
-			handleLose(e);
-		}
-		$dialog = null;
-		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
-			isGameOver = true;
-		}
-	}
-
 	function getWinConditions() {
 		if ($game.currentRack.innings) {
 			return [{ id: 'M8', message: 'Made The 8!' }];
@@ -92,23 +78,13 @@
 		}
 	}
 
-	function handleLoseDialog() {
-		let message = `How did ${$game.currentPlayer.name} lose?`;
-		let conditions = [
-			{ id: 'E8', message: 'Early 8.' },
-			{ id: 'W8', message: '8 In Wrong Pocket.' },
-			{ id: 'S8', message: 'Scratched On 8.' }
-		] as Condition[];
-		$dialog = { message, conditions, game: $game };
-	}
-
-	function handleCancelDialog() {
-		$dialog = null;
-	}
-
 	function handleLose(e: CustomEvent<EndGameCase>) {
 		$game.doAction(new Lose(e.detail));
 		$game = $game;
+
+		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
+			handleWinner();
+		}
 	}
 
 	function handleUndo() {
@@ -128,26 +104,20 @@
 		$game.doAction(new Safety());
 		$game = $game;
 	}
+
+	function toggleInfoView() {
+		showGameInfo = !showGameInfo;
+	}
 </script>
 
 <div class="flex-[1_0_auto] flex gap-4 portrait:flex-col">
 	<div class="container m-auto max-w-xl h-full my-4 flex flex-col">
-		{#if $dialog}
-			<LoseDialog
-				game={$game}
-				message={$dialog.message}
-				conditions={$dialog.conditions}
-				on:cancelDialog={handleCancelDialog}
-				on:submitDialog={handleSubmitDialog}
-			/>
-		{/if}
-
 		<div
 			class="grid grid-rows-[auto_1fr_auto] landscape:flex-[1_1_50%] bg-[#131318] portrait:py-4 px-6 portrait:-mx-6 landscape:h-full"
 		>
 			<Scoreboard>
 				{#each $game.players as player, playerNumber}
-					<PlayerStats {player} game={$game} {playerNumber} {areTeamsAssigned} />
+					<PlayerStats {player} game={$game} {playerNumber} />
 				{/each}
 			</Scoreboard>
 			<div class="self-end">
@@ -161,25 +131,11 @@
 
 		<div class="container flex flex-col gap-2">
 			<InfoBox>
-				<div class="grid grid-cols-2 h-32 relative">
-					<div>
-						<div class="text-xl my-2">
-							{#if areTeamsAssigned}
-								{$game.currentPlayer.name} is:
-							{:else}
-								Assign {$game.currentPlayer.name} to:
-							{/if}
-						</div>
-						<div>Rack Innings: {$game.currentRack.innings}</div>
-						<div>Total Innings: {$game.totalInnings}</div>
-					</div>
-
-					{#if !areTeamsAssigned}
-						<BallSelect game={$game} on:ballSelect={handleBallSelect} />
-					{:else}
-						<AssignedBall game={$game} team={$game.currentRack.teams[$game.currentRack.turn]}/>
-					{/if}
-				</div>
+				<TeamSelectAndInfoSlider
+					game={$game}
+					{areTeamsAssigned}
+					on:ballAssigned={handleBallSelect}
+				/>
 			</InfoBox>
 
 			<EightBallControlPad
@@ -188,7 +144,7 @@
 				on:miss={handleMiss}
 				on:win={handleWin}
 				on:winDialog={handleWinDialog}
-				on:lose={handleLoseDialog}
+				on:lose={handleLose}
 				on:undo={handleUndo}
 				on:timeout={handleTimeout}
 				on:safety={handleSafety}
