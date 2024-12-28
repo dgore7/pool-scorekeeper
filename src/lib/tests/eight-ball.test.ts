@@ -25,9 +25,6 @@ describe('teamBallSelect', () => {
 			new EightBallPlayer('Player1', 6, red),
 			new EightBallPlayer('Player2', 3, blue)
 		);
-
-		testGame.doAction(new AssignSide('stripe'));
-		expect(testGame.currentRack.assignmentBalls[0].isStripe).toBe(true);
 	});
 
 	it('Player1 claims stripes after misses', () => {
@@ -38,8 +35,7 @@ describe('teamBallSelect', () => {
 
 		testGame.doAction(new Miss());
 		testGame.doAction(new Miss());
-		testGame.doAction(new AssignSide('stripe'));
-		expect(testGame.currentRack.assignmentBalls[0].isStripe).toBe(true);
+		testGame.doAction(new AssignSide('stripes'));
 	});
 
 	it('Player1 claims solids', () => {
@@ -48,8 +44,7 @@ describe('teamBallSelect', () => {
 			new EightBallPlayer('Player2', 3, blue)
 		);
 
-		testGame.doAction(new AssignSide('solid'));
-		expect(testGame.currentRack.assignmentBalls[0].isStripe).toBe(false);
+		testGame.doAction(new AssignSide('solids'));
 	});
 });
 
@@ -60,7 +55,7 @@ describe('win', () => {
 			new EightBallPlayer('Player2', 4, blue)
 		);
 
-		testGame.doAction(new AssignSide('stripe'));
+		testGame.doAction(new AssignSide('stripes'));
 		testGame.doAction(new Win('M8'));
 		expect(testGame.currentPlayer.score).toBe(1);
 		expect(testGame.racks.length).toBe(2);
@@ -73,7 +68,7 @@ describe('win', () => {
 		);
 
 		for (let i = 0; i < 9; i++) {
-			testGame.doAction(new AssignSide('stripe'));
+			testGame.doAction(new AssignSide('stripes'));
 			testGame.doAction(new Win('BNR'));
 		}
 
@@ -90,7 +85,7 @@ describe('lose', () => {
 			new EightBallPlayer('Player2', 4, blue)
 		);
 
-		testGame.doAction(new AssignSide('stripe'));
+		testGame.doAction(new AssignSide('stripes'));
 		testGame.doAction(new Lose('E8'));
 		expect(testGame.player1.score).toBe(0);
 		expect(testGame.player2.score).toBe(1);
@@ -105,7 +100,7 @@ describe('lose', () => {
 		);
 
 		for (let i = 0; i < 7; i++) {
-			testGame.doAction(new AssignSide('stripe'));
+			testGame.doAction(new AssignSide('stripes'));
 			testGame.doAction(new Lose('E8'));
 			testGame.doAction(new Miss());
 		}
@@ -170,7 +165,7 @@ describe('timeout', () => {
 			new EightBallPlayer('Player2', 4, blue)
 		);
 
-		testGame.doAction(new AssignSide('stripe'));
+		testGame.doAction(new AssignSide('stripes'));
 		testGame.doAction(new Timeout());
 		testGame.doAction(new Win('BNR'));
 		expect(testGame.currentRack.timeouts[0]).toBe(1);

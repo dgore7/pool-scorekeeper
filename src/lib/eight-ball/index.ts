@@ -138,16 +138,20 @@ export class EightBallGame {
 			this.currentRack.teams = ['solids', 'stripes'];
 		} else {
 			this.currentRack.teams = ['stripes', 'solids'];
-			this.currentRack.assignmentBalls.reverse();
 		}
 	}
 
 	assignSolids() {
 		if (this.currentRack.turn) {
 			this.currentRack.teams = ['stripes', 'solids'];
-			this.currentRack.assignmentBalls.reverse();
 		} else {
 			this.currentRack.teams = ['solids', 'stripes'];
+		}
+	}
+
+	unAssignSides() {
+		if (this.currentRack) {
+			this.currentRack.teams = [null, null]
 		}
 	}
 
@@ -172,6 +176,9 @@ export class EightBallGame {
 			case 'TIMEOUT':
 				this.currentRack.unUseTimeout();
 				break;
+			case 'ASSIGN_SIDE' : 
+				this.unAssignSides()
+				break;	
 			default:
 				throw new AssertionError('unexpected action');
 		}
@@ -224,7 +231,6 @@ export class EightBallRack {
 	timeouts = [1, 1];
 	endGameCase: EndGameCase | null = null;
 	teams: BallType[] | null[] = [null, null];
-	assignmentBalls = [Ball.fromNumber(1), Ball.fromNumber(9)];
 	readonly gameBalls = this.createBalls();
 
 	constructor(
