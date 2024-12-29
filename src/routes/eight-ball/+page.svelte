@@ -21,6 +21,10 @@
 	import type { Writable } from 'svelte/store';
 	import InfoBox from '$lib/components/score-sheet/InfoBox.svelte';
 	import TeamSelectAndInfoSlider from '$lib/components/eight-ball/TeamSelectAndInfoSlider.svelte';
+	import BallSelect from '$lib/components/eight-ball/BallSelect.svelte';
+	import SlideRightIcon from '$lib/components/icons/SlideRightIcon.svelte';
+	import SlideLeftIcon from '$lib/components/icons/SlideLeftIcon.svelte';
+	import AssignedBall from '$lib/components/eight-ball/AssignedBall.svelte';
 
 	export let data;
 	const { game } = data as Required<{ game: Writable<EightBallGame> }>;
@@ -130,13 +134,56 @@
 		<div class="flex-1"></div>
 
 		<div class="container flex flex-col gap-2">
-			<InfoBox>
+			<div class="h-16 relative overflow-hidden rounded-lg">
+				<InfoBox class="h-full">
+					<div class="flex justify-between items-center w-3/4 pl-2">
+						<div>Assign {$game.currentPlayer.name} to:</div>
+						<BallSelect game={$game} on:ballSelect={handleBallSelect} />
+					</div>
+				</InfoBox>
+				<InfoBox
+					class="absolute h-full top-0 -right-[80%] transition-transform duration-300 {showGameInfo ||
+					areTeamsAssigned
+						? '-translate-x-[80%]'
+						: 'translate-x-0'}"
+				>
+					<div class="flex items-center p-2 gap-2 relative">
+						<button
+							on:click={toggleInfoView}
+							class="transition-opacity duration-300 {areTeamsAssigned
+								? 'opacity-0'
+								: 'opacity-100'}"
+							disabled={areTeamsAssigned}
+						>
+							{#if !showGameInfo}
+								<SlideRightIcon />
+							{:else}
+								<SlideLeftIcon />
+							{/if}
+						</button>
+						<div
+							class="flex flex-col transition-opacity {showGameInfo || areTeamsAssigned
+								? 'opacity-100'
+								: 'opacity-0'}"
+						>
+							<div>Rack Innings: {$game.currentRack.innings}</div>
+							<div>Total Innings: {$game.totalInnings}</div>
+						</div>
+					</div>
+
+					{#if areTeamsAssigned}
+						<AssignedBall game={$game} team={$game.currentRack.teams[$game.currentRack.turn]} />
+					{/if}
+				</InfoBox>
+			</div>
+
+			<!-- <InfoBox>
 				<TeamSelectAndInfoSlider
 					game={$game}
 					{areTeamsAssigned}
 					on:ballAssigned={handleBallSelect}
 				/>
-			</InfoBox>
+			</InfoBox> -->
 
 			<EightBallControlPad
 				{isGameOver}
