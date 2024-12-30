@@ -20,7 +20,6 @@
 
 	import type { Writable } from 'svelte/store';
 	import InfoBox from '$lib/components/score-sheet/InfoBox.svelte';
-	import TeamSelectAndInfoSlider from '$lib/components/eight-ball/TeamSelectAndInfoSlider.svelte';
 	import BallSelect from '$lib/components/eight-ball/BallSelect.svelte';
 	import SlideRightIcon from '$lib/components/icons/SlideRightIcon.svelte';
 	import SlideLeftIcon from '$lib/components/icons/SlideLeftIcon.svelte';
@@ -31,7 +30,6 @@
 	const { dialog, toast, toastTime } = data;
 
 	let isGameOver = false;
-
 	let showGameInfo = false;
 
 	$: areTeamsAssigned = $game.currentRack.teams.some((value: BallType | null) => value !== null);
@@ -112,6 +110,7 @@
 	function toggleInfoView() {
 		showGameInfo = !showGameInfo;
 	}
+
 </script>
 
 <div class="flex-[1_0_auto] flex gap-4 portrait:flex-col">
@@ -135,16 +134,19 @@
 
 		<div class="container flex flex-col gap-2">
 			<div class="h-16 relative overflow-hidden rounded-lg">
+
+
 				<InfoBox class="h-full">
 					<div class="flex justify-between items-center w-3/4 pl-2">
 						<div>Assign {$game.currentPlayer.name} to:</div>
 						<BallSelect game={$game} on:ballSelect={handleBallSelect} />
 					</div>
 				</InfoBox>
+
 				<InfoBox
-					class="absolute h-full top-0 -right-[80%] transition-transform duration-300 {showGameInfo ||
+					class="absolute h-full top-0 -right-[88%] transition-transform duration-300 {showGameInfo ||
 					areTeamsAssigned
-						? '-translate-x-[80%]'
+						? '-translate-x-[88%]'
 						: 'translate-x-0'}"
 				>
 					<div class="flex items-center p-2 gap-2 relative">
@@ -176,14 +178,6 @@
 					{/if}
 				</InfoBox>
 			</div>
-
-			<!-- <InfoBox>
-				<TeamSelectAndInfoSlider
-					game={$game}
-					{areTeamsAssigned}
-					on:ballAssigned={handleBallSelect}
-				/>
-			</InfoBox> -->
 
 			<EightBallControlPad
 				{isGameOver}

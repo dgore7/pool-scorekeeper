@@ -130,7 +130,7 @@
 				<PlayerColorButton
 					player={$game.currentPlayer}
 					disabled={isDeadBallMode || $game.isGameOver}
-					dispatchEvent={$game.isGameOver ? 'newRack' : 'miss'}
+					dispatchEvent={$game.isRackOver ? 'newRack' : 'miss'}
 					on:miss={handleMiss}
 					on:newRack={handleNewRack}
 					isTurnButton
