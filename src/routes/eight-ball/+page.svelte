@@ -1,20 +1,9 @@
 <script lang="ts">
-	import BallSelect from '$lib/components/BallSelect.svelte';
-
-	import Dialog from '$lib/components/Dialog.svelte';
-
 	import EightBallControlPad from '$lib/components/eight-ball/EightBallControlPad.svelte';
-
-	import PlayerStats from '$lib/components/nine-ball/PlayerStats.svelte';
-
+	import PlayerStats from '$lib/components/eight-ball/PlayerStats.svelte';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
-
 	import Scoreboard from '$lib/components/nine-ball/Scoreboard.svelte';
-
-	import TeamDisplay from '$lib/components/TeamDisplay.svelte';
-
 	import TrophyIcon from '$lib/components/icons/TrophyIcon.svelte';
-
 	import {
 		EightBallGame,
 		Miss,
@@ -30,16 +19,20 @@
 	} from '$lib/eight-ball';
 
 	import type { Writable } from 'svelte/store';
+	import InfoBox from '$lib/components/score-sheet/InfoBox.svelte';
+	import BallSelect from '$lib/components/eight-ball/BallSelect.svelte';
+	import SlideRightIcon from '$lib/components/icons/SlideRightIcon.svelte';
+	import SlideLeftIcon from '$lib/components/icons/SlideLeftIcon.svelte';
+	import AssignedBall from '$lib/components/eight-ball/AssignedBall.svelte';
 
 	export let data;
 	const { game } = data as Required<{ game: Writable<EightBallGame> }>;
 	const { dialog, toast, toastTime } = data;
 
 	let isGameOver = false;
+	let showGameInfo = false;
 
-	$: areTeamsAssigned = $game.currentRack.playerBalls.some(
-		(value: BallType | null) => value !== null
-	);
+	$: areTeamsAssigned = $game.currentRack.teams.some((value: BallType | null) => value !== null);
 
 	function handleBallSelect(e: CustomEvent<BallType>) {
 		$game.doAction(new AssignSide(e.detail));
@@ -54,7 +47,7 @@
 	function handleWinDialog() {
 		let message = `How did ${$game.currentPlayer.name} win?`;
 		let conditions = getWinConditions() as Condition[];
-		$dialog = { message, conditions };
+		$dialog = { message, conditions, game: $game };
 	}
 
 	function handleWin(e: CustomEvent<EndGameCase>) {
@@ -76,18 +69,6 @@
 		};
 	}
 
-	function handleSubmitDialog(e: CustomEvent<EndGameCase>) {
-		if (e.detail === '8OB' || e.detail === 'BNR') {
-			handleWin(e);
-		} else {
-			handleLose(e);
-		}
-		$dialog = null;
-		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
-			isGameOver = true;
-		}
-	}
-
 	function getWinConditions() {
 		if ($game.currentRack.innings) {
 			return [{ id: 'M8', message: 'Made The 8!' }];
@@ -99,23 +80,13 @@
 		}
 	}
 
-	function handleLoseDialog() {
-		let message = `How did ${$game.currentPlayer.name} lose?`;
-		let conditions = [
-			{ id: 'E8', message: 'Early 8.' },
-			{ id: 'W8', message: '8 In Wrong Pocket.' },
-			{ id: 'S8', message: 'Scratched On 8.' }
-		] as Condition[];
-		$dialog = { message, conditions };
-	}
-
-	function handleCancelDialog() {
-		$dialog = null;
-	}
-
 	function handleLose(e: CustomEvent<EndGameCase>) {
 		$game.doAction(new Lose(e.detail));
 		$game = $game;
+
+		if ($game.currentPlayer.score === $game.currentPlayer.scoreRequired) {
+			handleWinner();
+		}
 	}
 
 	function handleUndo() {
@@ -135,44 +106,90 @@
 		$game.doAction(new Safety());
 		$game = $game;
 	}
+
+	function toggleInfoView() {
+		showGameInfo = !showGameInfo;
+	}
+
 </script>
 
-<div class="container m-auto max-w-xl h-full my-4 flex flex-col">
-	{#if $dialog}
-		<Dialog
-			message={$dialog.message}
-			conditions={$dialog.conditions}
-			on:cancelDialog={handleCancelDialog}
-			on:submitDialog={handleSubmitDialog}
-		/>
-	{/if}
-	<Scoreboard>
-		{#each $game.players as player, playerNumber}
-			<PlayerStats {player} game={$game} {playerNumber} />
-		{/each}
-		{#each $game.players as player}
-			<ProgressBar {player} />
-		{/each}
-	</Scoreboard>
+<div class="flex-[1_0_auto] flex gap-4 portrait:flex-col">
+	<div class="container m-auto max-w-xl h-full my-4 flex flex-col">
+		<div
+			class="grid grid-rows-[auto_1fr_auto] landscape:flex-[1_1_50%] bg-[#131318] portrait:py-4 px-6 portrait:-mx-6 landscape:h-full"
+		>
+			<Scoreboard>
+				{#each $game.players as player, playerNumber}
+					<PlayerStats {player} game={$game} {playerNumber} />
+				{/each}
+			</Scoreboard>
+			<div class="self-end">
+				{#each $game.players as player}
+					<ProgressBar {player} game={$game} />
+				{/each}
+			</div>
+		</div>
 
-	<div class="flex-1"></div>
-	<div class="container flex flex-col gap-6">
-		{#if !areTeamsAssigned}
-			<BallSelect game={$game} on:ballSelect={handleBallSelect} />
-		{:else}
-			<TeamDisplay game={$game} />
-		{/if}
+		<div class="flex-1"></div>
 
-		<EightBallControlPad
-			{isGameOver}
-			game={$game}
-			on:miss={handleMiss}
-			on:win={handleWin}
-			on:winDialog={handleWinDialog}
-			on:lose={handleLoseDialog}
-			on:undo={handleUndo}
-			on:timeout={handleTimeout}
-			on:safety={handleSafety}
-		/>
+		<div class="container flex flex-col gap-2">
+			<div class="h-16 relative overflow-hidden rounded-lg">
+
+
+				<InfoBox class="h-full">
+					<div class="flex justify-between items-center w-3/4 pl-2">
+						<div>Assign {$game.currentPlayer.name} to:</div>
+						<BallSelect game={$game} on:ballSelect={handleBallSelect} />
+					</div>
+				</InfoBox>
+
+				<InfoBox
+					class="absolute h-full top-0 -right-[88%] transition-transform duration-300 {showGameInfo ||
+					areTeamsAssigned
+						? '-translate-x-[88%]'
+						: 'translate-x-0'}"
+				>
+					<div class="flex items-center p-2 gap-2 relative">
+						<button
+							on:click={toggleInfoView}
+							class="transition-opacity duration-300 {areTeamsAssigned
+								? 'opacity-0'
+								: 'opacity-100'}"
+							disabled={areTeamsAssigned}
+						>
+							{#if !showGameInfo}
+								<SlideRightIcon />
+							{:else}
+								<SlideLeftIcon />
+							{/if}
+						</button>
+						<div
+							class="flex flex-col transition-opacity {showGameInfo || areTeamsAssigned
+								? 'opacity-100'
+								: 'opacity-0'}"
+						>
+							<div>Rack Innings: {$game.currentRack.innings}</div>
+							<div>Total Innings: {$game.totalInnings}</div>
+						</div>
+					</div>
+
+					{#if areTeamsAssigned}
+						<AssignedBall game={$game} team={$game.currentRack.teams[$game.currentRack.turn]} />
+					{/if}
+				</InfoBox>
+			</div>
+
+			<EightBallControlPad
+				{isGameOver}
+				game={$game}
+				on:miss={handleMiss}
+				on:win={handleWin}
+				on:winDialog={handleWinDialog}
+				on:lose={handleLose}
+				on:undo={handleUndo}
+				on:timeout={handleTimeout}
+				on:safety={handleSafety}
+			/>
+		</div>
 	</div>
 </div>

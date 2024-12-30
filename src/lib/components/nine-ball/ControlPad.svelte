@@ -7,9 +7,7 @@
 	import { receive, send } from '$lib/cross-fade';
 	import type { Ball as BallModel } from '$lib/common/ball';
 	import type { Writable } from 'svelte/store';
-	import { tweened } from 'svelte/motion';
-	import { getCssPropertyValue } from '$lib/colors';
-	import { interpolateLab } from 'd3-interpolate';
+	import PlayerColorButton from '../PlayerColorButton.svelte';
 
 	export let game: Writable<NineBallGame>;
 	export let isDeadBallMode: boolean = false;
@@ -81,16 +79,6 @@
 		dispatch('saveDeadBalls', deadBallsToAdd);
 		deadBallsToAdd = [];
 	}
-
-	const fromColor = tweened(getCssPropertyValue($game.currentPlayer.color.gradient.stops[0]), {
-		interpolate: interpolateLab
-	});
-
-	const toColor = tweened(getCssPropertyValue($game.currentPlayer.color.gradient.stops[1]), {
-		interpolate: interpolateLab
-	});
-
-	$: [$fromColor, $toColor] = $game.currentPlayer.color.gradient.stops.map(getCssPropertyValue);
 </script>
 
 {#if $game}
@@ -139,13 +127,13 @@
 					on:click={handleDeadBallSave}>Save and Exit Deadball Mode</button
 				>
 			{:else}
-				<button
-					aria-label="switch innings button"
-					class="rounded-xl py-2 w-full h-12 mb-2 bg-gradient-to-b {$game.currentPlayer.color
-						.border} border transition-all"
-					style:--tw-gradient-stops="{$fromColor}, {$toColor}"
-					on:click={$game.isRackOver ? handleNewRack : handleMiss}
+				<PlayerColorButton
+					player={$game.currentPlayer}
 					disabled={isDeadBallMode || $game.isGameOver}
+					dispatchEvent={$game.isRackOver ? 'newRack' : 'miss'}
+					on:miss={handleMiss}
+					on:newRack={handleNewRack}
+					isTurnButton
 				>
 					{#if $game.isRackOver}
 						New Rack
@@ -154,7 +142,7 @@
 					{:else}
 						End {$game.currentPlayer.name}'s Turn
 					{/if}
-				</button>
+				</PlayerColorButton>
 			{/if}
 		</div>
 	</div>

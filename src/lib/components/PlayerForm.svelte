@@ -6,17 +6,17 @@
 	import { BALL_COLORS } from '$lib/common/ball';
 	import { dev } from '$app/environment';
 
+	export let selectedGame: GameType;
+
 	export let playerFormData = {
 		playerOneName: dev ? 'Shane Van Boening' : '',
 		playerTwoName: dev ? 'Adam Stanley' : '',
-		playerOneHandicap: dev ? 9 : NaN,
-		playerTwoHandicap: dev ? 1 : NaN,
+		playerOneHandicap: dev ? selectedGame === "8ball" ? 7 : 9 : NaN,
+		playerTwoHandicap: dev ? selectedGame === "8ball" ? 2 : 1 : NaN,
 		playerOneColor: BALL_COLORS.find((color) => color.label === 'red')!,
 		playerTwoColor: BALL_COLORS.find((color) => color.label === 'blue')!
 	};
-
-	export let selectedGame: GameType;
-
+	
 	export let step: number;
 
 	function swapPlayers() {

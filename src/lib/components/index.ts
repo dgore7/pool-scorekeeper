@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'svelte';
 import { default as Toast } from './Toast.svelte';
 import { default as PlayerForm } from './PlayerForm.svelte';
-import type Dialog from './Dialog.svelte';
+import type Dialog from './eight-ball/LoseDialog.svelte';
 
 export { default as Well } from './Well.svelte';
 export { default as PlayerFieldSet } from './PlayerFieldSet.svelte';

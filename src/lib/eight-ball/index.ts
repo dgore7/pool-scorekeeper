@@ -28,7 +28,6 @@ class AssertionError extends Error {
 export class EightBallGame {
 	readonly type = '8ball';
 	players: [EightBallPlayer, EightBallPlayer];
-	winner: EightBallPlayer | null = null;
 	actions: Action[] = [];
 	racks: EightBallRack[] = [];
 	undoneActions: Action[] = [];
@@ -73,10 +72,6 @@ export class EightBallGame {
 
 	private get isScoreValidToDecrease() {
 		return this.currentPlayer.score > 0;
-	}
-
-	private get areTeamsAssigned() {
-		return this.currentRack.playerBalls.some((val) => val !== null);
 	}
 
 	private get requiredScores() {
@@ -131,28 +126,32 @@ export class EightBallGame {
 	}
 
 	assignSide(side: BallType) {
-		if (side === 'solid') {
-			this.assignSolid();
+		if (side === 'solids') {
+			this.assignSolids();
 		} else {
-			this.assignStripe();
+			this.assignStripes();
 		}
 	}
 
-	assignStripe() {
+	assignStripes() {
 		if (this.currentRack.turn) {
-			this.currentRack.playerBalls = ['solid', 'stripe'];
+			this.currentRack.teams = ['solids', 'stripes'];
 		} else {
-			this.currentRack.playerBalls = ['stripe', 'solid'];
-			this.currentRack.assignmentBalls.reverse();
+			this.currentRack.teams = ['stripes', 'solids'];
 		}
 	}
 
-	assignSolid() {
+	assignSolids() {
 		if (this.currentRack.turn) {
-			this.currentRack.playerBalls = ['stripe', 'solid'];
-			this.currentRack.assignmentBalls.reverse();
+			this.currentRack.teams = ['stripes', 'solids'];
 		} else {
-			this.currentRack.playerBalls = ['solid', 'stripe'];
+			this.currentRack.teams = ['solids', 'stripes'];
+		}
+	}
+
+	unAssignSides() {
+		if (this.currentRack) {
+			this.currentRack.teams = [null, null]
 		}
 	}
 
@@ -177,6 +176,9 @@ export class EightBallGame {
 			case 'TIMEOUT':
 				this.currentRack.unUseTimeout();
 				break;
+			case 'ASSIGN_SIDE' : 
+				this.unAssignSides()
+				break;	
 			default:
 				throw new AssertionError('unexpected action');
 		}
@@ -228,14 +230,22 @@ export class EightBallRack {
 	scores = [0, 0];
 	timeouts = [1, 1];
 	endGameCase: EndGameCase | null = null;
-	playerBalls: BallType[] | null[] = [null, null];
-	assignmentBalls = [Ball.fromNumber(1), Ball.fromNumber(9)];
-	winner: EightBallPlayer | null = null;
+	teams: BallType[] | null[] = [null, null];
+	readonly gameBalls = this.createBalls();
 
 	constructor(
 		public turn: number,
 		readonly playerToBreak: EightBallPlayer
 	) {}
+
+	private createBalls() {
+		const balls = [];
+
+		for (let i = 0; i < 15; i++) {
+			balls.push(Ball.fromIndex(i));
+		}
+		return balls;
+	}
 
 	endTurn() {
 		this.changeTurn();
